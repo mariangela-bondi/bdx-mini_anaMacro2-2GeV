@@ -61,7 +61,7 @@ public:
 		time=0;
 		N0=0;
 
-	
+        INDEX =0;
 		nEventsTotal = 0;
 		thisEventN = 0;
 		thisEventT = 0;
@@ -77,7 +77,7 @@ public:
       
 
 		EOT =0;
-		tlive =0;
+		mean_tlive =0;
 	       
 		/*OutputTree and related stuff*/
 		outProofFile = 0;
@@ -90,120 +90,47 @@ public:
 		hHALLA_cur_beam=0;
 
 		// HISTO VETO
-	    hOV_Atot_beam = 0;
-	    hOV_multiplicity_beam = 0;
-		hIV_Atot_beam = 0;
-		hIV_multiplicity_beam = 0;
-		hOV_Atot_vs_multiplicity_beam = 0;
-		hIV_Atot_vs_multiplicity_beam = 0;
+		for(int i=0; i<3; i++){
+	    hOV_Atot[i] = 0;
+	    hOV_multiplicity[i] = 0;
+		hIV_Atot[i] = 0;
+		hIV_multiplicity[i] = 0;
+		hOV_Atot_vs_multiplicity[i] = 0;
+		hIV_Atot_vs_multiplicity[i] = 0;
 
-	    hOV_Atot_cosmic = 0;
-	    hOV_multiplicity_cosmic = 0;
-		hIV_Atot_cosmic= 0;
-		hIV_multiplicity_cosmic = 0;
-		hOV_Atot_vs_multiplicity_cosmic = 0;
-		hIV_Atot_vs_multiplicity_cosmic = 0;
-
-	    hOV_Atot_MC = 0;
-	    hOV_multiplicity_MC = 0;
-		hIV_Atot_MC= 0;
-		hIV_multiplicity_MC = 0;
-		hOV_Atot_vs_multiplicity_MC = 0;
-		hIV_Atot_vs_multiplicity_MC = 0;
 
 		// HISTO CALORIMETER
+		hCrs_Etot[i] = 0;
+		hCrs_multiplicity[i] = 0;
+		hCrs_Eseed[i] = 0;
+		hCrs_Etop[i] = 0;
+		hCrs_Ebottom[i] = 0;
+		hCrs_R_EtopEtot[i] = 0;
+		hCrs_R_EbottomEtot[i] = 0;
+		hCrs_EtotVsEtop[i] = 0;
+	    hCrs_XYseed[i] = 0;
+	    hCrs_XY_XYseed[i] = 0;
+		hCrs_EseedVSEtot[i] = 0;
+		hCrs_EseedVSMulti[i] = 0;
+		hCrs_EtotVSMulti[i] = 0;
 
-		 // BEAM
-		hCrs_Etot_beam = 0;
-		hCrs_multiplicity_beam = 0;
-		hCrs_Eseed_beam = 0;
-		hCrs_Etop_beam = 0;
-		hCrs_Ebottom_beam = 0;
-		hCrs_R_EtopEtot_beam = 0;
-		hCrs_R_EbottomEtot_beam = 0;
-		hCrs_EtotVsEtop_beam = 0;
-	    hCrs_XYseed_beam = 0;
-	    hCrs_XY_XYseed_beam = 0;
-		hCrs_EseedVSEtot_beam = 0;
-		hCrs_EseedVSMulti_beam = 0;
-		hCrs_EtotVSMulti_beam = 0;
-
-		 // COSMIC
-		hCrs_Etot_cosmic = 0;
-		hCrs_multiplicity_cosmic = 0;
-		hCrs_Eseed_cosmic = 0;
-		hCrs_Etop_cosmic = 0;
-		hCrs_Ebottom_cosmic = 0;
-		hCrs_R_EtopEtot_cosmic = 0;
-		hCrs_R_EbottomEtot_cosmic = 0;
-		hCrs_EtotVsEtop_cosmic = 0;
-	    hCrs_XYseed_cosmic = 0;
-	    hCrs_XY_XYseed_cosmic = 0;
-		hCrs_EseedVSEtot_cosmic = 0;
-		hCrs_EseedVSMulti_cosmic = 0;
-		hCrs_EtotVSMulti_cosmic = 0;
-
-		 // MC
-		hCrs_Etot_MC = 0;
-		hCrs_multiplicity_MC = 0;
-		hCrs_Eseed_MC = 0;
-		hCrs_Etop_MC = 0;
-		hCrs_Ebottom_MC = 0;
-		hCrs_R_EtopEtot_MC = 0;
-		hCrs_R_EbottomEtot_MC = 0;
-		hCrs_EtotVsEtop_MC = 0;
-	    hCrs_XYseed_MC = 0;
-	    hCrs_XY_XYseed_MC = 0;
-		hCrs_EseedVSEtot_MC = 0;
-		hCrs_EseedVSMulti_MC = 0;
-		hCrs_EtotVSMulti_MC = 0;
 
 		  // HISTO CALORIMETER NO VETO
 
-		 // BEAM
-		hCrs_Etot_NoVETO_beam = 0;
-		hCrs_multiplicity_NoVETO_beam = 0;
-		hCrs_Eseed_NoVETO_beam = 0;
-		hCrs_Etop_NoVETO_beam = 0;
-		hCrs_Ebottom_NoVETO_beam = 0;
-		hCrs_R_EtopEtot_NoVETO_beam = 0;
-		hCrs_R_EbottomEtot_NoVETO_beam = 0;
-		hCrs_EtotVsEtop_NoVETO_beam = 0;
-	    hCrs_XYseed_NoVETO_beam = 0;
-	    hCrs_XY_XYseed_NoVETO_beam = 0;
-		hCrs_EseedVSEtot_NoVETO_beam = 0;
-		hCrs_EseedVSMulti_NoVETO_beam = 0;
-		hCrs_EtotVSMulti_NoVETO_beam = 0;
-
-		 // COSMIC
-		hCrs_Etot_NoVETO_cosmic = 0;
-		hCrs_multiplicity_NoVETO_cosmic = 0;
-		hCrs_Eseed_NoVETO_cosmic = 0;
-		hCrs_Etop_NoVETO_cosmic = 0;
-		hCrs_Ebottom_NoVETO_cosmic = 0;
-		hCrs_R_EtopEtot_NoVETO_cosmic = 0;
-		hCrs_R_EbottomEtot_NoVETO_cosmic = 0;
-		hCrs_EtotVsEtop_NoVETO_cosmic = 0;
-	    hCrs_XYseed_NoVETO_cosmic = 0;
-	    hCrs_XY_XYseed_NoVETO_cosmic = 0;
-		hCrs_EseedVSEtot_NoVETO_cosmic = 0;
-		hCrs_EseedVSMulti_NoVETO_cosmic = 0;
-		hCrs_EtotVSMulti_NoVETO_cosmic = 0;
-
-		 // MC
-		hCrs_Etot_NoVETO_MC = 0;
-		hCrs_multiplicity_NoVETO_MC = 0;
-		hCrs_Eseed_NoVETO_MC = 0;
-		hCrs_Etop_NoVETO_MC = 0;
-		hCrs_Ebottom_NoVETO_MC = 0;
-		hCrs_R_EtopEtot_NoVETO_MC = 0;
-		hCrs_R_EbottomEtot_NoVETO_MC = 0;
-		hCrs_EtotVsEtop_NoVETO_MC = 0;
-	    hCrs_XYseed_NoVETO_MC = 0;
-	    hCrs_XY_XYseed_NoVETO_MC = 0;
-		hCrs_EseedVSEtot_NoVETO_MC = 0;
-		hCrs_EseedVSMulti_NoVETO_MC = 0;
-		hCrs_EtotVSMulti_NoVETO_MC = 0;
+		hCrs_Etot_NoVETO[i] = 0;
+		hCrs_multiplicity_NoVETO[i] = 0;
+		hCrs_Eseed_NoVETO[i] = 0;
+		hCrs_Etop_NoVETO[i] = 0;
+		hCrs_Ebottom_NoVETO[i] = 0;
+		hCrs_R_EtopEtot_NoVETO[i] = 0;
+		hCrs_R_EbottomEtot_NoVETO[i] = 0;
+		hCrs_EtotVsEtop_NoVETO[i] = 0;
+	    hCrs_XYseed_NoVETO[i] = 0;
+	    hCrs_XY_XYseed_NoVETO[i] = 0;
+		hCrs_EseedVSEtot_NoVETO[i] = 0;
+		hCrs_EseedVSMulti_NoVETO[i] = 0;
+		hCrs_EtotVSMulti_NoVETO[i] = 0;
+		}
 
 
 
@@ -268,122 +195,49 @@ public:
     bool isGarbage;
     bool isCosmic;
     bool isBeam;
+    int INDEX;
 
        // HISTO VETO
 
-    // BEAM
-    TH1D *hOV_Atot_beam, *hOV_multiplicity_beam ;
-	TH1D *hIV_Atot_beam, *hIV_multiplicity_beam ;
-	TH2D *hOV_Atot_vs_multiplicity_beam;
-	TH2D *hIV_Atot_vs_multiplicity_beam;
 
-	//Cosmic
-    TH1D *hOV_Atot_cosmic, *hOV_multiplicity_cosmic;
-	TH1D *hIV_Atot_cosmic, *hIV_multiplicity_cosmic;
-	TH2D *hOV_Atot_vs_multiplicity_cosmic;
-	TH2D *hIV_Atot_vs_multiplicity_cosmic;
+    TH1D *hOV_Atot[3], *hOV_multiplicity[3] ;
+	TH1D *hIV_Atot[3], *hIV_multiplicity[3] ;
+	TH2D *hOV_Atot_vs_multiplicity[3];
+	TH2D *hIV_Atot_vs_multiplicity[3];
 
-	//MC
-    TH1D *hOV_Atot_MC, *hOV_multiplicity_MC;
-	TH1D *hIV_Atot_MC, *hIV_multiplicity_MC;
-	TH2D *hOV_Atot_vs_multiplicity_MC;
-	TH2D *hIV_Atot_vs_multiplicity_MC;
 
 
 	  // HISTO CALORIMETER
-
-	 // BEAM
-	TH1D *hCrs_Etot_beam;
-	TH1D *hCrs_multiplicity_beam;
-	TH1D *hCrs_Eseed_beam;
-	TH1D *hCrs_Etop_beam;
-	TH1D *hCrs_Ebottom_beam;
-	TH1D *hCrs_R_EtopEtot_beam;
-	TH1D *hCrs_R_EbottomEtot_beam;
-	TH2D *hCrs_EtotVsEtop_beam;
-	TH2D *hCrs_XYseed_beam;
-	TH2D *hCrs_XY_XYseed_beam;
-	TH2D *hCrs_EseedVSEtot_beam;
-	TH2D *hCrs_EseedVSMulti_beam;
-	TH2D *hCrs_EtotVSMulti_beam;
-
-	//Cosmic
-	TH1D *hCrs_Etot_cosmic;
-	TH1D *hCrs_multiplicity_cosmic;
-	TH1D *hCrs_Eseed_cosmic;
-	TH1D *hCrs_Etop_cosmic;
-	TH1D *hCrs_Ebottom_cosmic;
-	TH1D *hCrs_R_EtopEtot_cosmic;
-	TH1D *hCrs_R_EbottomEtot_cosmic;
-	TH2D *hCrs_EtotVsEtop_cosmic;
-	TH2D *hCrs_XYseed_cosmic;
-	TH2D *hCrs_XY_XYseed_cosmic;
-	TH2D *hCrs_EseedVSEtot_cosmic;
-	TH2D *hCrs_EseedVSMulti_cosmic;
-	TH2D *hCrs_EtotVSMulti_cosmic;
-
-	//MC
-	TH1D *hCrs_Etot_MC;
-	TH1D *hCrs_multiplicity_MC;
-	TH1D *hCrs_Eseed_MC;
-	TH1D *hCrs_Etop_MC;
-	TH1D *hCrs_Ebottom_MC;
-	TH1D *hCrs_R_EtopEtot_MC;
-	TH1D *hCrs_R_EbottomEtot_MC;
-	TH2D *hCrs_EtotVsEtop_MC;
-	TH2D *hCrs_XYseed_MC;
-	TH2D *hCrs_XY_XYseed_MC;
-	TH2D *hCrs_EseedVSEtot_MC;
-	TH2D *hCrs_EseedVSMulti_MC;
-	TH2D *hCrs_EtotVSMulti_MC;
+	 // 0=cosmic, 1=beam, 2=MC
+	TH1D *hCrs_Etot[3];
+	TH1D *hCrs_multiplicity[3];
+	TH1D *hCrs_Eseed[3];
+	TH1D *hCrs_Etop[3];
+	TH1D *hCrs_Ebottom[3];
+	TH1D *hCrs_R_EtopEtot[3];
+	TH1D *hCrs_R_EbottomEtot[3];
+	TH2D *hCrs_EtotVsEtop[3];
+	TH2D *hCrs_XYseed[3];
+	TH2D *hCrs_XY_XYseed[3];
+	TH2D *hCrs_EseedVSEtot[3];
+	TH2D *hCrs_EseedVSMulti[3];
+	TH2D *hCrs_EtotVSMulti[3];
 
 
 	// HISTO CALORIMETER No VETO
-
-	 // BEAM
-	TH1D *hCrs_Etot_NoVETO_beam;
-	TH1D *hCrs_multiplicity_NoVETO_beam;
-	TH1D *hCrs_Eseed_NoVETO_beam;
-	TH1D *hCrs_Etop_NoVETO_beam;
-	TH1D *hCrs_Ebottom_NoVETO_beam;
-	TH1D *hCrs_R_EtopEtot_NoVETO_beam;
-	TH1D *hCrs_R_EbottomEtot_NoVETO_beam;
-	TH2D *hCrs_EtotVsEtop_NoVETO_beam;
-	TH2D *hCrs_XYseed_NoVETO_beam;
-	TH2D *hCrs_XY_XYseed_NoVETO_beam;
-	TH2D *hCrs_EseedVSEtot_NoVETO_beam;
-	TH2D *hCrs_EseedVSMulti_NoVETO_beam;
-	TH2D *hCrs_EtotVSMulti_NoVETO_beam;
-
-	//Cosmic
-	TH1D *hCrs_Etot_NoVETO_cosmic;
-	TH1D *hCrs_multiplicity_NoVETO_cosmic;
-	TH1D *hCrs_Eseed_NoVETO_cosmic;
-	TH1D *hCrs_Etop_NoVETO_cosmic;
-	TH1D *hCrs_Ebottom_NoVETO_cosmic;
-	TH1D *hCrs_R_EtopEtot_NoVETO_cosmic;
-	TH1D *hCrs_R_EbottomEtot_NoVETO_cosmic;
-	TH2D *hCrs_EtotVsEtop_NoVETO_cosmic;
-	TH2D *hCrs_XYseed_NoVETO_cosmic;
-	TH2D *hCrs_XY_XYseed_NoVETO_cosmic;
-	TH2D *hCrs_EseedVSEtot_NoVETO_cosmic;
-	TH2D *hCrs_EseedVSMulti_NoVETO_cosmic;
-	TH2D *hCrs_EtotVSMulti_NoVETO_cosmic;
-
-	//MC
-	TH1D *hCrs_Etot_NoVETO_MC;
-	TH1D *hCrs_multiplicity_NoVETO_MC;
-	TH1D *hCrs_Eseed_NoVETO_MC;
-	TH1D *hCrs_Etop_NoVETO_MC;
-	TH1D *hCrs_Ebottom_NoVETO_MC;
-	TH1D *hCrs_R_EtopEtot_NoVETO_MC;
-	TH1D *hCrs_R_EbottomEtot_NoVETO_MC;
-	TH2D *hCrs_EtotVsEtop_NoVETO_MC;
-	TH2D *hCrs_XYseed_NoVETO_MC;
-	TH2D *hCrs_XY_XYseed_NoVETO_MC;
-	TH2D *hCrs_EseedVSEtot_NoVETO_MC;
-	TH2D *hCrs_EseedVSMulti_NoVETO_MC;
-	TH2D *hCrs_EtotVSMulti_NoVETO_MC;
+	TH1D *hCrs_Etot_NoVETO[3];
+	TH1D *hCrs_multiplicity_NoVETO[3];
+	TH1D *hCrs_Eseed_NoVETO[3];
+	TH1D *hCrs_Etop_NoVETO[3];
+	TH1D *hCrs_Ebottom_NoVETO[3];
+	TH1D *hCrs_R_EtopEtot_NoVETO[3];
+	TH1D *hCrs_R_EbottomEtot_NoVETO[3];
+	TH2D *hCrs_EtotVsEtop_NoVETO[3];
+	TH2D *hCrs_XYseed_NoVETO[3];
+	TH2D *hCrs_XY_XYseed_NoVETO[3];
+	TH2D *hCrs_EseedVSEtot_NoVETO[3];
+	TH2D *hCrs_EseedVSMulti_NoVETO[3];
+	TH2D *hCrs_EtotVSMulti_NoVETO[3];
 
 
 
@@ -397,7 +251,7 @@ public:
 
 	
 	/*Variables*/
-	double EOT, tlive;
+	double EOT, mean_tlive;
 	double Ttot, T0;
 	int N0;
 	int thisEventN;

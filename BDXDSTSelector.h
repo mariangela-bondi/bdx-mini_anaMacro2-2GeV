@@ -12,6 +12,7 @@
 #include "TProofOutputFile.h"
 #include <TChain.h>
 #include <TFile.h>
+#include <vector>
 #include <TSelector.h>
 #include <TTreeReader.h>
 #include <TTreeReaderValue.h>
@@ -61,6 +62,7 @@ public:
 		Tlive=0;
 		time_Tlive=0;
 		time_current=0;
+		time_current_temp=0;
 		N_event=0;
 
 		nEventsTotal = 0;
@@ -76,7 +78,10 @@ public:
 
 		hHALLA_cur=0;
 		hTlive=0;
+		hTlive_temp=0;
 		hTrigAllEvents =0;
+		hTrigAllEvents_stability=0;
+		hTrigAllEvents_current_temp=0;
 		hBDXMiniStability_hasChannel_Alltrg=0;
 		hBDXMiniStability_hasChannel_trg0=0;
 		hBDXMiniStability_hasChannel_trg1=0;
@@ -151,7 +156,8 @@ public:
   
 	TH2D *hHALLA_cur, *hTlive;
 	/*trigger histograms*/
-	TH1D *hTrigAllEvents;
+	TH1D *hTlive_temp;
+	TH1D *hTrigAllEvents, *hTrigAllEvents_stability, *hTrigAllEvents_current_temp;
 	TH1D *hBDXMiniStability_trg[32];
 	TH1D *hBDXMiniStability_hasChannel_Alltrg;
 	TH1D *hBDXMiniStability_hasChannel_trg0;
@@ -181,13 +187,18 @@ public:
 
 	
 	/*Variables*/
+    bool isGarbage;
+    bool isCosmic;
+    bool isBeam;
 	double T0, Ttot;
 	int N0, N_event;
 	int thisEventN;
 	double thisEventT;
 	int nEventsTotal;
 	int NProof;
-	double current, Tlive, time_Tlive, time_current;
+	double current, Tlive, time_Tlive, time_current, time_current_temp;
+    vector<double> Vect_current;
+    vector<double> Vect_time_current;
 
 	uint64_t thisEventFineTime, prevEventFineTime; //works only if proof = 0
 

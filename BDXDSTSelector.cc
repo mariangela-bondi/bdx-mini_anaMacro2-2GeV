@@ -74,10 +74,15 @@ void BDXDSTSelector::SlaveBegin(TTree * /*tree*/) {
 
 	/*Create here the histograms.*/
 	
-	hHALLA_cur = new TH2D("hHALLA_cur", "hHALLA_cur;T(s);Current(uA)", N, 0, N * dT, 200, 0, 200);
+	hHALLA_cur = new TH2D("hHALLA_cur", "hHALLA_cur;T(s);Current(uA)", N, 0, N * dT, 100, -0.05, 200.05);
 	hTlive = new TH2D("hTlive", "hTlive;T(s);Live Time(%)", N, 0, N * dT, 111, -0.5, 110.5);
 
-	hTrigAllEvents = new TH1D("hTrigAllEvents", "hTrigAllEvents;T(s);Rate(Hz)",N1,0,N1 * dT1);
+	hTrigAllEvents_stability = new TH1D("hTrigAllEvents_stability", "hTrigAllEvents_stability;T(s);Rate(Hz)",N1,0,N1 * dT1);
+
+	hTrigAllEvents = new TH1D("hTrigAllEvents", "hTrigAllEvents;T(s);counts",N,0,N * dT);
+	hTrigAllEvents_current_temp = new TH1D("hTrigAllEvents_current_temp", "hTrigAllEvents_current_temp;T(s);sum_current",N,0,N * dT);
+
+	hTlive_temp = new TH1D("hTlive_temp", "hTlive_temp",N,0,N * dT);
 
 	for(int i=0; i<32; i++){
 		hBDXMiniStability_trg[i] = new TH1D(Form("hBDXMiniStability_trg_%i",i), Form("hBDXMiniStability_trg_%i;T(s);Rate(Hz)",i),N1,0,N1 * dT1);
@@ -156,6 +161,17 @@ Bool_t BDXDSTSelector::Process(Long64_t entry) {
 	// The return value is currently not used.
 	this->GetEntry(entry);
 
+	/*Get the event header and fill some variables*/
+	m_EventHeader = m_Event->getEventHeader();
+	eventNumber = m_EventHeader->getEventNumber();
+	runNumber = m_EventHeader->getRunNumber();
+	///WEIGHT///
+	weight =  m_EventHeader->getWeight();
+
+	thisEventT = m_Event->getEventHeader()->getEventTime() - T0;
+	current = m_Event->getEventHeader()->getEpicsData()->getDataValue("pcrexHallA_beam_current");
+	time_current = m_Event->getEventHeader()->getEpicsData()->getDataTime("pcrexHallA_beam_current") -T0;
+
 
 
 	/*Objects to read collections*/
@@ -168,21 +184,20 @@ Bool_t BDXDSTSelector::Process(Long64_t entry) {
 	int idx_crs_down=0;
 
 
-	/*Get the event header and fill some variables*/
-	m_EventHeader = m_Event->getEventHeader();
-	eventNumber = m_EventHeader->getEventNumber();
-	runNumber = m_EventHeader->getRunNumber();
-	///WEIGHT///
-	weight =  m_EventHeader->getWeight();
 
 
 	//	if(weight>0.01)	cout << "ERR WEIGHT!!: "<< weight << endl;
+
 	N_event++;
 
 	// Stability trigger
 	if(m_Event->hasObject("triggerDataBDXmini")) {
 	TObject *triggerDataObj = m_Event->getObject("triggerDataBDXmini");
 	m_trigger = (triggerDataBDXmini*)triggerDataObj;
+
+
+
+
 	for(int itrg=0; itrg<32; itrg++ ) {
 		if(m_trigger->getNtriggers_single(itrg)) hBDXMiniStability_trg[itrg]->Fill(thisEventT);
 	}
@@ -197,16 +212,19 @@ Bool_t BDXDSTSelector::Process(Long64_t entry) {
 
 	}
 
-	thisEventT = m_Event->getEventHeader()->getEventTime() - T0;
-	hTrigAllEvents->Fill(thisEventT);
+	hTrigAllEvents_stability->Fill(thisEventT);
 
-	current = m_EventHeader->getEpicsData()->getDataValue("pcrexHallA_beam_current");
-	time_current = m_EventHeader->getEpicsData()->getDataTime("pcrexHallA_beam_current") -T0;
+	hTrigAllEvents->Fill(thisEventT);
+	hTrigAllEvents_current_temp->Fill(thisEventT, current);
+
+
 	hHALLA_cur->Fill(thisEventT, current);
+
 
 	Tlive = m_EventHeader->getEpicsData()->getDataValue("B_DET_BDX_FPGA:livetime");
 	time_Tlive = m_EventHeader->getEpicsData()->getDataTime("B_DET_BDX_FPGA:livetime")-T0;
 	hTlive->Fill(thisEventT, Tlive);
+	hTlive_temp->Fill(thisEventT, Tlive);
 
 
 	if (m_Event->hasCollection(IntVetoHit::Class(), "IntVetoHits")) {
@@ -254,11 +272,12 @@ Bool_t BDXDSTSelector::Process(Long64_t entry) {
 	  }
 	}
 	outTree->Fill();
-	
+
 
 	//cout <<"end event"<<endl;
-	
+
 	return kTRUE;
+	
 }
 
 void BDXDSTSelector::SlaveTerminate() {
@@ -279,10 +298,15 @@ void BDXDSTSelector::Terminate() {
   
   TListIter iter(fOutput);
   TObject *obj;
- 
+
+
+
   hTrigAllEvents = (TH1D*)fOutput->FindObject("hTrigAllEvents");
+  hTrigAllEvents_stability=(TH1D*)fOutput->FindObject("hTrigAllEvents_stability");
+  hTrigAllEvents_current_temp=(TH1D*)fOutput->FindObject("hTrigAllEvents_current_temp");
   hHALLA_cur = (TH2D*)fOutput->FindObject("hHALLA_cur");
   hTlive = (TH2D*)fOutput->FindObject("hTlive");
+  hTlive_temp=(TH1D*)fOutput->FindObject("hTlive_temp");
   hBDXMiniStability_hasChannel_Alltrg = (TH1D*)fOutput->FindObject("hBDXMiniStability_hasChannel_Alltrg");
   hBDXMiniStability_hasChannel_trg0 = (TH1D*)fOutput->FindObject("hBDXMiniStability_hasChannel_trg0");
   hBDXMiniStability_hasChannel_trg1 = (TH1D*)fOutput->FindObject("hBDXMiniStability_hasChannel_trg1");
@@ -314,8 +338,8 @@ void BDXDSTSelector::Terminate() {
 
 
 
-    hTrigAllEvents->Sumw2();
-    hTrigAllEvents->Scale(1.,"width");
+    hTrigAllEvents_stability->Sumw2();
+    hTrigAllEvents_stability->Scale(1.,"width");
 
     hBDXMiniStability_trg[0]->Sumw2();
 	hBDXMiniStability_trg[0]->Scale(1.,"width");

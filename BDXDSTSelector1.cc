@@ -71,9 +71,9 @@ void BDXDSTSelector1::SlaveBegin(TTree * /*tree*/) {
 
 	/*Create here the histograms.*/
 
-	hHALLA_cur_beam = new TH2D("hHALLA_cur_beam", "hHALLA_cur_beam;T(s);Current(uA)", N, 0, N * dT, 200, 0, 200);
-	hHALLA_cur_cosmic = new TH2D("hHALLA_cur_cosmic", "hHALLA_cur_cosmic;T(s);Current(uA)", N, 0, N * dT, 200, 0, 200);
-	hHALLA_cur_garbage = new TH2D("hHALLA_cur_garbage", "hHALLA_cur_garbage;T(s);Current(uA)", N, 0, N * dT, 200, 0, 200);
+	hHALLA_cur_beam = new TH2D("hHALLA_cur_beam", "hHALLA_cur_beam;T(s);Current(uA)", N, 0, N * dT, 100, -0.05, 200.05);
+	hHALLA_cur_cosmic = new TH2D("hHALLA_cur_cosmic", "hHALLA_cur_cosmic;T(s);Current(uA)", N, 0, N * dT, 100, -0.05, 200.05);
+	hHALLA_cur_garbage = new TH2D("hHALLA_cur_garbage", "hHALLA_cur_garbage;T(s);Current(uA)",N, 0, N * dT, 100, -0.05, 200.05);
 //	hTlive = new TH2D("hTlive", "hTlive;T(s);Live Time(%)", N, 0, N * dT, 100, 0, 100.);
 
 
@@ -82,129 +82,53 @@ void BDXDSTSelector1::SlaveBegin(TTree * /*tree*/) {
 	int min_Atot =-0.5;
 	int max_Atot = 2000.5;
 
-	if(isMC ==0){
-    hOV_Atot_beam = new TH1D("hOV_Atot_beam", "hOV_Atot_beam; phe;Counts", Nbin_Atot, min_Atot, max_Atot);
-    hOV_multiplicity_beam = new TH1D("hOV_multiplicity_beam", "hOV_multiplicity_beam; multiplicity;Counts", 11,-0.5,10.5);
-	hIV_Atot_beam = new TH1D("hIV_Atot_beam", "hIV_Atot_beam; phe;Counts", Nbin_Atot, min_Atot, max_Atot);
-	hIV_multiplicity_beam = new TH1D("hIV_multiplicity_beam", "hIV_multiplicity_beam; multiplicity;Counts", 11,-0.5,10.5);
-	hOV_Atot_vs_multiplicity_beam = new TH2D("hOV_Atot_vs_multiplicity_beam", "hOV_Atot_vs_multiplicity_beam; phe;multiplicity", Nbin_Atot, min_Atot, max_Atot, 11,-0.5,10.5);
-	hIV_Atot_vs_multiplicity_beam = new TH2D("hIV_Atot_vs_multiplicity_beam", "hIV_Atot_vs_multiplicity_beam; phe;multiplicity", Nbin_Atot, min_Atot, max_Atot, 11,-0.5,10.5);
-
-    hOV_Atot_cosmic = new TH1D("hOV_Atot_cosmic", "hOV_Atot_cosmic; phe;Counts", Nbin_Atot, min_Atot, max_Atot);
-    hOV_multiplicity_cosmic = new TH1D("hOV_multiplicity_cosmic", "hOV_multiplicity_cosmic; multiplicity;Counts", 11,-0.5,10.5);
-	hIV_Atot_cosmic= new TH1D("hIV_Atot_cosmic", "hIV_Atot_cosmic; phe;Counts",Nbin_Atot, min_Atot, max_Atot);
-	hIV_multiplicity_cosmic = new TH1D("hIV_multiplicity_cosmic", "hIV_multiplicity_cosmic; multiplicity;Counts", 11,-0.5,10.5);
-	hOV_Atot_vs_multiplicity_cosmic = new TH2D("hOV_Atot_vs_multiplicity_cosmic", "hOV_Atot_vs_multiplicity_cosmic; phe;multiplicity", Nbin_Atot, min_Atot, max_Atot, 11,-0.5,10.5);
-	hIV_Atot_vs_multiplicity_cosmic = new TH2D("hIV_Atot_vs_multiplicity_cosmic", "hIV_Atot_vs_multiplicity_cosmic; phe;multiplicity", Nbin_Atot, min_Atot, max_Atot, 11,-0.5,10.5);
-	}else{
-    hOV_Atot_MC = new TH1D("hOV_Atot_MC", "hOV_Atot_MC; phe;Counts", Nbin_Atot, min_Atot, max_Atot);
-    hOV_multiplicity_MC = new TH1D("hOV_multiplicity_MC", "hOV_multiplicity_MC; multiplicity;Counts", 11,-0.5,10.5);
-	hIV_Atot_MC= new TH1D("hIV_Atot_MC", "hIV_Atot_MC; phe;Counts", Nbin_Atot, min_Atot, max_Atot);
-	hIV_multiplicity_MC = new TH1D("hIV_multiplicity_MC", "hIV_multiplicity_MC; multiplicity;Counts", 11,-0.5,10.5);
-	hOV_Atot_vs_multiplicity_MC = new TH2D("hOV_Atot_vs_multiplicity_MC", "hOV_Atot_vs_multiplicity_MC; phe;multiplicity", Nbin_Atot, min_Atot, max_Atot, 11,-0.5,10.5);
-	hIV_Atot_vs_multiplicity_MC = new TH2D("hIV_Atot_vs_multiplicity_MC", "hIV_Atot_vs_multiplicity_MC; phe;multiplicity", Nbin_Atot, min_Atot, max_Atot, 11,-0.5,10.5);
-	}
-
 	// HISTO CALORIMETER
 
 	int Nbin_Etot = 3000;
 	int min_Etot =-0.5;
 	int max_Etot = 2999.5;
 
-	if(isMC ==0){
-	hCrs_Etot_beam = new TH1D("hCrs_Etot_beam", "hCrs_Etot_beam; Etot [MeV]; Hz/MeV", Nbin_Etot, min_Etot, max_Etot);
-	hCrs_multiplicity_beam = new TH1D("hCrs_multiplicity_beam", "hCrs_multiplicity_beam; multiplicity; counts", 45, -0.5, 44.5);
-	hCrs_Eseed_beam = new TH1D("hCrs_Eseed_beam", "hCrs_Eseed_beam; Eseed [MeV]; Hz/MeV", Nbin_Etot, min_Etot, max_Etot);
-	hCrs_Etop_beam = new TH1D("hCrs_Etop_beam", "hCrs_Etop_beam; Etop [MeV]; Hz/MeV", Nbin_Etot, min_Etot, max_Etot);
-	hCrs_Ebottom_beam = new TH1D("hCrs_Ebottom_beam", "hCrs_Ebottom_beam; Ebottom [MeV]; Hz/MeV", Nbin_Etot, min_Etot, max_Etot);
-	hCrs_R_EtopEtot_beam = new TH1D("hCrs_R_EtopEtot_beam", "hCrs_R_EtopEtot_beam; Etop/Etot; counts", 110, -0.5, 1.5);
-	hCrs_R_EbottomEtot_beam = new TH1D("hCrs_R_EbottomEtot_beam", "hCrs_R_EbottomEtot_beam; Ebottom/Etot; counts", 110, -0.5, 1.5);
-	hCrs_EtotVsEtop_beam = new TH2D("hCrs_EtotVsEtop_beam","hCrs_EtotVsEtop_beam; Etot [MeV]; Etop [MeV]",Nbin_Etot, min_Etot, max_Etot, Nbin_Etot, min_Etot, max_Etot);
-	hCrs_XYseed_beam = new TH2D("hCrs_XYseed_beam","hCrs_XYseed_beam; X; Y",11,-5.5,5.5,11,-5.5,5.5);
-	hCrs_XY_XYseed_beam = new TH2D("hCrs_XY_XYseed_beam","hCrs_XY_XYseed_beam; X-Xseed; Y-Yseed",11,-5.5,5.5,11,-5.5,5.5);
-	hCrs_EseedVSEtot_beam = new TH2D("hCrs_EseedVSEtot_beam","hCrs_EseedVSEtot_beam; Eseed [MeV]; Etot [MeV]",Nbin_Etot, min_Etot, max_Etot, Nbin_Etot, min_Etot, max_Etot);
-	hCrs_EseedVSMulti_beam = new TH2D("hCrs_EseedVSMulti_beam","hCrs_EseedVSMulti_beam; Eseed [MeV]; Multiplicity",Nbin_Etot, min_Etot, max_Etot,45, -0.5, 44.5);
-	hCrs_EtotVSMulti_beam = new TH2D("hCrs_EtotVSMulti_beam","hCrs_EtotVSMulti_beam; Etot [MeV]; Multiplicity",Nbin_Etot, min_Etot, max_Etot,45, -0.5, 44.5);
 
-	hCrs_Etot_cosmic = new TH1D("hCrs_Etot_cosmic", "hCrs_Etot_cosmic; Etot [MeV]; Hz/MeV", Nbin_Etot, min_Etot, max_Etot);
-	hCrs_multiplicity_cosmic = new TH1D("hCrs_multiplicity_cosmic", "hCrs_multiplicity_cosmic; multiplicity; counts", 45, -0.5, 44.5);
-	hCrs_Eseed_cosmic = new TH1D("hCrs_Eseed_cosmic", "hCrs_Eseed_cosmic; Eseed [MeV]; Hz/MeV", Nbin_Etot, min_Etot, max_Etot);
-	hCrs_Etop_cosmic = new TH1D("hCrs_Etop_cosmic", "hCrs_Etop_cosmic; Etop [MeV]; Hz/MeV", Nbin_Etot, min_Etot, max_Etot);
-	hCrs_Ebottom_cosmic = new TH1D("hCrs_Ebottom_cosmic", "hCrs_Ebottom_cosmic; Ebottom [MeV]; Hz/MeV", Nbin_Etot, min_Etot, max_Etot);
-	hCrs_R_EtopEtot_cosmic = new TH1D("hCrs_R_EtopEtot_cosmic", "hCrs_R_EtopEtot_cosmic; Etop/Etot; counts", 110, -0.5, 1.5);
-	hCrs_R_EbottomEtot_cosmic = new TH1D("hCrs_R_EbottomEtot_cosmic", "hCrs_R_EbottomEtot_cosmic; Ebottom/Etot; counts", 110, -0.5, 1.5);
-	hCrs_EtotVsEtop_cosmic = new TH2D("hCrs_EtotVsEtop_cosmic","hCrs_EtotVsEtop_cosmic; Etot [MeV]; Etop [MeV]",Nbin_Etot, min_Etot, max_Etot, Nbin_Etot, min_Etot, max_Etot);
-    hCrs_XYseed_cosmic = new TH2D("hCrs_XYseed_cosmic","hCrs_XYseed_cosmic; X; Y",11,-5.5,5.5,11,-5.5,5.5);
-    hCrs_XY_XYseed_cosmic = new TH2D("hCrs_XY_XYseed_cosmic","hCrs_XY_XYseed_cosmic; X-Xseed; Y-Yseed",11,-5.5,5.5,11,-5.5,5.5);
-    hCrs_EseedVSEtot_cosmic = new TH2D("hCrs_EseedVSEtot_cosmic","hCrs_EseedVSEtot_cosmic; Eseed [MeV]; Etot [MeV]",Nbin_Etot, min_Etot, max_Etot, Nbin_Etot, min_Etot, max_Etot);
-	hCrs_EseedVSMulti_cosmic = new TH2D("hCrs_EseedVSMulti_cosmic","hCrs_EseedVSMulti_cosmic; Eseed [MeV]; Multiplicity",Nbin_Etot, min_Etot, max_Etot,45, -0.5, 44.5);
-	hCrs_EtotVSMulti_cosmic = new TH2D("hCrs_EtotVSMulti_cosmic","hCrs_EtotVSMulti_cosmic; Etot [MeV]; Multiplicity",Nbin_Etot, min_Etot, max_Etot,45, -0.5, 44.5);
+   for(int i=0; i<3; i++){
+    hOV_Atot[i] = new TH1D(Form("hOV_Atot_%i",i), Form("hOV_Atot_%i; phe;Counts",i), Nbin_Atot, min_Atot, max_Atot);
+    hOV_multiplicity[i] = new TH1D(Form("hOV_multiplicity_%i",i), Form("hOV_multiplicity_%i; multiplicity;Counts",i), 11,-0.5,10.5);
+	hIV_Atot[i] = new TH1D(Form("hIV_Atot_%i",i), Form("hIV_Atot_%i; phe;Counts",i), Nbin_Atot, min_Atot, max_Atot);
+	hIV_multiplicity[i] = new TH1D(Form("hIV_multiplicity_%i",i), Form("hIV_multiplicity_%i; multiplicity;Counts",i), 11,-0.5,10.5);
+	hOV_Atot_vs_multiplicity[i] = new TH2D(Form("hOV_Atot_vs_multiplicity_%i",i), Form("hOV_Atot_vs_multiplicity_%i; phe;multiplicity",i), Nbin_Atot, min_Atot, max_Atot, 11,-0.5,10.5);
+	hIV_Atot_vs_multiplicity[i] = new TH2D(Form("hIV_Atot_vs_multiplicity_%i",i), Form("hIV_Atot_vs_multiplicity_%i; phe;multiplicity",i), Nbin_Atot, min_Atot, max_Atot, 11,-0.5,10.5);
 
-	}else{
 
-	hCrs_Etot_MC = new TH1D("hCrs_Etot_MC", "hCrs_Etot_MC; Etot [MeV]; events/(EOT*MeV)", Nbin_Etot, min_Etot, max_Etot);
-	hCrs_multiplicity_MC = new TH1D("hCrs_multiplicity_MC", "hCrs_multiplicity_MC; multiplicity; ", 45, -0.5, 44.5);
-	hCrs_Eseed_MC = new TH1D("hCrs_Eseed_MC", "hCrs_Eseed_MC; Eseed [MeV]; events/(EOT*MeV)", Nbin_Etot, min_Etot, max_Etot);
-	hCrs_Etop_MC = new TH1D("hCrs_Etop_MC", "hCrs_Etop_MC; Etop [MeV]; events/(EOT*MeV)", Nbin_Etot, min_Etot, max_Etot);
-	hCrs_Ebottom_MC = new TH1D("hCrs_Ebottom_MC", "hCrs_Ebottom_MC; Ebottom [MeV]; events/(EOT*MeV)", Nbin_Etot, min_Etot, max_Etot);
-	hCrs_R_EtopEtot_MC = new TH1D("hCrs_R_EtopEtot_MC", "hCrs_R_EtopEtot_MC; Etop/Etot; ", 110, -0.5, 1.5);
-	hCrs_R_EbottomEtot_MC = new TH1D("hCrs_R_EbottomEtot_MC", "hCrs_R_EbottomEtot_MC; Ebottom/Etot; ", 110, -0.5, 1.5);
-	hCrs_EtotVsEtop_MC = new TH2D("hCrs_EtotVsEtop_MC","hCrs_EtotVsEtop_MC; Etot [MeV]; Etop [MeV]",Nbin_Etot, min_Etot, max_Etot, Nbin_Etot, min_Etot, max_Etot);
-	hCrs_XYseed_MC = new TH2D("hCrs_XYseed_MC","hCrs_XYseed_MC; X; Y",11,-5.5,5.5,11,-5.5,5.5);
-	hCrs_XY_XYseed_MC = new TH2D("hCrs_XY_XYseed_MC","hCrs_XY_XYseed_MC; X-Xseed; Y-Yseed",11,-5.5,5.5,11,-5.5,5.5);
-	hCrs_EseedVSEtot_MC = new TH2D("hCrs_EseedVSEtot_MC","hCrs_EseedVSEtot_MC; Eseed [MeV]; Etot [MeV]",Nbin_Etot, min_Etot, max_Etot, Nbin_Etot, min_Etot, max_Etot);
-	hCrs_EseedVSMulti_MC = new TH2D("hCrs_EseedVSMulti_MC","hCrs_EseedVSMulti_MC; Eseed [MeV]; Multiplicity",Nbin_Etot, min_Etot, max_Etot,45, -0.5, 44.5);
-	hCrs_EtotVSMulti_MC = new TH2D("hCrs_EtotVSMulti_MC","hCrs_EtotVSMulti_MC; Etot [MeV]; Multiplicity",Nbin_Etot, min_Etot, max_Etot,45, -0.5, 44.5);
-	}
+	// HISTO CALORIMETER
 
-	// HISTO CALORIMETER NO VETO
+	hCrs_Etot[i] = new TH1D(Form("hCrs_Etot_%i",i), Form("hCrs_Etot_%i; Etot [MeV]; Hz/MeV",i), Nbin_Etot, min_Etot, max_Etot);
+	hCrs_multiplicity[i] = new TH1D(Form("hCrs_multiplicity_%i",i), Form("hCrs_multiplicity_%i; multiplicity; counts",i), 45, -0.5, 44.5);
+	hCrs_Eseed[i] = new TH1D(Form("hCrs_Eseed_%i",i), Form("hCrs_Eseed_%i; Eseed [MeV]; Hz/MeV",i), Nbin_Etot, min_Etot, max_Etot);
+	hCrs_Etop[i] = new TH1D(Form("hCrs_Etop_%i",i), Form("hCrs_Etop_%i; Etop [MeV]; Hz/MeV",i), Nbin_Etot, min_Etot, max_Etot);
+	hCrs_Ebottom[i] = new TH1D(Form("hCrs_Ebottom_%i",i), Form("hCrs_Ebottom_%i; Ebottom [MeV]; Hz/MeV",i), Nbin_Etot, min_Etot, max_Etot);
+	hCrs_R_EtopEtot[i] = new TH1D(Form("hCrs_R_EtopEtot_%i",i), Form("hCrs_R_EtopEtot_%i; Etop/Etot; counts",i), 110, -0.5, 1.5);
+	hCrs_R_EbottomEtot[i] = new TH1D(Form("hCrs_R_EbottomEtot_%i",i), Form("hCrs_R_EbottomEtot_%i; Ebottom/Etot; counts",i), 110, -0.5, 1.5);
+	hCrs_EtotVsEtop[i] = new TH2D(Form("hCrs_EtotVsEtop_%i",i),Form("hCrs_EtotVsEtop_%i; Etot [MeV]; Etop [MeV]",i),Nbin_Etot, min_Etot, max_Etot, Nbin_Etot, min_Etot, max_Etot);
+	hCrs_XYseed[i] = new TH2D(Form("hCrs_XYseed_%i",i),Form("hCrs_XYseed_%i; X; Y",i),11,-5.5,5.5,11,-5.5,5.5);
+	hCrs_XY_XYseed[i] = new TH2D(Form("hCrs_XY_XYseed_%i",i),Form("hCrs_XY_XYseed_%i; X-Xseed; Y-Yseed",i),11,-5.5,5.5,11,-5.5,5.5);
+	hCrs_EseedVSEtot[i] = new TH2D(Form("hCrs_EseedVSEtot_%i",i),Form("hCrs_EseedVSEtot_%i; Eseed [MeV]; Etot [MeV]",i),Nbin_Etot, min_Etot, max_Etot, Nbin_Etot, min_Etot, max_Etot);
+	hCrs_EseedVSMulti[i] = new TH2D(Form("hCrs_EseedVSMulti_%i",i),Form("hCrs_EseedVSMulti_%i; Eseed [MeV]; Multiplicity",i),Nbin_Etot, min_Etot, max_Etot,45, -0.5, 44.5);
+	hCrs_EtotVSMulti[i] = new TH2D(Form("hCrs_EtotVSMulti_%i",i),Form("hCrs_EtotVSMulti_%i; Etot [MeV]; Multiplicity",i),Nbin_Etot, min_Etot, max_Etot,45, -0.5, 44.5);
 
-	if(isMC ==0){
-	hCrs_Etot_NoVETO_beam = new TH1D("hCrs_Etot_NoVETO_beam", "hCrs_Etot_NoVETO_beam; Etot [MeV]; Hz/MeV", Nbin_Etot, min_Etot, max_Etot);
-	hCrs_multiplicity_NoVETO_beam = new TH1D("hCrs_multiplicity_NoVETO_beam", "hCrs_multiplicity_NoVETO_beam; multiplicity; counts", 45, -0.5, 44.5);
-	hCrs_Eseed_NoVETO_beam = new TH1D("hCrs_Eseed_NoVETO_beam", "hCrs_Eseed_NoVETO_beam; Eseed [MeV]; Hz/MeV", Nbin_Etot, min_Etot, max_Etot);
-	hCrs_Etop_NoVETO_beam = new TH1D("hCrs_Etop_NoVETO_beam", "hCrs_Etop_NoVETO_beam; Etop [MeV]; Hz/MeV", Nbin_Etot, min_Etot, max_Etot);
-	hCrs_Ebottom_NoVETO_beam = new TH1D("hCrs_Ebottom_NoVETO_beam", "hCrs_Ebottom_NoVETO_beam; Ebottom [MeV]; Hz/MeV", Nbin_Etot, min_Etot, max_Etot);
-	hCrs_R_EtopEtot_NoVETO_beam = new TH1D("hCrs_R_EtopEtot_NoVETO_beam", "hCrs_R_EtopEtot_NoVETO_beam; Etop/Etot; counts", 110, -0.5, 1.5);
-	hCrs_R_EbottomEtot_NoVETO_beam = new TH1D("hCrs_R_EbottomEtot_NoVETO_beam", "hCrs_R_EbottomEtot_NoVETO_beam; Ebottom/Etot; counts", 110, -0.5, 1.5);
-	hCrs_EtotVsEtop_NoVETO_beam = new TH2D("hCrs_EtotVsEtop_NoVETO_beam","hCrs_EtotVsEtop_NoVETO_beam; Etot [MeV]; Etop [MeV]",Nbin_Etot, min_Etot, max_Etot, Nbin_Etot, min_Etot, max_Etot);
-	hCrs_XYseed_NoVETO_beam = new TH2D("hCrs_XYseed_NoVETO_beam","hCrs_XYseed_NoVETO_beam; X; Y",11,-5.5,5.5,11,-5.5,5.5);
-	hCrs_XY_XYseed_NoVETO_beam = new TH2D("hCrs_XY_XYseed_NoVETO_beam","hCrs_XY_XYseed_NoVETO_beam; X-Xseed; Y-Yseed",11,-5.5,5.5,11,-5.5,5.5);
-	hCrs_EseedVSEtot_NoVETO_beam = new TH2D("hCrs_EseedVSEtot_NoVETO_beam","hCrs_EseedVSEtot_NoVETO_beam; Eseed [MeV]; Etot [MeV]",Nbin_Etot, min_Etot, max_Etot, Nbin_Etot, min_Etot, max_Etot);
-	hCrs_EseedVSMulti_NoVETO_beam = new TH2D("hCrs_EseedVSMulti_NoVETO_beam","hCrs_EseedVSMulti_NoVETO_beam; Eseed [MeV]; Multiplicity",Nbin_Etot, min_Etot, max_Etot,45, -0.5, 44.5);
-	hCrs_EtotVSMulti_NoVETO_beam = new TH2D("hCrs_EtotVSMulti_NoVETO_beam","hCrs_EtotVSMulti_NoVETO_beam; Etot [MeV]; Multiplicity",Nbin_Etot, min_Etot, max_Etot,45, -0.5, 44.5);
+	hCrs_Etot_NoVETO[i] = new TH1D(Form("hCrs_Etot_NoVETO_%i",i), Form("hCrs_Etot_NoVETO_%i; Etot [MeV]; Hz/MeV",i), Nbin_Etot, min_Etot, max_Etot);
+	hCrs_multiplicity_NoVETO[i] = new TH1D(Form("hCrs_multiplicity_NoVETO_%i",i), Form("hCrs_multiplicity_NoVETO_%i; multiplicity; counts",i), 45, -0.5, 44.5);
+	hCrs_Eseed_NoVETO[i] = new TH1D(Form("hCrs_Eseed_NoVETO_%i",i), Form("hCrs_Eseed_NoVETO_%i; Eseed [MeV]; Hz/MeV",i), Nbin_Etot, min_Etot, max_Etot);
+	hCrs_Etop_NoVETO[i] = new TH1D(Form("hCrs_Etop_NoVETO_%i",i), Form("hCrs_Etop_NoVETO_%i; Etop [MeV]; Hz/MeV",i), Nbin_Etot, min_Etot, max_Etot);
+	hCrs_Ebottom_NoVETO[i] = new TH1D(Form("hCrs_Ebottom_NoVETO_%i",i), Form("hCrs_Ebottom_NoVETO_%i; Ebottom [MeV]; Hz/MeV",i), Nbin_Etot, min_Etot, max_Etot);
+	hCrs_R_EtopEtot_NoVETO[i] = new TH1D(Form("hCrs_R_EtopEtot_NoVETO_%i",i), Form("hCrs_R_EtopEtot_NoVETO_%i; Etop/Etot; counts",i), 110, -0.5, 1.5);
+	hCrs_R_EbottomEtot_NoVETO[i] = new TH1D(Form("hCrs_R_EbottomEtot_NoVETO_%i",i), Form("hCrs_R_EbottomEtot_NoVETO_%i; Ebottom/Etot; counts",i), 110, -0.5, 1.5);
+	hCrs_EtotVsEtop_NoVETO[i] = new TH2D(Form("hCrs_EtotVsEtop_NoVETO_%i",i),Form("hCrs_EtotVsEtop_NoVETO_%i; Etot [MeV]; Etop [MeV]",i),Nbin_Etot, min_Etot, max_Etot, Nbin_Etot, min_Etot, max_Etot);
+	hCrs_XYseed_NoVETO[i] = new TH2D(Form("hCrs_XYseed_NoVETO_%i",i),Form("hCrs_XYseed_NoVETO_%i; X; Y",i),11,-5.5,5.5,11,-5.5,5.5);
+	hCrs_XY_XYseed_NoVETO[i] = new TH2D(Form("hCrs_XY_XYseed_NoVETO_%i",i),Form("hCrs_XY_XYseed_NoVETO_%i; X-Xseed; Y-Yseed",i),11,-5.5,5.5,11,-5.5,5.5);
+	hCrs_EseedVSEtot_NoVETO[i] = new TH2D(Form("hCrs_EseedVSEtot_NoVETO_%i",i),Form("hCrs_EseedVSEtot_NoVETO_%i; Eseed [MeV]; Etot [MeV]",i),Nbin_Etot, min_Etot, max_Etot, Nbin_Etot, min_Etot, max_Etot);
+	hCrs_EseedVSMulti_NoVETO[i] = new TH2D(Form("hCrs_EseedVSMulti_NoVETO_%i",i),Form("hCrs_EseedVSMulti_NoVETO_%i; Eseed [MeV]; Multiplicity",i),Nbin_Etot, min_Etot, max_Etot,45, -0.5, 44.5);
+	hCrs_EtotVSMulti_NoVETO[i] = new TH2D(Form("hCrs_EtotVSMulti_NoVETO_%i",i),Form("hCrs_EtotVSMulti_NoVETO_%i; Etot [MeV]; Multiplicity",i),Nbin_Etot, min_Etot, max_Etot,45, -0.5, 44.5);
 
-	hCrs_Etot_NoVETO_cosmic = new TH1D("hCrs_Etot_NoVETO_cosmic", "hCrs_Etot_NoVETO_cosmic; Etot [MeV]; Hz/MeV", Nbin_Etot, min_Etot, max_Etot);
-	hCrs_multiplicity_NoVETO_cosmic = new TH1D("hCrs_multiplicity_NoVETO_cosmic", "hCrs_multiplicity_NoVETO_cosmic; multiplicity; counts", 45, -0.5, 44.5);
-	hCrs_Eseed_NoVETO_cosmic = new TH1D("hCrs_Eseed_NoVETO_cosmic", "hCrs_Eseed_NoVETO_cosmic; Eseed [MeV]; Hz/MeV", Nbin_Etot, min_Etot, max_Etot);
-	hCrs_Etop_NoVETO_cosmic = new TH1D("hCrs_Etop_NoVETO_cosmic", "hCrs_Etop_NoVETO_cosmic; Etop [MeV]; Hz/MeV", Nbin_Etot, min_Etot, max_Etot);
-	hCrs_Ebottom_NoVETO_cosmic = new TH1D("hCrs_Ebottom_NoVETO_cosmic", "hCrs_Ebottom_NoVETO_cosmic; Ebottom [MeV]; Hz/MeV", Nbin_Etot, min_Etot, max_Etot);
-	hCrs_R_EtopEtot_NoVETO_cosmic = new TH1D("hCrs_R_EtopEtot_NoVETO_cosmic", "hCrs_R_EtopEtot_NoVETO_cosmic; Etop/Etot; counts", 110, -0.5, 1.5);
-	hCrs_R_EbottomEtot_NoVETO_cosmic = new TH1D("hCrs_R_EbottomEtot_NoVETO_cosmic", "hCrs_R_EbottomEtot_NoVETO_cosmic; Ebottom/Etot; counts", 110, -0.5, 1.5);
-	hCrs_EtotVsEtop_NoVETO_cosmic = new TH2D("hCrs_EtotVsEtop_NoVETO_cosmic","hCrs_EtotVsEtop_NoVETO_cosmic; Etot [MeV]; Etop [MeV]",Nbin_Etot, min_Etot, max_Etot, Nbin_Etot, min_Etot, max_Etot);
-    hCrs_XYseed_NoVETO_cosmic = new TH2D("hCrs_XYseed_NoVETO_cosmic","hCrs_XYseed_NoVETO_cosmic; X; Y",11,-5.5,5.5,11,-5.5,5.5);
-	hCrs_XY_XYseed_NoVETO_cosmic = new TH2D("hCrs_XY_XYseed_NoVETO_cosmic","hCrs_XY_XYseed_NoVETO_cosmic; X-Xseed; Y-Yseed",11,-5.5,5.5,11,-5.5,5.5);
-    hCrs_EseedVSEtot_NoVETO_cosmic = new TH2D("hCrs_EseedVSEtot_NoVETO_cosmic","hCrs_EseedVSEtot_NoVETO_cosmic; Eseed [MeV]; Etot [MeV]",Nbin_Etot, min_Etot, max_Etot, Nbin_Etot, min_Etot, max_Etot);
-	hCrs_EseedVSMulti_NoVETO_cosmic = new TH2D("hCrs_EseedVSMulti_NoVETO_cosmic","hCrs_EseedVSMulti_NoVETO_cosmic; Eseed [MeV]; Multiplicity",Nbin_Etot, min_Etot, max_Etot,45, -0.5, 44.5);
-	hCrs_EtotVSMulti_NoVETO_cosmic = new TH2D("hCrs_EtotVSMulti_NoVETO_cosmic","hCrs_EtotVSMulti_NoVETO_cosmic; Etot [MeV]; Multiplicity",Nbin_Etot, min_Etot, max_Etot,45, -0.5, 44.5);
-
-	}else{
-
-	hCrs_Etot_NoVETO_MC = new TH1D("hCrs_Etot_NoVETO_MC", "hCrs_Etot_NoVETO_MC; Etot [MeV]; events/(EOT*MeV)", Nbin_Etot, min_Etot, max_Etot);
-	hCrs_multiplicity_NoVETO_MC = new TH1D("hCrs_multiplicity_NoVETO_MC", "hCrs_multiplicity_NoVETO_MC; multiplicity; counts", 45, -0.5, 44.5);
-	hCrs_Eseed_NoVETO_MC = new TH1D("hCrs_Eseed_NoVETO_MC", "hCrs_Eseed_NoVETO_MC; Eseed [MeV]; events/(EOT*MeV)", Nbin_Etot, min_Etot, max_Etot);
-	hCrs_Etop_NoVETO_MC = new TH1D("hCrs_Etop_NoVETO_MC", "hCrs_Etop_NoVETO_MC; Etop [MeV]; events/(EOT*MeV)", Nbin_Etot, min_Etot, max_Etot);
-	hCrs_Ebottom_NoVETO_MC = new TH1D("hCrs_Ebottom_NoVETO_MC", "hCrs_Ebottom_NoVETO_MC; Ebottom [MeV]; events/(EOT*MeV)", Nbin_Etot, min_Etot, max_Etot);
-	hCrs_R_EtopEtot_NoVETO_MC = new TH1D("hCrs_R_EtopEtot_NoVETO_MC", "hCrs_R_EtopEtot_NoVETO_MC; Etop/Etot; ", 110, -0.5, 1.5);
-	hCrs_R_EbottomEtot_NoVETO_MC = new TH1D("hCrs_R_EbottomEtot_NoVETO_MC", "hCrs_R_EbottomEtot_NoVETO_MC; Ebottom/Etot; ", 110, -0.5, 1.5);
-	hCrs_EtotVsEtop_NoVETO_MC = new TH2D("hCrs_EtotVsEtop_NoVETO_MC","hCrs_EtotVsEtop_NoVETO_MC; Etot [MeV]; Etop [MeV]",Nbin_Etot, min_Etot, max_Etot, Nbin_Etot, min_Etot, max_Etot);
-	hCrs_XYseed_NoVETO_MC = new TH2D("hCrs_XYseed_NoVETO_MC","hCrs_XYseed_NoVETO_MC; X; Y",11,-5.5,5.5,11,-5.5,5.5);
-	hCrs_XY_XYseed_NoVETO_MC = new TH2D("hCrs_XY_XYseed_NoVETO_MC","hCrs_XY_XYseed_NoVETO_MC; X-Xseed; Y-Yseed",11,-5.5,5.5,11,-5.5,5.5);
-	hCrs_EseedVSEtot_NoVETO_MC = new TH2D("hCrs_EseedVSEtot_NoVETO_MC","hCrs_EseedVSEtot_NoVETO_MC; Eseed [MeV]; Etot [MeV]",Nbin_Etot, min_Etot, max_Etot, Nbin_Etot, min_Etot, max_Etot);
-	hCrs_EseedVSMulti_NoVETO_MC = new TH2D("hCrs_EseedVSMulti_NoVETO_MC","hCrs_EseedVSMulti_NoVETO_MC; Eseed [MeV]; Multiplicity",Nbin_Etot, min_Etot, max_Etot,45, -0.5, 44.5);
-	hCrs_EtotVSMulti_NoVETO_MC = new TH2D("hCrs_EtotVSMulti_NoVETO_MC","hCrs_EtotVSMulti_NoVETO_MC; Etot [MeV]; Multiplicity",Nbin_Etot, min_Etot, max_Etot,45, -0.5, 44.5);
-	}
-
+   }
 
 
 	outTree1 = new TTree("outTree1", "outTree1");
@@ -302,11 +226,11 @@ Bool_t BDXDSTSelector1::Process(Long64_t entry) {
 	 
 	//	if(weight>0.01)	cout << "ERR WEIGHT!!: "<< weight << endl;
 	N_event++;
+
 	thisEventT = m_Event->getEventHeader()->getEventTime() - T0;
 
-	if(isMC==0){
+	 if(isMC==0){
 	current = m_EventHeader->getEpicsData()->getDataValue("pcrexHallA_beam_current");
-	
     for(int i=0; i<BDX_time_garbage.size();i++){
          if(thisEventT==BDX_time_garbage[i]) {
         	 isGarbage = true;
@@ -322,14 +246,22 @@ if(isGarbage==true) hHALLA_cur_garbage->Fill(thisEventT, current);
 
 if((isGarbage==false)||(isMC==1)){
 
-     if(isMC==0 && current==0) isCosmic=true;
-     if(isMC==0 && current>0) isBeam =true;
+     if(isMC==0 && current==0){
+    	 isCosmic=true;
+    	 hHALLA_cur_cosmic->Fill(thisEventT, current);
+         INDEX =0;
+     }
 
-	 if(isMC==0 && isCosmic==true) hHALLA_cur_cosmic->Fill(thisEventT, current);
-	 if(isMC==0 && isBeam==true) hHALLA_cur_beam->Fill(thisEventT, current);
+	 if(isMC==0 && current>0){
+		 isBeam =true;
+	     hHALLA_cur_beam->Fill(thisEventT, current);
+         INDEX =1;
 
+	 }
 
+	 if(isMC==1) INDEX =2;
 
+	 if(INDEX ==1) return kTRUE;
 
 	/*Check if the event has a collection named IntVetoHits and the corresponding objects are IntVetoHit objects*/
 
@@ -381,34 +313,16 @@ if((isGarbage==false)||(isMC==1)){
 	if(multiplicity_IV==0 && (IVAtot <= Veto_Atot_th )) noIV= true;
 
 
-	cout << weight<<endl;
+	//cout << weight<<endl;
 	//HISTO VETO
 
-	if(isMC==0){
-	  if(isBeam==1){
-        hOV_Atot_beam->Fill(OVAtot, weight);
-        hOV_multiplicity_beam->Fill(multiplicity_OV, weight);
-	    hIV_Atot_beam ->Fill(IVAtot, weight);
-	    hIV_multiplicity_beam->Fill(multiplicity_IV, weight);
-	    hOV_Atot_vs_multiplicity_beam->Fill(OVAtot, multiplicity_OV, weight);
-	    hIV_Atot_vs_multiplicity_beam->Fill(IVAtot, multiplicity_IV, weight);
-	  }
-	  if(isCosmic==1){
-        hOV_Atot_cosmic->Fill(OVAtot, weight);
-        hOV_multiplicity_cosmic->Fill(multiplicity_OV, weight);
-	    hIV_Atot_cosmic->Fill(IVAtot, weight);
-	    hIV_multiplicity_cosmic->Fill(multiplicity_IV, weight);
-	    hOV_Atot_vs_multiplicity_cosmic->Fill(OVAtot, multiplicity_OV, weight);
-	    hIV_Atot_vs_multiplicity_cosmic->Fill(IVAtot, multiplicity_IV, weight);
-	  }
-	}else{
-    hOV_Atot_MC ->Fill(OVAtot, weight);
-    hOV_multiplicity_MC->Fill(multiplicity_OV, weight);
-	hIV_Atot_MC->Fill(IVAtot, weight);
-	hIV_multiplicity_MC->Fill(multiplicity_IV, weight);
-	hOV_Atot_vs_multiplicity_MC->Fill(OVAtot, multiplicity_OV, weight);
-	hIV_Atot_vs_multiplicity_MC->Fill(IVAtot, multiplicity_IV, weight);
-	}
+
+        hOV_Atot[INDEX]->Fill(OVAtot, weight);
+        hOV_multiplicity[INDEX]->Fill(multiplicity_OV, weight);
+	    hIV_Atot[INDEX] ->Fill(IVAtot, weight);
+	    hIV_multiplicity[INDEX]->Fill(multiplicity_IV, weight);
+	    hOV_Atot_vs_multiplicity[INDEX]->Fill(OVAtot, multiplicity_OV, weight);
+	    hIV_Atot_vs_multiplicity[INDEX]->Fill(IVAtot, multiplicity_IV, weight);
 
 
 	/*Check if the event has a collection named CalorimeterHits, and the corresponding objects are CalorimeterHit objects*/
@@ -466,16 +380,9 @@ if((isGarbage==false)||(isMC==1)){
 	      Zs = fCaloHit->m_channel.sector;
 
 	      if(Xs!= 0 || Ys != 0) {
-	    		if(isMC==0){
-	    	     if(isBeam==1) hCrs_XY_XYseed_beam->Fill(Xs,Ys,(weight));
-	    	     if(isCosmic==1) hCrs_XY_XYseed_cosmic->Fill(Xs,Ys,(weight));
+	    	  hCrs_XY_XYseed[INDEX]->Fill(Xs,Ys,(weight));
+	    	  if(noOV==1 && noIV==1) hCrs_XY_XYseed_NoVETO[INDEX]->Fill(Xs,Ys,(weight));
 
-	    	     if(isBeam==1 && noOV==1 && noIV==1)hCrs_XY_XYseed_NoVETO_beam->Fill(Xs,Ys,(weight));
-	    	     if(isCosmic==1 && noOV==1 && noIV==1)hCrs_XY_XYseed_NoVETO_cosmic->Fill(Xs,Ys,(weight));
-	    		}else{
-	    	     hCrs_XY_XYseed_MC->Fill(Xs,Ys,(weight));
-	    	     if(noOV==1 && noIV==1) hCrs_XY_XYseed_NoVETO_MC->Fill(Xs,Ys,(weight));
-	           }
 	      }
 
 	      if(Zseed==Zs){
@@ -492,103 +399,39 @@ if((isGarbage==false)||(isMC==1)){
 
 
 	if(Etot>E_singleCrs_thr){
-	if(isMC==0){
-     if(isBeam==1){
-	   hCrs_Etot_beam->Fill(Etot, weight);
-	   hCrs_multiplicity_beam->Fill(multip, weight);
-       hCrs_Eseed_beam->Fill(Eseed, weight);
-	   hCrs_Etop_beam->Fill(Etop, weight);
-	   hCrs_Ebottom_beam->Fill(Ebottom, weight);
-	   hCrs_R_EtopEtot_beam->Fill(Etop/Etot, weight);
-	   hCrs_R_EbottomEtot_beam->Fill(Ebottom/Etot, weight);
-	   hCrs_EtotVsEtop_beam->Fill(Etot, Etop, weight);
-       hCrs_XYseed_beam->Fill(Xseed, Yseed, weight);
-	   hCrs_EseedVSEtot_beam->Fill(Eseed, Etot, weight);
-	   hCrs_EseedVSMulti_beam->Fill(Eseed, multip, weight);
-	   hCrs_EtotVSMulti_beam->Fill(Etot, multip, weight);
-     }
-     if(isCosmic==1){
-  	   hCrs_Etot_cosmic->Fill(Etot, weight);
-  	   hCrs_multiplicity_cosmic->Fill(multip, weight);
-       hCrs_Eseed_cosmic->Fill(Eseed, weight);
-  	   hCrs_Etop_cosmic->Fill(Etop, weight);
-  	   hCrs_Ebottom_cosmic->Fill(Ebottom, weight);
-  	   hCrs_R_EtopEtot_cosmic->Fill(Etop/Etot, weight);
-  	   hCrs_R_EbottomEtot_cosmic->Fill(Ebottom/Etot, weight);
-  	   hCrs_EtotVsEtop_cosmic->Fill(Etot, Etop, weight);
-       hCrs_XYseed_cosmic->Fill(Xseed, Yseed, weight);
-  	   hCrs_EseedVSEtot_cosmic->Fill(Eseed, Etot, weight);
-  	   hCrs_EseedVSMulti_cosmic->Fill(Eseed, multip, weight);
-  	   hCrs_EtotVSMulti_cosmic->Fill(Etot, multip, weight);
-
-     }
-
-	}else{
-	 hCrs_Etot_MC->Fill(Etot, weight);
-	 hCrs_multiplicity_MC->Fill(multip, weight);
-	 hCrs_Eseed_MC->Fill(Eseed, weight);
-	 hCrs_Etop_MC->Fill(Etop, weight);
-	 hCrs_Ebottom_MC->Fill(Ebottom, weight);
-	 hCrs_R_EtopEtot_MC->Fill(Etop/Etot, weight);
-	 hCrs_R_EbottomEtot_MC->Fill(Ebottom/Etot, weight);
-	 hCrs_EtotVsEtop_MC->Fill(Ebottom/Etot, Etop/Etot, weight);
-	 hCrs_XYseed_MC->Fill(Xseed, Yseed, weight);
-	 hCrs_EseedVSEtot_MC->Fill(Eseed, Etot, weight);
-	 hCrs_EseedVSMulti_MC->Fill(Eseed, multip, weight);
-	 hCrs_EtotVSMulti_MC->Fill(Etot, multip, weight);
-
-	}
+	   hCrs_Etot[INDEX]->Fill(Etot, weight);
+	   hCrs_multiplicity[INDEX]->Fill(multip, weight);
+       hCrs_Eseed[INDEX]->Fill(Eseed, weight);
+	   hCrs_Etop[INDEX]->Fill(Etop, weight);
+	   hCrs_Ebottom[INDEX]->Fill(Ebottom, weight);
+	   hCrs_R_EtopEtot[INDEX]->Fill(Etop/Etot, weight);
+	   hCrs_R_EbottomEtot[INDEX]->Fill(Ebottom/Etot, weight);
+	   hCrs_EtotVsEtop[INDEX]->Fill(Etot, Etop, weight);
+       hCrs_XYseed[INDEX]->Fill(Xseed, Yseed, weight);
+	   hCrs_EseedVSEtot[INDEX]->Fill(Eseed, Etot, weight);
+	   hCrs_EseedVSMulti[INDEX]->Fill(Eseed, multip, weight);
+	   hCrs_EtotVSMulti[INDEX]->Fill(Etot, multip, weight);
 
 	}
 
 
 	if(Etot>E_singleCrs_thr && noOV==1 && noIV==1){
-	if(isMC==0){
-     if(isBeam==1){
-	   hCrs_Etot_NoVETO_beam->Fill(Etot, weight);
-	   hCrs_multiplicity_NoVETO_beam->Fill(multip, weight);
-       hCrs_Eseed_NoVETO_beam->Fill(Eseed, weight);
-	   hCrs_Etop_NoVETO_beam->Fill(Etop, weight);
-	   hCrs_Ebottom_NoVETO_beam->Fill(Ebottom, weight);
-	   hCrs_R_EtopEtot_NoVETO_beam->Fill(Etop/Etot, weight);
-	   hCrs_R_EbottomEtot_NoVETO_beam->Fill(Ebottom/Etot, weight);
-	   hCrs_EtotVsEtop_NoVETO_beam->Fill(Etot, Etop, weight);
-       hCrs_XYseed_NoVETO_beam->Fill(Xseed, Yseed, weight);
-	   hCrs_EseedVSEtot_NoVETO_beam->Fill(Eseed, Etot, weight);
-	   hCrs_EseedVSMulti_NoVETO_beam->Fill(Eseed, multip, weight);
-	   hCrs_EtotVSMulti_NoVETO_beam->Fill(Etot, multip, weight);
-     }
-     if(isCosmic==1){
-  	   hCrs_Etot_NoVETO_cosmic->Fill(Etot, weight);
-  	   hCrs_multiplicity_NoVETO_cosmic->Fill(multip, weight);
-       hCrs_Eseed_NoVETO_cosmic->Fill(Eseed, weight);
-  	   hCrs_Etop_NoVETO_cosmic->Fill(Etop, weight);
-  	   hCrs_Ebottom_NoVETO_cosmic->Fill(Ebottom, weight);
-  	   hCrs_R_EtopEtot_NoVETO_cosmic->Fill(Etop/Etot, weight);
-  	   hCrs_R_EbottomEtot_NoVETO_cosmic->Fill(Ebottom/Etot, weight);
-  	   hCrs_EtotVsEtop_NoVETO_cosmic->Fill(Etot, Etop, weight);
-       hCrs_XYseed_NoVETO_cosmic->Fill(Xseed, Yseed, weight);
-  	   hCrs_EseedVSEtot_NoVETO_cosmic->Fill(Eseed, Etot, weight);
-  	   hCrs_EseedVSMulti_NoVETO_cosmic->Fill(Eseed, multip, weight);
-  	   hCrs_EtotVSMulti_NoVETO_cosmic->Fill(Etot, multip, weight);
 
-     }
 
-	}else{
-	 hCrs_Etot_NoVETO_MC->Fill(Etot, weight);
-	 hCrs_multiplicity_NoVETO_MC->Fill(multip, weight);
-	 hCrs_Eseed_NoVETO_MC->Fill(Eseed, weight);
-	 hCrs_Etop_NoVETO_MC->Fill(Etop, weight);
-	 hCrs_Ebottom_NoVETO_MC->Fill(Ebottom, weight);
-	 hCrs_R_EtopEtot_NoVETO_MC->Fill(Etop/Etot, weight);
-	 hCrs_R_EbottomEtot_NoVETO_MC->Fill(Ebottom/Etot, weight);
-	 hCrs_EtotVsEtop_NoVETO_MC->Fill(Ebottom/Etot, Etop/Etot, weight);
-	 hCrs_XYseed_NoVETO_MC->Fill(Xseed, Yseed, weight);
-	 hCrs_EseedVSEtot_NoVETO_MC->Fill(Eseed, Etot, weight);
-	 hCrs_EseedVSMulti_NoVETO_MC->Fill(Eseed, multip, weight);
-	 hCrs_EtotVSMulti_NoVETO_MC->Fill(Etot, multip, weight);
+	   hCrs_Etot_NoVETO[INDEX]->Fill(Etot, weight);
+	   hCrs_multiplicity_NoVETO[INDEX]->Fill(multip, weight);
+       hCrs_Eseed_NoVETO[INDEX]->Fill(Eseed, weight);
+	   hCrs_Etop_NoVETO[INDEX]->Fill(Etop, weight);
+	   hCrs_Ebottom_NoVETO[INDEX]->Fill(Ebottom, weight);
+	   hCrs_R_EtopEtot_NoVETO[INDEX]->Fill(Etop/Etot, weight);
+	   hCrs_R_EbottomEtot_NoVETO[INDEX]->Fill(Ebottom/Etot, weight);
+	   hCrs_EtotVsEtop_NoVETO[INDEX]->Fill(Etot, Etop, weight);
+       hCrs_XYseed_NoVETO[INDEX]->Fill(Xseed, Yseed, weight);
+	   hCrs_EseedVSEtot_NoVETO[INDEX]->Fill(Eseed, Etot, weight);
+	   hCrs_EseedVSMulti_NoVETO[INDEX]->Fill(Eseed, multip, weight);
+	   hCrs_EtotVSMulti_NoVETO[INDEX]->Fill(Etot, multip, weight);
 
-	}
+
 
 	}
 
@@ -633,163 +476,77 @@ void BDXDSTSelector1::Terminate() {
   
 
   //HISTO VETO
-  if(isMC==0){
-  hOV_Atot_beam = (TH1D*)fOutput->FindObject("hOV_Atot_beam");
-  hOV_multiplicity_beam = (TH1D*)fOutput->FindObject("hOV_multiplicity_beam");
-  hIV_Atot_beam = (TH1D*)fOutput->FindObject("hIV_Atot_beam");
-  hIV_multiplicity_beam = (TH1D*)fOutput->FindObject("hIV_multiplicity_beam");
-  hOV_Atot_vs_multiplicity_beam = (TH2D*)fOutput->FindObject("hOV_Atot_vs_multiplicity_beam");
-  hIV_Atot_vs_multiplicity_beam = (TH2D*)fOutput->FindObject("hIV_Atot_vs_multiplicity_beam");
-
-  hOV_Atot_cosmic =(TH1D*)fOutput->FindObject("hOV_Atot_cosmic");
-  hOV_multiplicity_cosmic = (TH1D*)fOutput->FindObject("hOV_multiplicity_cosmic");
-  hIV_Atot_cosmic= (TH1D*)fOutput->FindObject("hIV_Atot_cosmic");
-  hIV_multiplicity_cosmic = (TH1D*)fOutput->FindObject("hIV_multiplicity_cosmic");
-  hOV_Atot_vs_multiplicity_cosmic = (TH2D*)fOutput->FindObject("hOV_Atot_vs_multiplicity_cosmic");
-  hIV_Atot_vs_multiplicity_cosmic = (TH2D*)fOutput->FindObject("hIV_Atot_vs_multiplicity_cosmic");
-  }else{
-  hOV_Atot_MC = (TH1D*)fOutput->FindObject("hOV_Atot_MC");
-  hOV_multiplicity_MC = (TH1D*)fOutput->FindObject("hOV_multiplicity_MC");
-  hIV_Atot_MC= (TH1D*)fOutput->FindObject("hIV_Atot_MC");
-  hIV_multiplicity_MC = (TH1D*)fOutput->FindObject("hIV_multiplicity_MC");
-  hOV_Atot_vs_multiplicity_MC = (TH2D*)fOutput->FindObject("hOV_Atot_vs_multiplicity_MC");
-  hIV_Atot_vs_multiplicity_MC = (TH2D*)fOutput->FindObject("hIV_Atot_vs_multiplicity_MC");
-  }
+  for(int i=0; i<3; i++){
+	 // if(i!=1){
+  hOV_Atot[i] = (TH1D*)fOutput->FindObject(Form("hOV_Atot_%i",i));
+  hOV_multiplicity[i] = (TH1D*)fOutput->FindObject(Form("hOV_multiplicity_%i",i));
+  hIV_Atot[i] = (TH1D*)fOutput->FindObject(Form("hIV_Atot_%i",i));
+  hIV_multiplicity[i] = (TH1D*)fOutput->FindObject(Form("hIV_multiplicity_%i",i));
+  hOV_Atot_vs_multiplicity[i] = (TH2D*)fOutput->FindObject(Form("hOV_Atot_vs_multiplicity_%i",i));
+  hIV_Atot_vs_multiplicity[i] = (TH2D*)fOutput->FindObject(Form("hIV_Atot_vs_multiplicity_%i",i));
 
   // HISTO CALORIMETER
+  hCrs_Etot[i] = (TH1D*)fOutput->FindObject(Form("hCrs_Etot_%i",i));
+  hCrs_multiplicity[i] = (TH1D*)fOutput->FindObject(Form("hCrs_multiplicity_%i",i));
+  hCrs_Eseed[i] = (TH1D*)fOutput->FindObject(Form("hCrs_Eseed_%i",i));
+  hCrs_Etop[i] = (TH1D*)fOutput->FindObject(Form("hCrs_Etop_%i",i));
+  hCrs_Ebottom[i] = (TH1D*)fOutput->FindObject(Form("hCrs_Ebottom_%i",i));
+  hCrs_R_EtopEtot[i] = (TH1D*)fOutput->FindObject(Form("hCrs_R_EtopEtot_%i",i));
+  hCrs_R_EbottomEtot[i] = (TH1D*)fOutput->FindObject(Form("hCrs_R_EbottomEtot_%i",i));
+  hCrs_EtotVsEtop[i] = (TH2D*)fOutput->FindObject(Form("hCrs_EtotVsEtop_%i",i));
+  hCrs_XYseed[i] = (TH2D*)fOutput->FindObject(Form("hCrs_XYseed_%i",i));
+  hCrs_XY_XYseed[i] = (TH2D*)fOutput->FindObject(Form("hCrs_XY_XYseed_%i",i));
+  hCrs_EseedVSEtot[i] = (TH2D*)fOutput->FindObject(Form("hCrs_EseedVSEtot_%i",i));
+  hCrs_EseedVSMulti[i] = (TH2D*)fOutput->FindObject(Form("hCrs_EseedVSMulti_%i",i));
+  hCrs_EtotVSMulti[i] = (TH2D*)fOutput->FindObject(Form("hCrs_EtotVSMulti_%i",i));
 
- if(isMC==0){
-  hCrs_Etot_beam = (TH1D*)fOutput->FindObject("hCrs_Etot_beam");
-  hCrs_multiplicity_beam = (TH1D*)fOutput->FindObject("hCrs_multiplicity_beam");
-  hCrs_Eseed_beam = (TH1D*)fOutput->FindObject("hCrs_Eseed_beam");
-  hCrs_Etop_beam = (TH1D*)fOutput->FindObject("hCrs_Etop_beam");
-  hCrs_Ebottom_beam = (TH1D*)fOutput->FindObject("hCrs_Ebottom_beam");
-  hCrs_R_EtopEtot_beam = (TH1D*)fOutput->FindObject("hCrs_R_EtopEtot_beam");
-  hCrs_R_EbottomEtot_beam = (TH1D*)fOutput->FindObject("hCrs_R_EbottomEtot_beam");
-  hCrs_EtotVsEtop_beam = (TH2D*)fOutput->FindObject("hCrs_EtotVsEtop_beam");
-  hCrs_XYseed_beam = (TH2D*)fOutput->FindObject("hCrs_XYseed_beam");
-  hCrs_XY_XYseed_beam = (TH2D*)fOutput->FindObject("hCrs_XY_XYseed_beam");
-  hCrs_EseedVSEtot_beam = (TH2D*)fOutput->FindObject("hCrs_EseedVSEtot_beam");
-  hCrs_EseedVSMulti_beam = (TH2D*)fOutput->FindObject("hCrs_EseedVSMulti_beam");
-  hCrs_EtotVSMulti_beam = (TH2D*)fOutput->FindObject("hCrs_EtotVSMulti_beam");
+  hCrs_Etot_NoVETO[i] = (TH1D*)fOutput->FindObject(Form("hCrs_Etot_NoVETO_%i",i));
+  hCrs_multiplicity_NoVETO[i] = (TH1D*)fOutput->FindObject(Form("hCrs_multiplicity_NoVETO_%i",i));
+  hCrs_Eseed_NoVETO[i] = (TH1D*)fOutput->FindObject(Form("hCrs_Eseed_NoVETO_%i",i));
+  hCrs_Etop_NoVETO[i] = (TH1D*)fOutput->FindObject(Form("hCrs_Etop_NoVETO_%i",i));
+  hCrs_Ebottom_NoVETO[i] = (TH1D*)fOutput->FindObject(Form("hCrs_Ebottom_NoVETO_%i",i));
+  hCrs_R_EtopEtot_NoVETO[i] = (TH1D*)fOutput->FindObject(Form("hCrs_R_EtopEtot_NoVETO_%i",i));
+  hCrs_R_EbottomEtot_NoVETO[i] = (TH1D*)fOutput->FindObject(Form("hCrs_R_EbottomEtot_NoVETO_%i",i));
+  hCrs_EtotVsEtop_NoVETO[i] = (TH2D*)fOutput->FindObject(Form("hCrs_EtotVsEtop_NoVETO_%i",i));
+  hCrs_XYseed_NoVETO[i] = (TH2D*)fOutput->FindObject(Form("hCrs_XYseed_NoVETO_%i",i));
+  hCrs_XY_XYseed_NoVETO[i] = (TH2D*)fOutput->FindObject(Form("hCrs_XY_XYseed_NoVETO_%i",i));
+  hCrs_EseedVSEtot_NoVETO[i] = (TH2D*)fOutput->FindObject(Form("hCrs_EseedVSEtot_NoVETO_%i",i));
+  hCrs_EseedVSMulti_NoVETO[i] = (TH2D*)fOutput->FindObject(Form("hCrs_EseedVSMulti_NoVETO_%i",i));
+  hCrs_EtotVSMulti_NoVETO[i] = (TH2D*)fOutput->FindObject(Form("hCrs_EtotVSMulti_NoVETO_%i",i));
 
-
-  hCrs_Etot_NoVETO_beam = (TH1D*)fOutput->FindObject("hCrs_Etot_NoVETO_beam");
-  hCrs_multiplicity_NoVETO_beam = (TH1D*)fOutput->FindObject("hCrs_multiplicity_NoVETO_beam");
-  hCrs_Eseed_NoVETO_beam = (TH1D*)fOutput->FindObject("hCrs_Eseed_NoVETO_beam");
-  hCrs_Etop_NoVETO_beam = (TH1D*)fOutput->FindObject("hCrs_Etop_NoVETO_beam");
-  hCrs_Ebottom_NoVETO_beam = (TH1D*)fOutput->FindObject("hCrs_Ebottom_NoVETO_beam");
-  hCrs_R_EtopEtot_NoVETO_beam = (TH1D*)fOutput->FindObject("hCrs_R_EtopEtot_NoVETO_beam");
-  hCrs_R_EbottomEtot_NoVETO_beam = (TH1D*)fOutput->FindObject("hCrs_R_EbottomEtot_NoVETO_beam");
-  hCrs_EtotVsEtop_NoVETO_beam = (TH2D*)fOutput->FindObject("hCrs_EtotVsEtop_NoVETO_beam");
-  hCrs_XYseed_NoVETO_beam = (TH2D*)fOutput->FindObject("hCrs_XYseed_NoVETO_beam");
-  hCrs_XY_XYseed_NoVETO_beam = (TH2D*)fOutput->FindObject("hCrs_XY_XYseed_NoVETO_beam");
-  hCrs_EseedVSEtot_NoVETO_beam = (TH2D*)fOutput->FindObject("hCrs_EseedVSEtot_NoVETO_beam");
-  hCrs_EseedVSMulti_NoVETO_beam = (TH2D*)fOutput->FindObject("hCrs_EseedVSMulti_NoVETO_beam");
-  hCrs_EtotVSMulti_NoVETO_beam = (TH2D*)fOutput->FindObject("hCrs_EtotVSMulti_NoVETO_beam");
-
- // COSMIC
-  hCrs_Etot_cosmic = (TH1D*)fOutput->FindObject("hCrs_Etot_cosmic");
-  hCrs_multiplicity_cosmic = (TH1D*)fOutput->FindObject("hCrs_multiplicity_cosmic");
-  hCrs_Eseed_cosmic = (TH1D*)fOutput->FindObject("hCrs_Eseed_cosmic");
-  hCrs_Etop_cosmic = (TH1D*)fOutput->FindObject("hCrs_Etop_cosmic");
-  hCrs_Ebottom_cosmic = (TH1D*)fOutput->FindObject("hCrs_Ebottom_cosmic");
-  hCrs_R_EtopEtot_cosmic = (TH1D*)fOutput->FindObject("hCrs_R_EtopEtot_cosmic");
-  hCrs_R_EbottomEtot_cosmic = (TH1D*)fOutput->FindObject("hCrs_R_EbottomEtot_cosmic");
-  hCrs_EtotVsEtop_cosmic = (TH2D*)fOutput->FindObject("hCrs_EtotVsEtop_cosmic");
-  hCrs_XYseed_cosmic = (TH2D*)fOutput->FindObject("hCrs_XYseed_cosmic");
-  hCrs_XY_XYseed_cosmic = (TH2D*)fOutput->FindObject("hCrs_XY_XYseed_cosmic");
-  hCrs_EseedVSEtot_cosmic = (TH2D*)fOutput->FindObject("hCrs_EseedVSEtot_cosmic");
-  hCrs_EseedVSMulti_cosmic = (TH2D*)fOutput->FindObject("hCrs_EseedVSMulti_cosmic");
-  hCrs_EtotVSMulti_cosmic = (TH2D*)fOutput->FindObject("hCrs_EtotVSMulti_cosmic");
-
-  hCrs_Etot_NoVETO_cosmic = (TH1D*)fOutput->FindObject("hCrs_Etot_NoVETO_cosmic");
-  hCrs_multiplicity_NoVETO_cosmic = (TH1D*)fOutput->FindObject("hCrs_multiplicity_NoVETO_cosmic");
-  hCrs_Eseed_NoVETO_cosmic = (TH1D*)fOutput->FindObject("hCrs_Eseed_NoVETO_cosmic");
-  hCrs_Etop_NoVETO_cosmic = (TH1D*)fOutput->FindObject("hCrs_Etop_NoVETO_cosmic");
-  hCrs_Ebottom_NoVETO_cosmic = (TH1D*)fOutput->FindObject("hCrs_Ebottom_NoVETO_cosmic");
-  hCrs_R_EtopEtot_NoVETO_cosmic = (TH1D*)fOutput->FindObject("hCrs_R_EtopEtot_NoVETO_cosmic");
-  hCrs_R_EbottomEtot_NoVETO_cosmic = (TH1D*)fOutput->FindObject("hCrs_R_EbottomEtot_NoVETO_cosmic");
-  hCrs_EtotVsEtop_NoVETO_cosmic = (TH2D*)fOutput->FindObject("hCrs_EtotVsEtop_NoVETO_cosmic");
-  hCrs_XYseed_NoVETO_cosmic = (TH2D*)fOutput->FindObject("hCrs_XYseed_NoVETO_cosmic");
-  hCrs_XY_XYseed_NoVETO_cosmic = (TH2D*)fOutput->FindObject("hCrs_XY_XYseed_NoVETO_cosmic");
-  hCrs_EseedVSEtot_NoVETO_cosmic = (TH2D*)fOutput->FindObject("hCrs_EseedVSEtot_NoVETO_cosmic");
-  hCrs_EseedVSMulti_NoVETO_cosmic = (TH2D*)fOutput->FindObject("hCrs_EseedVSMulti_NoVETO_cosmic");
-  hCrs_EtotVSMulti_NoVETO_cosmic = (TH2D*)fOutput->FindObject("hCrs_EtotVSMulti_NoVETO_cosmic");
- }else{
- // MC
-  hCrs_Etot_MC = (TH1D*)fOutput->FindObject("hCrs_Etot_MC");
-  hCrs_multiplicity_MC = (TH1D*)fOutput->FindObject("hCrs_multiplicity_MC");
-  hCrs_Eseed_MC = (TH1D*)fOutput->FindObject("hCrs_Eseed_MC");
-  hCrs_Etop_MC = (TH1D*)fOutput->FindObject("hCrs_Etop_MC");
-  hCrs_Ebottom_MC = (TH1D*)fOutput->FindObject("hCrs_Ebottom_MC");
-  hCrs_R_EtopEtot_MC = (TH1D*)fOutput->FindObject("hCrs_R_EtopEtot_MC");
-  hCrs_R_EbottomEtot_MC = (TH1D*)fOutput->FindObject("hCrs_R_EbottomEtot_MC");
-  hCrs_EtotVsEtop_MC = (TH2D*)fOutput->FindObject("hCrs_EtotVsEtop_MC");
-  hCrs_XYseed_MC = (TH2D*)fOutput->FindObject("hCrs_XYseed_MC");
-  hCrs_XY_XYseed_MC = (TH2D*)fOutput->FindObject("hCrs_XY_XYseed_MC");
-  hCrs_EseedVSEtot_MC = (TH2D*)fOutput->FindObject("hCrs_EseedVSEtot_MC");
-  hCrs_EseedVSMulti_MC = (TH2D*)fOutput->FindObject("hCrs_EseedVSMulti_MC");
-  hCrs_EtotVSMulti_MC = (TH2D*)fOutput->FindObject("hCrs_EtotVSMulti_MC");
-
-  hCrs_Etot_NoVETO_MC = (TH1D*)fOutput->FindObject("hCrs_Etot_NoVETO_MC");
-  hCrs_multiplicity_NoVETO_MC = (TH1D*)fOutput->FindObject("hCrs_multiplicity_NoVETO_MC");
-  hCrs_Eseed_NoVETO_MC = (TH1D*)fOutput->FindObject("hCrs_Eseed_NoVETO_MC");
-  hCrs_Etop_NoVETO_MC = (TH1D*)fOutput->FindObject("hCrs_Etop_NoVETO_MC");
-  hCrs_Ebottom_NoVETO_MC = (TH1D*)fOutput->FindObject("hCrs_Ebottom_NoVETO_MC");
-  hCrs_R_EtopEtot_NoVETO_MC = (TH1D*)fOutput->FindObject("hCrs_R_EtopEtot_NoVETO_MC");
-  hCrs_R_EbottomEtot_NoVETO_MC = (TH1D*)fOutput->FindObject("hCrs_R_EbottomEtot_NoVETO_MC");
-  hCrs_EtotVsEtop_NoVETO_MC = (TH2D*)fOutput->FindObject("hCrs_EtotVsEtop_NoVETO_MC");
-  hCrs_XYseed_NoVETO_MC = (TH2D*)fOutput->FindObject("hCrs_XYseed_NoVETO_MC");
-  hCrs_XY_XYseed_NoVETO_MC = (TH2D*)fOutput->FindObject("hCrs_XY_XYseed_NoVETO_MC");
-  hCrs_EseedVSEtot_NoVETO_MC = (TH2D*)fOutput->FindObject("hCrs_EseedVSEtot_NoVETO_MC");
-  hCrs_EseedVSMulti_NoVETO_MC = (TH2D*)fOutput->FindObject("hCrs_EseedVSMulti_NoVETO_MC");
-  hCrs_EtotVSMulti_NoVETO_MC = (TH2D*)fOutput->FindObject("hCrs_EtotVSMulti_NoVETO_MC");
- }
-
- if(isMC==0){
-
-	 hCrs_Etot_beam->Sumw2();
-	 hCrs_Etot_beam->Scale(1./BDX_time_beam.size(),"width");
-
-	 hCrs_Eseed_beam->Sumw2();
-	 hCrs_Eseed_beam->Scale(1./BDX_time_beam.size(),"width");
-
-	 hCrs_Etot_cosmic->Sumw2();
-	 hCrs_Etot_cosmic->Scale(1./BDX_time_cosmic.size(),"width");
-
-	 hCrs_Eseed_cosmic->Sumw2();
-	 hCrs_Eseed_cosmic->Scale(1./BDX_time_cosmic.size(),"width");
-
-	 hCrs_Etot_NoVETO_beam->Sumw2();
-	 hCrs_Etot_NoVETO_beam->Scale(1./BDX_time_beam.size(),"width");
-
-	 hCrs_Eseed_NoVETO_beam->Sumw2();
-	 hCrs_Eseed_NoVETO_beam->Scale(1./BDX_time_beam.size(),"width");
-
-	 hCrs_Etot_NoVETO_cosmic->Sumw2();
-	 hCrs_Etot_NoVETO_cosmic->Scale(1./BDX_time_cosmic.size(),"width");
-
-	 hCrs_Eseed_NoVETO_cosmic->Sumw2();
-	 hCrs_Eseed_NoVETO_cosmic->Scale(1./BDX_time_cosmic.size(),"width");
 
  }
 
-if(isMC == 1){
-	 hCrs_Etot_MC->Sumw2();
-	 hCrs_Etot_MC->Scale(1.,"width");
-
-	 hCrs_Eseed_MC->Sumw2();
-	 hCrs_Eseed_MC->Scale(1.,"width");
-
-	 hCrs_Etot_NoVETO_MC->Sumw2();
-	 hCrs_Etot_NoVETO_MC->Scale(1.,"width");
-
-	 hCrs_Eseed_NoVETO_MC->Sumw2();
-	 hCrs_Eseed_NoVETO_MC->Scale(1.,"width");
 
 
-}
+      for(int i=0; i<3; i++){
+
+	 hCrs_Etot[i]->Sumw2();
+	 hCrs_Etot[i]->Scale(1./mean_tlive,"width");
+
+	 hCrs_Eseed[i]->Sumw2();
+	 hCrs_Eseed[i]->Scale(1./mean_tlive,"width");
+
+	 hCrs_Etot[i]->Sumw2();
+	 hCrs_Etot[i]->Scale(1./mean_tlive,"width");
+
+	 hCrs_Eseed[i]->Sumw2();
+	 hCrs_Eseed[i]->Scale(1./mean_tlive,"width");
+
+	 hCrs_Etot_NoVETO[i]->Sumw2();
+	 hCrs_Etot_NoVETO[i]->Scale(1./mean_tlive,"width");
+
+	 hCrs_Eseed_NoVETO[i]->Sumw2();
+	 hCrs_Eseed_NoVETO[i]->Scale(1./mean_tlive,"width");
+
+	 hCrs_Etot_NoVETO[i]->Sumw2();
+	 hCrs_Etot_NoVETO[i]->Scale(1./mean_tlive,"width");
+
+	 hCrs_Eseed_NoVETO[i]->Sumw2();
+	 hCrs_Eseed_NoVETO[i]->Scale(1./mean_tlive,"width");
+
+ }
+
 
 
   while (obj = iter.Next()) {
