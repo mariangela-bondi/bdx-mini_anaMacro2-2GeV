@@ -221,7 +221,7 @@ int main(int argc, char **argv) {
 		proof->Exec("gSystem->Load(\"${BDXRECO_ROOT}/lib/libJANA.so\")");
 		proof->Exec("gSystem->Load(\"${BDXRECO_ROOT}/lib/libbdxRecoExt.so\")");
 		proof->Exec("gSystem->Load(\"${BDXRECO_ROOT}/lib/libbdxReco.so\")");
-		proof->Exec("gSystem->Load(\"/auto_data/fiber7/bondi/BDX_mini/bdx-mini_anaMacro2-2GeV/libBDXDSTSelector.so\")");
+		proof->Exec("gSystem->Load(\"/Users/Mariangela/work/BDX-MINI/bdx-mini_anaMacro2-2GeV/libBDXDSTSelector.so\")");
 		proof->SetParameter("PROOF_Packetizer", "TPacketizer");
 		DSTChain->SetProof(1);
 	}
@@ -268,7 +268,7 @@ int main(int argc, char **argv) {
 
 
     // skim data in beam on event, cosmic event, garbage event:
-    // an event is garbage if in the 5 sec after or before it there is a change of current:
+    // an event is garbage if in the 5 sec after or before it there is a change of current :
     //i.e in the i-simo bin the current is >0 and in the following i+5 (or i-5) current=0 or viceversa
 
     for (int iX = 1; iX <= hTrigAllEvents_current->GetNbinsX(); iX++){
@@ -308,6 +308,7 @@ int main(int argc, char **argv) {
      }
 
     }   //end skim of data
+
 
     // evaluation of mean Tlive
 
@@ -377,7 +378,7 @@ TH1D* hControl = new TH1D("hControl", "hControl",100,0.5,100.5);
     	if(i==5) hControl->SetBinContent(i, time_cosmic.size());
     	if(i==7) hControl->SetBinContent(i, time_garbage.size());
     }
-
+    cout << "before BDXDSTSelector1"<<endl;
     myBDXDSTSelector1->mean_tlive = meanTLive;
 
  DSTChain->Process(myBDXDSTSelector1, opt.c_str(), Ntot, N0);

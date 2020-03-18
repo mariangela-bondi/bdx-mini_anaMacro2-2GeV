@@ -84,13 +84,15 @@ void BDXDSTSelector::SlaveBegin(TTree * /*tree*/) {
 
 	hTlive_temp = new TH1D("hTlive_temp", "hTlive_temp",N,0,N * dT);
 
+
 	for(int i=0; i<32; i++){
 		hBDXMiniStability_trg[i] = new TH1D(Form("hBDXMiniStability_trg_%i",i), Form("hBDXMiniStability_trg_%i;T(s);Rate(Hz)",i),N1,0,N1 * dT1);
 	}
 
+
 	for(int i=0; i<11; i++){
-		hBDXMini_OV_A[i] = new TH1D(Form("hBDXMini_OV_A_%i",i), Form("hBDXMini_OV_A_%i;A; Counts",i),100,0,200);
-		hBDXMini_IV_A[i] = new TH1D(Form("hBDXMini_IV_A_%i",i), Form("hBDXMini_IV_A_%i;A; Counts",i),100,0,200);
+		hBDXMini_OV_A[i] = new TH1D(Form("hBDXMini_OV_A_%i",i), Form("hBDXMini_OV_A_%i;A; Counts",i),100,0,400);
+		hBDXMini_IV_A[i] = new TH1D(Form("hBDXMini_IV_A_%i",i), Form("hBDXMini_IV_A_%i;A; Counts",i),100,0,400);
 		hBDXMini_OV_T[i] = new TH1D(Form("hBDXMini_OV_T_%i",i), Form("hBDXMini_OV_T_%i;T[ns]; Counts",i),100,0,600);
 		hBDXMini_IV_T[i] = new TH1D(Form("hBDXMini_IV_T_%i",i), Form("hBDXMini_IV_T_%i;T[ns]; Counts",i),100,0,600);
 		hBDXMini_OV_Q[i] = new TH1D(Form("hBDXMini_OV_Q_%i",i), Form("hBDXMini_OV_Q_%i;Q[p.e.]; Counts",i),200,0,400);
@@ -98,11 +100,6 @@ void BDXDSTSelector::SlaveBegin(TTree * /*tree*/) {
 		hBDXMini_IV_AvT[i] = new TH2D(Form("hBDXMini_IV_AvT_%i",i), Form("hBDXMini_IV_AvT_%i;T; A",i),100,0,600, 200, 0, 400);
 		hBDXMini_OV_AvT[i] = new TH2D(Form("hBDXMini_OV_AvT_%i",i), Form("hBDXMini_OV_AvT_%i;T; A",i),100,0,600, 200, 0, 400);
 
-		if(i==9 || i==10){
-			hBDXMini_OV_A[i] = new TH1D(Form("hBDXMini_OV_A_%i",i), Form("hBDXMini_OV_A_%i;A[mV]; Counts",i),200,0,400);
-			hBDXMini_IV_A[i] = new TH1D(Form("hBDXMini_IV_A_%i",i), Form("hBDXMini_IV_A_%i;A[mV]; Counts",i),200,0,400);
-
-		}
 	}
 	for(int i=0; i<45; i++){
 
@@ -214,6 +211,7 @@ Bool_t BDXDSTSelector::Process(Long64_t entry) {
 
 	hTrigAllEvents_stability->Fill(thisEventT);
 
+	//histo used by ana.cc to select beam on events and cosmic events
 	hTrigAllEvents->Fill(thisEventT);
 	hTrigAllEvents_current_temp->Fill(thisEventT, current);
 

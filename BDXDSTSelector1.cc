@@ -261,7 +261,7 @@ if((isGarbage==false)||(isMC==1)){
 
 	 if(isMC==1) INDEX =2;
 
-	 if(INDEX ==1) return kTRUE;
+	 if(INDEX ==1) return kTRUE;  // it has to be commented if you want save the beam on analysis
 
 	/*Check if the event has a collection named IntVetoHits and the corresponding objects are IntVetoHit objects*/
 
