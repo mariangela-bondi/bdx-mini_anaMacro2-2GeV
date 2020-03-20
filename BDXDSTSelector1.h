@@ -89,6 +89,23 @@ public:
 		hHALLA_cur_cosmic=0;
 		hHALLA_cur_beam=0;
 
+		//variables VETO
+
+		for(int i=0; i<11; i++){
+			QOV[i]=0;
+			QIV[i]=0;
+			TOV[i]=0;
+			TIV[i]=0;
+		}
+
+		//variables CRS
+		for(int i=0; i<45; i++){
+			Ecrs[i]=0;
+			Tcrs[i]=0;
+			Acrs[i]=0;
+		}
+
+
 		// HISTO VETO
 		for(int i=0; i<3; i++){
 	    hOV_Atot[i] = 0;
@@ -196,6 +213,13 @@ public:
     bool isCosmic;
     bool isBeam;
     int INDEX;
+
+    //variables VETO
+    double QOV[11], QIV[11], TOV[11], TIV[11];
+
+    //variables CRS
+
+    double Ecrs[45], Tcrs[45], Acrs[45];
 
        // HISTO VETO
 

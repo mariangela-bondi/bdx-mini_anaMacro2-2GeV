@@ -119,7 +119,7 @@ void BDXDSTSelector::SlaveBegin(TTree * /*tree*/) {
 	
 	outTree->Branch("runNumber", &runNumber, "runNumber/I");
 	outTree->Branch("eventNumber", &eventNumber, "eventNumber/I");
-
+    outTree->Branch("thisEventT", &thisEventT, "thisEvend/D");
 
 
 

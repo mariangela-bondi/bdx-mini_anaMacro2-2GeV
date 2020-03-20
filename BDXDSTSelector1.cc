@@ -136,6 +136,17 @@ void BDXDSTSelector1::SlaveBegin(TTree * /*tree*/) {
 	outTree1->Branch("runNumber", &runNumber, "runNumber/I");
 	outTree1->Branch("eventNumber", &eventNumber, "eventNumber/I");
 
+	// veto BRANCH
+	outTree1->Branch("QOV",&QOV, "QOV[11]/D");
+	outTree1->Branch("QIV",&QIV, "QIV[11]/D");
+	outTree1->Branch("TOV",&QOV, "TOV[11]/D");
+	outTree1->Branch("TIV",&QIV, "TIV[11]/D");
+
+	// CRS BRANCH
+	outTree1->Branch("Ecrs",&Ecrs, "Ecrs[45]/D");
+	outTree1->Branch("Tcrs",&Tcrs, "Tcrs[45]/D");
+	outTree1->Branch("Acrs",&Acrs, "Acrs[45]/D");
+
 
 
 	Info("SlaveBegin", "AllHistos to fOutput");
@@ -195,6 +206,20 @@ Bool_t BDXDSTSelector1::Process(Long64_t entry) {
 	bool noOV =false;
 	bool noIV =false;
 
+	//VETO  Variables //
+	for(int i=0; i<11; i++){
+		QOV[i]=-10;
+		QIV[i]=-10;
+		TOV[i]=-10;
+		TIV[i]=-10;
+	}
+
+	//variables CRS
+	for(int i=0; i<45; i++){
+		Ecrs[i]=-10;
+		Tcrs[i]=-10;
+		Acrs[i]=-10;
+	}
 
 	///CRS  Variables ///
 	double E_singleCrs_thr = 10; //minima energia misurabile
@@ -229,6 +254,7 @@ Bool_t BDXDSTSelector1::Process(Long64_t entry) {
 
 	thisEventT = m_Event->getEventHeader()->getEventTime() - T0;
 
+
 	 if(isMC==0){
 	current = m_EventHeader->getEpicsData()->getDataValue("pcrexHallA_beam_current");
     for(int i=0; i<BDX_time_garbage.size();i++){
@@ -240,7 +266,10 @@ Bool_t BDXDSTSelector1::Process(Long64_t entry) {
     }
 
 
-if(isGarbage==true) hHALLA_cur_garbage->Fill(thisEventT, current);
+if(isGarbage==true) {
+	hHALLA_cur_garbage->Fill(thisEventT, current);
+	return kTRUE;
+}
 	}
 
 
@@ -270,6 +299,8 @@ if((isGarbage==false)||(isMC==1)){
 	  while (fIntVetoHit = (IntVetoHit*) IntVetoHitsIter.Next()) { //Need to cast to the proper object
 
 		  if (fIntVetoHit->m_channel.layer == 0 && fIntVetoHit->m_channel.component!=3) {
+			  QOV[fIntVetoHit->m_channel.component] = fIntVetoHit->A;
+			  TOV[fIntVetoHit->m_channel.component] = fIntVetoHit->T;
 			  OVAtot += fIntVetoHit->A;
 		      if(isMC==1){
 			     if(fIntVetoHit->A > OV_th ){
@@ -288,6 +319,8 @@ if((isGarbage==false)||(isMC==1)){
 		  }
 
 		  if (fIntVetoHit->m_channel.layer == 1) {
+			  QIV[fIntVetoHit->m_channel.component] = fIntVetoHit->A;
+			  TIV[fIntVetoHit->m_channel.component] = fIntVetoHit->T;
 
 		     IVAtot += fIntVetoHit->A;
 		      if(isMC==1){
@@ -323,6 +356,35 @@ if((isGarbage==false)||(isMC==1)){
 	    hIV_multiplicity[INDEX]->Fill(multiplicity_IV, weight);
 	    hOV_Atot_vs_multiplicity[INDEX]->Fill(OVAtot, multiplicity_OV, weight);
 	    hIV_Atot_vs_multiplicity[INDEX]->Fill(IVAtot, multiplicity_IV, weight);
+
+
+	    int idx_crs_up=0;
+	    int idx_crs_down=0;
+
+
+
+		if (m_Event->hasCollection(CalorimeterHit::Class(), "CalorimeterHits")) {
+		  TIter CaloHitsIter(m_Event->getCollection(CalorimeterHit::Class(), "CalorimeterHits"));
+		  //thisEventT = m_Event->getEventHeader()->getEventTime() - T0;
+
+		  while (fCaloHit = (CalorimeterHit*) CaloHitsIter.Next()) {
+			  if(fCaloHit->m_channel.sector ==0){   // sono la parte up del calorimetro
+			  idx_crs_up = this->getCaloIDXFromXY(fCaloHit->m_channel.x, fCaloHit->m_channel.y);
+			  Ecrs[idx_crs_up] = fCaloHit->E;
+			  Tcrs[idx_crs_up] = fCaloHit->T;
+			  Acrs[idx_crs_up] = fCaloHit->A;
+			  }
+			  if(fCaloHit->m_channel.sector ==1){   // sono la parte down del calorimetro
+			  idx_crs_down = (this->getCaloIDXFromXY(fCaloHit->m_channel.x, fCaloHit->m_channel.y)) +22;
+			  Ecrs[idx_crs_down] = fCaloHit->E;
+			  Tcrs[idx_crs_down] = fCaloHit->T;
+			  Acrs[idx_crs_down] = fCaloHit->A;
+
+			  }
+
+		  }
+		  }
+
 
 
 	/*Check if the event has a collection named CalorimeterHits, and the corresponding objects are CalorimeterHit objects*/
