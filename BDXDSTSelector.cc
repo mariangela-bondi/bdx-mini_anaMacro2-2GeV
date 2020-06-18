@@ -77,7 +77,7 @@ void BDXDSTSelector::SlaveBegin(TTree * /*tree*/) {
 	hHALLA_cur = new TH2D("hHALLA_cur", "hHALLA_cur;T(s);Current(uA)", N, 0, N * dT, 100, -0.05, 200.05);
 	hTlive = new TH2D("hTlive", "hTlive;T(s);Live Time(%)", N, 0, N * dT, 111, -0.5, 110.5);
 
-	hTrigAllEvents_stability = new TH1D("hTrigAllEvents_stability", "hTrigAllEvents_stability;T(s);Rate(Hz)",N1,0,N1 * dT1);
+	hTrigAllEvents_rate = new TH1D("hTrigAllEvents_rate", "hTrigAllEvents_rate;T(s);Rate(Hz)",N,0,N * dT);
 
 	hTrigAllEvents = new TH1D("hTrigAllEvents", "hTrigAllEvents;T(s);counts",N,0,N * dT);
 	hTrigAllEvents_current_temp = new TH1D("hTrigAllEvents_current_temp", "hTrigAllEvents_current_temp;T(s);sum_current",N,0,N * dT);
@@ -209,7 +209,7 @@ Bool_t BDXDSTSelector::Process(Long64_t entry) {
 
 	}
 
-	hTrigAllEvents_stability->Fill(thisEventT);
+	hTrigAllEvents_rate->Fill(thisEventT);
 
 	//histo used by ana.cc to select beam on events and cosmic events
 	hTrigAllEvents->Fill(thisEventT);
@@ -273,7 +273,7 @@ Bool_t BDXDSTSelector::Process(Long64_t entry) {
 
 
 	//cout <<"end event"<<endl;
-
+	 m_Event->Clear("C");
 	return kTRUE;
 	
 }
@@ -300,7 +300,7 @@ void BDXDSTSelector::Terminate() {
 
 
   hTrigAllEvents = (TH1D*)fOutput->FindObject("hTrigAllEvents");
-  hTrigAllEvents_stability=(TH1D*)fOutput->FindObject("hTrigAllEvents_stability");
+  hTrigAllEvents_rate=(TH1D*)fOutput->FindObject("hTrigAllEvents_rate");
   hTrigAllEvents_current_temp=(TH1D*)fOutput->FindObject("hTrigAllEvents_current_temp");
   hHALLA_cur = (TH2D*)fOutput->FindObject("hHALLA_cur");
   hTlive = (TH2D*)fOutput->FindObject("hTlive");
@@ -336,8 +336,8 @@ void BDXDSTSelector::Terminate() {
 
 
 
-    hTrigAllEvents_stability->Sumw2();
-    hTrigAllEvents_stability->Scale(1.,"width");
+    hTrigAllEvents_rate->Sumw2();
+    hTrigAllEvents_rate->Scale(1.,"width");
 
     hBDXMiniStability_trg[0]->Sumw2();
 	hBDXMiniStability_trg[0]->Scale(1.,"width");

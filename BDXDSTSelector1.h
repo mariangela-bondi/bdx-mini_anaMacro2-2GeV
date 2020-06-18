@@ -78,13 +78,15 @@ public:
 
 		EOT =0;
 		mean_tlive =0;
+
+
 	       
 		/*OutputTree and related stuff*/
 		outProofFile = 0;
 		outFile = 0;
 		outTree1 = 0;
 
-
+		hTrigAllEvents_rate_garbage =0;
 		hHALLA_cur_garbage=0;
 		hHALLA_cur_cosmic=0;
 		hHALLA_cur_beam=0;
@@ -147,6 +149,30 @@ public:
 		hCrs_EseedVSEtot_NoVETO[i] = 0;
 		hCrs_EseedVSMulti_NoVETO[i] = 0;
 		hCrs_EtotVSMulti_NoVETO[i] = 0;
+
+		//HISTO rejection study
+
+		hCrs_Eseed_IVc1[i] =0;
+		hCrs_Eseed_IVc2[i] =0;
+		hCrs_Eseed_IVc3[i] =0;
+		hCrs_Eseed_IVc4[i] =0;
+		hCrs_Eseed_IVc5[i] =0;
+
+
+		hCrs_Eseed_NoIVc1[i] =0;
+		hCrs_Eseed_NoIVc2[i] =0;
+		hCrs_Eseed_NoIVc3[i] =0;
+		hCrs_Eseed_NoIVc4[i] =0;
+		hCrs_Eseed_NoIVc5[i] =0;
+
+		 IVc1=0;
+		 IVc2=0;
+		 IVc3=0;
+		 IVc4=0;
+		 IVc5=0;
+
+		 Eseed=0;
+		 multip=0;
 		}
 
 
@@ -206,9 +232,11 @@ public:
 	//TH1D *hTrig1, *hTrig2, *hTrig3, *hTrig4, *hTrigP, *hTrig0;
 
 
-  
+	TH1D *hTrigAllEvents_rate_garbage;
 	TH2D *hHALLA_cur_garbage, *hHALLA_cur_cosmic, *hHALLA_cur_beam, *hTlive;
-	vector<double> BDX_time_garbage, BDX_time_beam, BDX_time_cosmic;
+	vector<double> BDX_time_garbage;
+	vector<double> BDX_time_beam;
+	vector<double> BDX_time_cosmic;
     bool isGarbage;
     bool isCosmic;
     bool isBeam;
@@ -263,8 +291,26 @@ public:
 	TH2D *hCrs_EseedVSMulti_NoVETO[3];
 	TH2D *hCrs_EtotVSMulti_NoVETO[3];
 
+	//HISTO rejection study
+	TH1D *hCrs_Eseed_IVc1[3];
+	TH1D *hCrs_Eseed_IVc2[3];
+	TH1D *hCrs_Eseed_IVc3[3];
+	TH1D *hCrs_Eseed_IVc4[3];
+	TH1D *hCrs_Eseed_IVc5[3];
 
+	TH1D *hCrs_Eseed_NoIVc1[3];
+	TH1D *hCrs_Eseed_NoIVc2[3];
+	TH1D *hCrs_Eseed_NoIVc3[3];
+	TH1D *hCrs_Eseed_NoIVc4[3];
+	TH1D *hCrs_Eseed_NoIVc5[3];
 
+	int IVc1;
+	int IVc2;
+	int IVc3;
+	int IVc4;
+	int IVc5;
+	double Eseed;
+	int multip;
 
 	vector<TTree*> tQmatrix;
 

@@ -70,6 +70,7 @@ void BDXDSTSelector1::SlaveBegin(TTree * /*tree*/) {
 	}
 
 	/*Create here the histograms.*/
+	hTrigAllEvents_rate_garbage = new TH1D("hTrigAllEvents_rate_garbage", "hTrigAllEvents_rate_garbage;T(s);Rate(Hz)",N,0,N * dT);
 
 	hHALLA_cur_beam = new TH2D("hHALLA_cur_beam", "hHALLA_cur_beam;T(s);Current(uA)", N, 0, N * dT, 100, -0.05, 200.05);
 	hHALLA_cur_cosmic = new TH2D("hHALLA_cur_cosmic", "hHALLA_cur_cosmic;T(s);Current(uA)", N, 0, N * dT, 100, -0.05, 200.05);
@@ -128,6 +129,19 @@ void BDXDSTSelector1::SlaveBegin(TTree * /*tree*/) {
 	hCrs_EseedVSMulti_NoVETO[i] = new TH2D(Form("hCrs_EseedVSMulti_NoVETO_%i",i),Form("hCrs_EseedVSMulti_NoVETO_%i; Eseed [MeV]; Multiplicity",i),Nbin_Etot, min_Etot, max_Etot,45, -0.5, 44.5);
 	hCrs_EtotVSMulti_NoVETO[i] = new TH2D(Form("hCrs_EtotVSMulti_NoVETO_%i",i),Form("hCrs_EtotVSMulti_NoVETO_%i; Etot [MeV]; Multiplicity",i),Nbin_Etot, min_Etot, max_Etot,45, -0.5, 44.5);
 
+
+	hCrs_Eseed_IVc1[i] = new TH1D(Form("hCrs_Eseed_IVc1_%i",i), Form("hCrs_Eseed_IVc1_%i; Eseed [MeV]; Hz/MeV",i), Nbin_Etot, min_Etot, max_Etot);
+	hCrs_Eseed_IVc2[i] = new TH1D(Form("hCrs_Eseed_IVc2_%i",i), Form("hCrs_Eseed_IVc2_%i; Eseed [MeV]; Hz/MeV",i), Nbin_Etot, min_Etot, max_Etot);
+	hCrs_Eseed_IVc3[i] = new TH1D(Form("hCrs_Eseed_IVc3_%i",i), Form("hCrs_Eseed_IVc3_%i; Eseed [MeV]; Hz/MeV",i), Nbin_Etot, min_Etot, max_Etot);
+	hCrs_Eseed_IVc4[i] = new TH1D(Form("hCrs_Eseed_IVc4_%i",i), Form("hCrs_Eseed_IVc4_%i; Eseed [MeV]; Hz/MeV",i), Nbin_Etot, min_Etot, max_Etot);
+	hCrs_Eseed_IVc5[i] = new TH1D(Form("hCrs_Eseed_IVc5_%i",i), Form("hCrs_Eseed_IVc5_%i; Eseed [MeV]; Hz/MeV",i), Nbin_Etot, min_Etot, max_Etot);
+
+	hCrs_Eseed_NoIVc1[i] = new TH1D(Form("hCrs_Eseed_NoIVc1_%i",i), Form("hCrs_Eseed_NoIVc1_%i; Eseed [MeV]; Hz/MeV",i), Nbin_Etot, min_Etot, max_Etot);
+	hCrs_Eseed_NoIVc2[i] = new TH1D(Form("hCrs_Eseed_NoIVc2_%i",i), Form("hCrs_Eseed_NoIVc2_%i; Eseed [MeV]; Hz/MeV",i), Nbin_Etot, min_Etot, max_Etot);
+	hCrs_Eseed_NoIVc3[i] = new TH1D(Form("hCrs_Eseed_NoIVc3_%i",i), Form("hCrs_Eseed_NoIVc3_%i; Eseed [MeV]; Hz/MeV",i), Nbin_Etot, min_Etot, max_Etot);
+	hCrs_Eseed_NoIVc4[i] = new TH1D(Form("hCrs_Eseed_NoIVc4_%i",i), Form("hCrs_Eseed_NoIVc4_%i; Eseed [MeV]; Hz/MeV",i), Nbin_Etot, min_Etot, max_Etot);
+	hCrs_Eseed_NoIVc5[i] = new TH1D(Form("hCrs_Eseed_NoIVc5_%i",i), Form("hCrs_Eseed_NoIVc5_%i; Eseed [MeV]; Hz/MeV",i), Nbin_Etot, min_Etot, max_Etot);
+
    }
 
 
@@ -139,13 +153,22 @@ void BDXDSTSelector1::SlaveBegin(TTree * /*tree*/) {
 	// veto BRANCH
 	outTree1->Branch("QOV",&QOV, "QOV[11]/D");
 	outTree1->Branch("QIV",&QIV, "QIV[11]/D");
-	outTree1->Branch("TOV",&QOV, "TOV[11]/D");
-	outTree1->Branch("TIV",&QIV, "TIV[11]/D");
+	outTree1->Branch("TOV",&TOV, "TOV[11]/D");
+	outTree1->Branch("TIV",&TIV, "TIV[11]/D");
 
 	// CRS BRANCH
 	outTree1->Branch("Ecrs",&Ecrs, "Ecrs[45]/D");
+	outTree1->Branch("Eseed",&Eseed, "Eseed/D");
 	outTree1->Branch("Tcrs",&Tcrs, "Tcrs[45]/D");
 	outTree1->Branch("Acrs",&Acrs, "Acrs[45]/D");
+	outTree1->Branch("multip",&multip, "multip/I");
+
+	outTree1->Branch("IVc1",&IVc1,"IVc1/I");
+	outTree1->Branch("IVc2",&IVc2,"IVc2/I");
+	outTree1->Branch("IVc3",&IVc3,"IVc3/I");
+	outTree1->Branch("IVc4",&IVc4,"IVc4/I");
+	outTree1->Branch("IVc5",&IVc5,"IVc5/I");
+
 
 
 
@@ -200,11 +223,25 @@ Bool_t BDXDSTSelector1::Process(Long64_t entry) {
 	double Tmin = 50;
 	double Tmax = 500;
 
+	double IV_A_max=0;
+	double IV_T_max=0;
+	double IV_Atot_oct=0;
+	double IV_Amax_oct=0;
+	double IV_Tmax_oct=0;
+	int multi_IVOct=0;
+	int multi_IVtot=0;
+
 	int multiplicity_OV =0;
 	int multiplicity_IV =0;
 
 	bool noOV =false;
 	bool noIV =false;
+
+	 IVc1=0;
+	 IVc2=0;
+	 IVc3=0;
+	 IVc4=0;
+	 IVc5=0;
 
 	//VETO  Variables //
 	for(int i=0; i<11; i++){
@@ -226,9 +263,9 @@ Bool_t BDXDSTSelector1::Process(Long64_t entry) {
 	double Etot = 0;
 	double Etop = 0;
 	double Ebottom = 0;
-	double Eseed = 0;
+	 Eseed = 0;
 	double Ehit =0;
-	int multip = 0;
+	 multip = 0;
 	int Xseed = 0;
 	int Yseed = 0;
 	int Zseed = 0;
@@ -267,7 +304,9 @@ Bool_t BDXDSTSelector1::Process(Long64_t entry) {
 
 
 if(isGarbage==true) {
+	hTrigAllEvents_rate_garbage->Fill(thisEventT);
 	hHALLA_cur_garbage->Fill(thisEventT, current);
+	 m_Event->Clear("C");
 	return kTRUE;
 }
 	}
@@ -275,13 +314,13 @@ if(isGarbage==true) {
 
 if((isGarbage==false)||(isMC==1)){
 
-     if(isMC==0 && current==0){
+     if(isMC==0 && current<=0.03){
     	 isCosmic=true;
     	 hHALLA_cur_cosmic->Fill(thisEventT, current);
          INDEX =0;
      }
 
-	 if(isMC==0 && current>0){
+	 if(isMC==0 && current>0.03){
 		 isBeam =true;
 	     hHALLA_cur_beam->Fill(thisEventT, current);
          INDEX =1;
@@ -290,7 +329,10 @@ if((isGarbage==false)||(isMC==1)){
 
 	 if(isMC==1) INDEX =2;
 
-	 if(INDEX ==1) return kTRUE;  // it has to be commented if you want save the beam on analysis
+	 if(INDEX ==1) {
+		 m_Event->Clear("C");
+		 return kTRUE;  // it has to be commented if you want save the beam on data
+	 }
 
 	/*Check if the event has a collection named IntVetoHits and the corresponding objects are IntVetoHit objects*/
 
@@ -322,6 +364,22 @@ if((isGarbage==false)||(isMC==1)){
 			  QIV[fIntVetoHit->m_channel.component] = fIntVetoHit->A;
 			  TIV[fIntVetoHit->m_channel.component] = fIntVetoHit->T;
 
+              if(fIntVetoHit->A>IV_A_max) {
+            	  IV_A_max = fIntVetoHit->A;
+            	  IV_T_max = fIntVetoHit->T;
+             //	IV_seed=fIntVetoHit->m_channel.component;
+              }
+
+              if(fIntVetoHit->m_channel.component<9){
+                  if(fIntVetoHit->A>IV_Amax_oct) {
+                	  IV_Amax_oct = fIntVetoHit->A;
+                	  IV_Tmax_oct = fIntVetoHit->T;
+                 //	IV_seed=fIntVetoHit->m_channel.component;
+                  }
+                  IV_Atot_oct += fIntVetoHit->A;
+
+              }
+
 		     IVAtot += fIntVetoHit->A;
 		      if(isMC==1){
 			     if(fIntVetoHit->A > IV_th ){
@@ -341,6 +399,21 @@ if((isGarbage==false)||(isMC==1)){
 
 
 }
+
+	if(IV_A_max>2.5) {
+		multi_IVtot =1;
+	for(int i=1; i<=10; i++){
+	  if(QIV[i]>2.5&&abs(TIV[i]-IV_T_max)<100) multi_IVtot = multi_IVtot+1;
+	}
+	}
+
+	if(IV_Amax_oct>2.5) {
+		multi_IVOct =1;
+	for(int i=1; i<=8; i++){
+	  if(QIV[i]>2.5&&abs(TIV[i]-IV_Tmax_oct)<100) multi_IVOct = multi_IVOct+1;
+	}
+	}
+
 
 	if(multiplicity_OV==0 && (OVAtot <= Veto_Atot_th )) noOV= true;
 	if(multiplicity_IV==0 && (IVAtot <= Veto_Atot_th )) noIV= true;
@@ -463,7 +536,8 @@ if((isGarbage==false)||(isMC==1)){
 	if(Etot>E_singleCrs_thr){
 	   hCrs_Etot[INDEX]->Fill(Etot, weight);
 	   hCrs_multiplicity[INDEX]->Fill(multip, weight);
-       hCrs_Eseed[INDEX]->Fill(Eseed, weight);
+    //   hCrs_Eseed[INDEX]->Fill(Eseed, weight);
+	   hCrs_Eseed[INDEX]->Fill(Eseed);
 	   hCrs_Etop[INDEX]->Fill(Etop, weight);
 	   hCrs_Ebottom[INDEX]->Fill(Ebottom, weight);
 	   hCrs_R_EtopEtot[INDEX]->Fill(Etop/Etot, weight);
@@ -497,6 +571,31 @@ if((isGarbage==false)||(isMC==1)){
 
 	}
 
+
+	if(IV_A_max>5.5) IVc1=1;
+	if((IV_Amax_oct>4&&IV_Atot_oct>11)||(QIV[9]>5.5)||(QIV[10]>5.5)) IVc2=1;
+    if(multi_IVOct>1||(QIV[9]>5.5)||(QIV[10]>5.5)) IVc3=1;
+    if((multi_IVOct==1&&IV_Amax_oct>5.5)||multi_IVOct>1||(QIV[9]>5.5)||(QIV[10]>5.5)) IVc4=1;
+    if((multi_IVtot==1&&IV_A_max>5.5)||multi_IVtot>1) IVc5=1;
+
+   if(Eseed>0){
+	if(IV_A_max>5.5) hCrs_Eseed_IVc1[INDEX]->Fill(Eseed);
+	if((IV_Amax_oct>4&&IV_Atot_oct>11)||(QIV[9]>5.5)||(QIV[10]>5.5)) hCrs_Eseed_IVc2[INDEX]->Fill(Eseed);
+    if(multi_IVOct>1||(QIV[9]>5.5)||(QIV[10]>5.5)) hCrs_Eseed_IVc3[INDEX]->Fill(Eseed);
+    if((multi_IVOct==1&&IV_Amax_oct>5.5)||multi_IVOct>1||(QIV[9]>5.5)||(QIV[10]>5.5)) hCrs_Eseed_IVc4[INDEX]->Fill(Eseed);
+    if((multi_IVtot==1&&IV_A_max>5.5)||multi_IVtot>1) hCrs_Eseed_IVc5[INDEX]->Fill(Eseed);
+
+	if(!(IV_A_max>5.5)) hCrs_Eseed_NoIVc1[INDEX]->Fill(Eseed);
+	if(!((IV_Amax_oct>4&&IV_Atot_oct>11)||(QIV[9]>5.5)||(QIV[10]>5.5))) hCrs_Eseed_NoIVc2[INDEX]->Fill(Eseed);
+    if(!(multi_IVOct>1||(QIV[9]>5.5)||(QIV[10]>5.5))) hCrs_Eseed_NoIVc3[INDEX]->Fill(Eseed);
+    if(!((multi_IVOct==1&&IV_Amax_oct>5.5)||multi_IVOct>1||(QIV[9]>5.5)||(QIV[10]>5.5))) hCrs_Eseed_NoIVc4[INDEX]->Fill(Eseed);
+    if(!((multi_IVtot==1&&IV_A_max>5.5)||multi_IVtot>1)) hCrs_Eseed_NoIVc5[INDEX]->Fill(Eseed);
+
+
+}
+
+
+
 }
 
 
@@ -508,7 +607,7 @@ if((isGarbage==false)||(isMC==1)){
 	
 
 	//cout <<"end event"<<endl;
-	
+	 m_Event->Clear("C");
 	return kTRUE;
 }
 
@@ -531,7 +630,7 @@ void BDXDSTSelector1::Terminate() {
   TListIter iter(fOutput);
   TObject *obj;
 
-
+  hTrigAllEvents_rate_garbage = (TH1D*)fOutput->FindObject("hTrigAllEvents_rate_garbage");
   hHALLA_cur_beam = (TH2D*)fOutput->FindObject("hHALLA_cur_beam");
   hHALLA_cur_cosmic = (TH2D*)fOutput->FindObject("hHALLA_cur_cosmic");
   hHALLA_cur_garbage = (TH2D*)fOutput->FindObject("hHALLA_cur_garbage");
@@ -576,24 +675,36 @@ void BDXDSTSelector1::Terminate() {
   hCrs_EseedVSMulti_NoVETO[i] = (TH2D*)fOutput->FindObject(Form("hCrs_EseedVSMulti_NoVETO_%i",i));
   hCrs_EtotVSMulti_NoVETO[i] = (TH2D*)fOutput->FindObject(Form("hCrs_EtotVSMulti_NoVETO_%i",i));
 
+  hCrs_Eseed_IVc1[i] = (TH1D*)fOutput->FindObject(Form("hCrs_Eseed_IVc1_%i",i));
+  hCrs_Eseed_IVc2[i] = (TH1D*)fOutput->FindObject(Form("hCrs_Eseed_IVc2_%i",i));
+  hCrs_Eseed_IVc3[i] = (TH1D*)fOutput->FindObject(Form("hCrs_Eseed_IVc3_%i",i));
+  hCrs_Eseed_IVc4[i] = (TH1D*)fOutput->FindObject(Form("hCrs_Eseed_IVc4_%i",i));
+  hCrs_Eseed_IVc5[i] = (TH1D*)fOutput->FindObject(Form("hCrs_Eseed_IVc5_%i",i));
 
+  hCrs_Eseed_NoIVc1[i] = (TH1D*)fOutput->FindObject(Form("hCrs_Eseed_NoIVc1_%i",i));
+  hCrs_Eseed_NoIVc2[i] = (TH1D*)fOutput->FindObject(Form("hCrs_Eseed_NoIVc2_%i",i));
+  hCrs_Eseed_NoIVc3[i] = (TH1D*)fOutput->FindObject(Form("hCrs_Eseed_NoIVc3_%i",i));
+  hCrs_Eseed_NoIVc4[i] = (TH1D*)fOutput->FindObject(Form("hCrs_Eseed_NoIVc4_%i",i));
+  hCrs_Eseed_NoIVc5[i] = (TH1D*)fOutput->FindObject(Form("hCrs_Eseed_NoIVc5_%i",i));
  }
 
 
+  hTrigAllEvents_rate_garbage->Sumw2();
+  hTrigAllEvents_rate_garbage->Scale(1.,"width");
 
       for(int i=0; i<3; i++){
 
 	 hCrs_Etot[i]->Sumw2();
 	 hCrs_Etot[i]->Scale(1./mean_tlive,"width");
 
-	 hCrs_Eseed[i]->Sumw2();
-	 hCrs_Eseed[i]->Scale(1./mean_tlive,"width");
+//	 hCrs_Eseed[i]->Sumw2();
+//	 hCrs_Eseed[i]->Scale(1./mean_tlive,"width");
 
 	 hCrs_Etot[i]->Sumw2();
 	 hCrs_Etot[i]->Scale(1./mean_tlive,"width");
 
-	 hCrs_Eseed[i]->Sumw2();
-	 hCrs_Eseed[i]->Scale(1./mean_tlive,"width");
+//	 hCrs_Eseed[i]->Sumw2();
+//	 hCrs_Eseed[i]->Scale(1./mean_tlive,"width");
 
 	 hCrs_Etot_NoVETO[i]->Sumw2();
 	 hCrs_Etot_NoVETO[i]->Scale(1./mean_tlive,"width");

@@ -80,7 +80,7 @@ public:
 		hTlive=0;
 		hTlive_temp=0;
 		hTrigAllEvents =0;
-		hTrigAllEvents_stability=0;
+		hTrigAllEvents_rate=0;
 		hTrigAllEvents_current_temp=0;
 		hBDXMiniStability_hasChannel_Alltrg=0;
 		hBDXMiniStability_hasChannel_trg0=0;
@@ -157,7 +157,7 @@ public:
 	TH2D *hHALLA_cur, *hTlive;
 	/*trigger histograms*/
 	TH1D *hTlive_temp;
-	TH1D *hTrigAllEvents, *hTrigAllEvents_stability, *hTrigAllEvents_current_temp;
+	TH1D *hTrigAllEvents, *hTrigAllEvents_rate, *hTrigAllEvents_current_temp;
 	TH1D *hBDXMiniStability_trg[32];
 	TH1D *hBDXMiniStability_hasChannel_Alltrg;
 	TH1D *hBDXMiniStability_hasChannel_trg0;
