@@ -152,25 +152,6 @@ public:
 
 		//HISTO rejection study
 
-		hCrs_Eseed_IVc1[i] =0;
-		hCrs_Eseed_IVc2[i] =0;
-		hCrs_Eseed_IVc3[i] =0;
-		hCrs_Eseed_IVc4[i] =0;
-		hCrs_Eseed_IVc5[i] =0;
-
-
-		hCrs_Eseed_NoIVc1[i] =0;
-		hCrs_Eseed_NoIVc2[i] =0;
-		hCrs_Eseed_NoIVc3[i] =0;
-		hCrs_Eseed_NoIVc4[i] =0;
-		hCrs_Eseed_NoIVc5[i] =0;
-
-		 IVc1=0;
-		 IVc2=0;
-		 IVc3=0;
-		 IVc4=0;
-		 IVc5=0;
-
 		 Eseed=0;
 		 multip=0;
 		}
@@ -291,24 +272,6 @@ public:
 	TH2D *hCrs_EseedVSMulti_NoVETO[3];
 	TH2D *hCrs_EtotVSMulti_NoVETO[3];
 
-	//HISTO rejection study
-	TH1D *hCrs_Eseed_IVc1[3];
-	TH1D *hCrs_Eseed_IVc2[3];
-	TH1D *hCrs_Eseed_IVc3[3];
-	TH1D *hCrs_Eseed_IVc4[3];
-	TH1D *hCrs_Eseed_IVc5[3];
-
-	TH1D *hCrs_Eseed_NoIVc1[3];
-	TH1D *hCrs_Eseed_NoIVc2[3];
-	TH1D *hCrs_Eseed_NoIVc3[3];
-	TH1D *hCrs_Eseed_NoIVc4[3];
-	TH1D *hCrs_Eseed_NoIVc5[3];
-
-	int IVc1;
-	int IVc2;
-	int IVc3;
-	int IVc4;
-	int IVc5;
 	double Eseed;
 	int multip;
 
