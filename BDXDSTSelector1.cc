@@ -155,6 +155,7 @@ void BDXDSTSelector1::SlaveBegin(TTree * /*tree*/) {
 	outTree1->Branch("QIV",&QIV, "QIV[11]/D");
 	outTree1->Branch("TOV",&TOV, "TOV[11]/D");
 	outTree1->Branch("TIV",&TIV, "TIV[11]/D");
+	outTree1->Branch("QIV_tot",&QIV_tot, "QIV_tot/D");
 
 	// CRS BRANCH
 	outTree1->Branch("Ecrs",&Ecrs, "Ecrs[45]/D");
@@ -162,6 +163,9 @@ void BDXDSTSelector1::SlaveBegin(TTree * /*tree*/) {
 	outTree1->Branch("Tcrs",&Tcrs, "Tcrs[45]/D");
 	outTree1->Branch("Acrs",&Acrs, "Acrs[45]/D");
 	outTree1->Branch("multip",&multip, "multip/I");
+	outTree1->Branch("Etot",&Etot, "Etot/D");
+	outTree1->Branch("Etop",&Etop, "Etop/D");
+	outTree1->Branch("Ebottom",&Ebottom, "Ebottom/D");
 
 	outTree1->Branch("IVc1",&IVc1,"IVc1/I");
 	outTree1->Branch("IVc2",&IVc2,"IVc2/I");
@@ -230,6 +234,7 @@ Bool_t BDXDSTSelector1::Process(Long64_t entry) {
 	double IV_Tmax_oct=0;
 	int multi_IVOct=0;
 	int multi_IVtot=0;
+	QIV_tot=0;
 
 	int multiplicity_OV =0;
 	int multiplicity_IV =0;
@@ -245,24 +250,24 @@ Bool_t BDXDSTSelector1::Process(Long64_t entry) {
 
 	//VETO  Variables //
 	for(int i=0; i<11; i++){
-		QOV[i]=-10;
-		QIV[i]=-10;
-		TOV[i]=-10;
-		TIV[i]=-10;
+		QOV[i]=0;
+		QIV[i]=0;
+		TOV[i]=0;
+		TIV[i]=0;
 	}
 
 	//variables CRS
 	for(int i=0; i<45; i++){
-		Ecrs[i]=-10;
-		Tcrs[i]=-10;
-		Acrs[i]=-10;
+		Ecrs[i]=0;
+		Tcrs[i]=0;
+		Acrs[i]=0;
 	}
 
 	///CRS  Variables ///
 	double E_singleCrs_thr = 10; //minima energia misurabile
-	double Etot = 0;
-	double Etop = 0;
-	double Ebottom = 0;
+	 Etot = 0;
+	 Etop = 0;
+	 Ebottom = 0;
 	 Eseed = 0;
 	double Ehit =0;
 	 multip = 0;
@@ -363,7 +368,7 @@ if((isGarbage==false)||(isMC==1)){
 		  if (fIntVetoHit->m_channel.layer == 1) {
 			  QIV[fIntVetoHit->m_channel.component] = fIntVetoHit->A;
 			  TIV[fIntVetoHit->m_channel.component] = fIntVetoHit->T;
-
+              QIV_tot += fIntVetoHit->A;
               if(fIntVetoHit->A>IV_A_max) {
             	  IV_A_max = fIntVetoHit->A;
             	  IV_T_max = fIntVetoHit->T;

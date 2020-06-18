@@ -99,6 +99,7 @@ public:
 			TOV[i]=0;
 			TIV[i]=0;
 		}
+		QIV_tot=0;
 
 		//variables CRS
 		for(int i=0; i<45; i++){
@@ -106,6 +107,9 @@ public:
 			Tcrs[i]=0;
 			Acrs[i]=0;
 		}
+		 Etot = 0;
+		 Etop = 0;
+		 Ebottom = 0;
 
 
 		// HISTO VETO
@@ -243,11 +247,14 @@ public:
     int INDEX;
 
     //variables VETO
-    double QOV[11], QIV[11], TOV[11], TIV[11];
+    double QOV[11], QIV[11], TOV[11], TIV[11], QIV_tot;
 
     //variables CRS
 
     double Ecrs[45], Tcrs[45], Acrs[45];
+	double Etot;
+	double Etop;
+	double Ebottom;
 
        // HISTO VETO
 
