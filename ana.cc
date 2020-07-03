@@ -547,13 +547,14 @@ cout <<"after BDXDSTSelector1"<<endl;
 		if(isMC==0){
 		hControl->Write();
 		//hRate->Write();
+/*
 		TListIter iter(myBDXDSTSelector->GetOutputList());
 		TObject *obj;
 
 		while (obj = iter.Next()) {
 			if (obj->InheritsFrom(TH1::Class())) obj->Write();
 		}
-
+*/
 
 		}
 		TListIter iter1(myBDXDSTSelector1->GetOutputList());

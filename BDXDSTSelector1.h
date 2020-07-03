@@ -132,28 +132,48 @@ public:
 		hCrs_EseedVSEtot[i] = 0;
 		hCrs_EseedVSMulti[i] = 0;
 		hCrs_EtotVSMulti[i] = 0;
+		hCrs_EtopEbotVsEtot[i] = 0;
+		hCrs_EtopEbotVsEseed[i] = 0;
+		hCrs_Eseed_CutEasym[i] = 0;
 
 
 		  // HISTO CALORIMETER NO VETO
 
-		hCrs_Etot_NoVETO[i] = 0;
-		hCrs_multiplicity_NoVETO[i] = 0;
-		hCrs_Eseed_NoVETO[i] = 0;
-		hCrs_Etop_NoVETO[i] = 0;
-		hCrs_Ebottom_NoVETO[i] = 0;
-		hCrs_R_EtopEtot_NoVETO[i] = 0;
-		hCrs_R_EbottomEtot_NoVETO[i] = 0;
-		hCrs_EtotVsEtop_NoVETO[i] = 0;
-	    hCrs_XYseed_NoVETO[i] = 0;
-	    hCrs_XY_XYseed_NoVETO[i] = 0;
-		hCrs_EseedVSEtot_NoVETO[i] = 0;
-		hCrs_EseedVSMulti_NoVETO[i] = 0;
-		hCrs_EtotVSMulti_NoVETO[i] = 0;
+		for(int j=0; j<3; j++){
+		hCrs_Etot_NoVETO[i][j] = 0;
+		hCrs_multiplicity_NoVETO[i][j] = 0;
+		hCrs_Eseed_NoVETO[i][j] = 0;
+		hCrs_Etop_NoVETO[i][j] = 0;
+		hCrs_Ebottom_NoVETO[i][j] = 0;
+		hCrs_R_EtopEtot_NoVETO[i][j] = 0;
+		hCrs_R_EbottomEtot_NoVETO[i][j] = 0;
+		hCrs_EtotVsEtop_NoVETO[i][j] = 0;
+	    hCrs_XYseed_NoVETO[i][j] = 0;
+	    hCrs_XY_XYseed_NoVETO[i][j] = 0;
+		hCrs_EseedVSEtot_NoVETO[i][j]= 0;
+		hCrs_EseedVSMulti_NoVETO[i][j] = 0;
+		hCrs_EtotVSMulti_NoVETO[i][j] = 0;
+		hCrs_EtopEbotVsEtot_NoVETO[i][j] = 0;
+		hCrs_EtopEbotVsEseed_NoVETO[i][j] = 0;
+		hCrs_Eseed_CutEasym_NoVETO[i][j] = 0;
+		}
+
 
 		//HISTO rejection study
 
 		 Eseed=0;
 		 multip=0;
+
+		/*Variables Veto */
+
+		OV_A_max=0;
+		OV_T_max=0;
+	    OV_max=0;
+
+	 	IV_A_max=0;
+	 	IV_T_max=0;
+	 	IV_max=0;
+
 		}
 
 
@@ -255,25 +275,47 @@ public:
 	TH2D *hCrs_EseedVSEtot[3];
 	TH2D *hCrs_EseedVSMulti[3];
 	TH2D *hCrs_EtotVSMulti[3];
+	TH2D *hCrs_EtopEbotVsEtot[3];
+	TH2D *hCrs_EtopEbotVsEseed[3];
+	TH1D *hCrs_Eseed_CutEasym[3];
+
+
+
 
 
 	// HISTO CALORIMETER No VETO
-	TH1D *hCrs_Etot_NoVETO[3];
-	TH1D *hCrs_multiplicity_NoVETO[3];
-	TH1D *hCrs_Eseed_NoVETO[3];
-	TH1D *hCrs_Etop_NoVETO[3];
-	TH1D *hCrs_Ebottom_NoVETO[3];
-	TH1D *hCrs_R_EtopEtot_NoVETO[3];
-	TH1D *hCrs_R_EbottomEtot_NoVETO[3];
-	TH2D *hCrs_EtotVsEtop_NoVETO[3];
-	TH2D *hCrs_XYseed_NoVETO[3];
-	TH2D *hCrs_XY_XYseed_NoVETO[3];
-	TH2D *hCrs_EseedVSEtot_NoVETO[3];
-	TH2D *hCrs_EseedVSMulti_NoVETO[3];
-	TH2D *hCrs_EtotVSMulti_NoVETO[3];
+	//[i][j] :
+   // i = 0=cosmic, 1=beam, 2=MC
+	//j = 0= no OV, 1 = no IV, 2 = No IV && NO OV
+	TH1D *hCrs_Etot_NoVETO[3][3];
+	TH1D *hCrs_multiplicity_NoVETO[3][3];
+	TH1D *hCrs_Eseed_NoVETO[3][3];
+	TH1D *hCrs_Etop_NoVETO[3][3];
+	TH1D *hCrs_Ebottom_NoVETO[3][3];
+	TH1D *hCrs_R_EtopEtot_NoVETO[3][3];
+	TH1D *hCrs_R_EbottomEtot_NoVETO[3][3];
+	TH2D *hCrs_EtotVsEtop_NoVETO[3][3];
+	TH2D *hCrs_XYseed_NoVETO[3][3];
+	TH2D *hCrs_XY_XYseed_NoVETO[3][3];
+	TH2D *hCrs_EseedVSEtot_NoVETO[3][3];
+	TH2D *hCrs_EseedVSMulti_NoVETO[3][3];
+	TH2D *hCrs_EtotVSMulti_NoVETO[3][3];
+	TH2D *hCrs_EtopEbotVsEtot_NoVETO[3][3];
+	TH2D *hCrs_EtopEbotVsEseed_NoVETO[3][3];
+	TH1D *hCrs_Eseed_CutEasym_NoVETO[3][3];
 
+
+	/*Variables Cal*/
 	double Eseed;
 	int multip;
+
+	/*Variables Veto */
+
+	double OV_A_max, OV_T_max;
+	int OV_max;
+
+	double IV_A_max, IV_T_max;
+	int IV_max;
 
 	vector<TTree*> tQmatrix;
 
