@@ -79,7 +79,7 @@ void BDXDSTSelector1::SlaveBegin(TTree * /*tree*/) {
 
 
 	// HISTO VETO
-	int Nbin_Atot = 201;
+	int Nbin_Atot = 2000;
 	int min_Atot =-0.5;
 	int max_Atot = 2000.5;
 
@@ -114,6 +114,11 @@ void BDXDSTSelector1::SlaveBegin(TTree * /*tree*/) {
 	hCrs_EseedVSEtot[i] = new TH2D(Form("hCrs_EseedVSEtot_%i",i),Form("hCrs_EseedVSEtot_%i; Eseed [MeV]; Etot [MeV]",i),Nbin_Etot, min_Etot, max_Etot, Nbin_Etot, min_Etot, max_Etot);
 	hCrs_EseedVSMulti[i] = new TH2D(Form("hCrs_EseedVSMulti_%i",i),Form("hCrs_EseedVSMulti_%i; Eseed [MeV]; Multiplicity",i),Nbin_Etot, min_Etot, max_Etot,45, -0.5, 44.5);
 	hCrs_EtotVSMulti[i] = new TH2D(Form("hCrs_EtotVSMulti_%i",i),Form("hCrs_EtotVSMulti_%i; Etot [MeV]; Multiplicity",i),Nbin_Etot, min_Etot, max_Etot,45, -0.5, 44.5);
+	hCrs_EtopEbotVsEtot[i] = new TH2D(Form("hCrs_EtopEbotVsEtot_%i",i),Form("hCrs_EtopEbotVsEtot_%i; Etop-Ebot/Etot; Etot [MeV]",i),300, -1.5, 1.5, Nbin_Etot, min_Etot, max_Etot);
+	hCrs_EtopEbotVsEseed[i] = new TH2D(Form("hCrs_EtopEbotVsEseed_%i",i),Form("hCrs_EtopEbotVsEseed_%i; Etop-Ebot/Etot; Eseed [MeV]",i),300, -1.5, 1.5, Nbin_Etot, min_Etot, max_Etot);
+	hCrs_Eseed_CutEasym[i] = new TH1D(Form("hCrs_Eseed_CutEasym_%i",i), Form("hCrs_Eseed_CutEasym_%i; Eseed [MeV]; Hz/MeV",i), Nbin_Etot, min_Etot, max_Etot);
+
+
 
 	hCrs_Etot_NoVETO[i] = new TH1D(Form("hCrs_Etot_NoVETO_%i",i), Form("hCrs_Etot_NoVETO_%i; Etot [MeV]; Hz/MeV",i), Nbin_Etot, min_Etot, max_Etot);
 	hCrs_multiplicity_NoVETO[i] = new TH1D(Form("hCrs_multiplicity_NoVETO_%i",i), Form("hCrs_multiplicity_NoVETO_%i; multiplicity; counts",i), 45, -0.5, 44.5);
@@ -129,9 +134,11 @@ void BDXDSTSelector1::SlaveBegin(TTree * /*tree*/) {
 	hCrs_EseedVSMulti_NoVETO[i] = new TH2D(Form("hCrs_EseedVSMulti_NoVETO_%i",i),Form("hCrs_EseedVSMulti_NoVETO_%i; Eseed [MeV]; Multiplicity",i),Nbin_Etot, min_Etot, max_Etot,45, -0.5, 44.5);
 	hCrs_EtotVSMulti_NoVETO[i] = new TH2D(Form("hCrs_EtotVSMulti_NoVETO_%i",i),Form("hCrs_EtotVSMulti_NoVETO_%i; Etot [MeV]; Multiplicity",i),Nbin_Etot, min_Etot, max_Etot,45, -0.5, 44.5);
 
+
+
 	hCrs_Etot_noIVc1[i] = new TH1D(Form("hCrs_Etot_noIVc1_%i",i), Form("hCrs_Etot_noIVc1_%i; Etot [MeV]; Hz/MeV",i), Nbin_Etot, min_Etot, max_Etot);
 	hCrs_multiplicity_noIVc1[i] = new TH1D(Form("hCrs_multiplicity_noIVc1_%i",i), Form("hCrs_multiplicity_noIVc1_%i; multiplicity; counts",i), 45, -0.5, 44.5);
-	hCrs_Eseed_noIVc1[i] = new TH1D(Form("hCrs_Eseed_noIVc1_%i",i), Form("hCrs_Eseed_NoVETO_%i; Eseed [MeV]; Hz/MeV",i), Nbin_Etot, min_Etot, max_Etot);
+	//hCrs_Eseed_noIVc1[i] = new TH1D(Form("hCrs_Eseed_noIVc1_%i",i), Form("hCrs_Eseed_noIVc1_%i; Eseed [MeV]; Hz/MeV",i), Nbin_Etot, min_Etot, max_Etot);
 	hCrs_Etop_noIVc1[i] = new TH1D(Form("hCrs_Etop_noIVc1_%i",i), Form("hCrs_Etop_noIVc1_%i; Etop [MeV]; Hz/MeV",i), Nbin_Etot, min_Etot, max_Etot);
 	hCrs_Ebottom_noIVc1[i] = new TH1D(Form("hCrs_Ebottom_noIVc1_%i",i), Form("hCrs_Ebottom_noIVc1_%i; Ebottom [MeV]; Hz/MeV",i), Nbin_Etot, min_Etot, max_Etot);
 	hCrs_R_EtopEtot_noIVc1[i] = new TH1D(Form("hCrs_R_EtopEtot_noIVc1_%i",i), Form("hCrs_R_EtopEtot_noIVc1_%i; Etop/Etot; counts",i), 110, -0.5, 1.5);
@@ -145,7 +152,7 @@ void BDXDSTSelector1::SlaveBegin(TTree * /*tree*/) {
 
 	hCrs_Etot_noIVc2[i] = new TH1D(Form("hCrs_Etot_noIVc2_%i",i), Form("hCrs_Etot_noIVc2_%i; Etot [MeV]; Hz/MeV",i), Nbin_Etot, min_Etot, max_Etot);
 	hCrs_multiplicity_noIVc2[i] = new TH1D(Form("hCrs_multiplicity_noIVc2_%i",i), Form("hCrs_multiplicity_noIVc2_%i; multiplicity; counts",i), 45, -0.5, 44.5);
-	hCrs_Eseed_noIVc2[i] = new TH1D(Form("hCrs_Eseed_noIVc2_%i",i), Form("hCrs_Eseed_NoVETO_%i; Eseed [MeV]; Hz/MeV",i), Nbin_Etot, min_Etot, max_Etot);
+	//hCrs_Eseed_noIVc2[i] = new TH1D(Form("hCrs_Eseed_noIVc2_%i",i), Form("hCrs_Eseed_noIVc2_%i; Eseed [MeV]; Hz/MeV",i), Nbin_Etot, min_Etot, max_Etot);
 	hCrs_Etop_noIVc2[i] = new TH1D(Form("hCrs_Etop_noIVc2_%i",i), Form("hCrs_Etop_noIVc2_%i; Etop [MeV]; Hz/MeV",i), Nbin_Etot, min_Etot, max_Etot);
 	hCrs_Ebottom_noIVc2[i] = new TH1D(Form("hCrs_Ebottom_noIVc2_%i",i), Form("hCrs_Ebottom_noIVc2_%i; Ebottom [MeV]; Hz/MeV",i), Nbin_Etot, min_Etot, max_Etot);
 	hCrs_R_EtopEtot_noIVc2[i] = new TH1D(Form("hCrs_R_EtopEtot_noIVc2_%i",i), Form("hCrs_R_EtopEtot_noIVc2_%i; Etop/Etot; counts",i), 110, -0.5, 1.5);
@@ -159,7 +166,7 @@ void BDXDSTSelector1::SlaveBegin(TTree * /*tree*/) {
 
 	hCrs_Etot_noIVc5[i] = new TH1D(Form("hCrs_Etot_noIVc5_%i",i), Form("hCrs_Etot_noIVc5_%i; Etot [MeV]; Hz/MeV",i), Nbin_Etot, min_Etot, max_Etot);
 	hCrs_multiplicity_noIVc5[i] = new TH1D(Form("hCrs_multiplicity_noIVc5_%i",i), Form("hCrs_multiplicity_noIVc5_%i; multiplicity; counts",i), 45, -0.5, 44.5);
-	hCrs_Eseed_noIVc5[i] = new TH1D(Form("hCrs_Eseed_noIVc5_%i",i), Form("hCrs_Eseed_NoVETO_%i; Eseed [MeV]; Hz/MeV",i), Nbin_Etot, min_Etot, max_Etot);
+	//hCrs_Eseed_noIVc5[i] = new TH1D(Form("hCrs_Eseed_noIVc5_%i",i), Form("hCrs_Eseed_noIVc5_%i; Eseed [MeV]; Hz/MeV",i), Nbin_Etot, min_Etot, max_Etot);
 	hCrs_Etop_noIVc5[i] = new TH1D(Form("hCrs_Etop_noIVc5_%i",i), Form("hCrs_Etop_noIVc5_%i; Etop [MeV]; Hz/MeV",i), Nbin_Etot, min_Etot, max_Etot);
 	hCrs_Ebottom_noIVc5[i] = new TH1D(Form("hCrs_Ebottom_noIVc5_%i",i), Form("hCrs_Ebottom_noIVc5_%i; Ebottom [MeV]; Hz/MeV",i), Nbin_Etot, min_Etot, max_Etot);
 	hCrs_R_EtopEtot_noIVc5[i] = new TH1D(Form("hCrs_R_EtopEtot_noIVc5_%i",i), Form("hCrs_R_EtopEtot_noIVc5_%i; Etop/Etot; counts",i), 110, -0.5, 1.5);
@@ -170,7 +177,68 @@ void BDXDSTSelector1::SlaveBegin(TTree * /*tree*/) {
 	hCrs_EseedVSEtot_noIVc5[i] = new TH2D(Form("hCrs_EseedVSEtot_noIVc5_%i",i),Form("hCrs_EseedVSEtot_noIVc5_%i; Eseed [MeV]; Etot [MeV]",i),Nbin_Etot, min_Etot, max_Etot, Nbin_Etot, min_Etot, max_Etot);
 	hCrs_EseedVSMulti_noIVc5[i] = new TH2D(Form("hCrs_EseedVSMulti_noIVc5_%i",i),Form("hCrs_EseedVSMulti_noIVc5_%i; Eseed [MeV]; Multiplicity",i),Nbin_Etot, min_Etot, max_Etot,45, -0.5, 44.5);
 	hCrs_EtotVSMulti_noIVc5[i] = new TH2D(Form("hCrs_EtotVSMulti_noIVc5_%i",i),Form("hCrs_EtotVSMulti_noIVc5_%i; Etot [MeV]; Multiplicity",i),Nbin_Etot, min_Etot, max_Etot,45, -0.5, 44.5);
+	hCrs_EtopEbotVsEtot_noIVc5[i] = new TH2D(Form("hCrs_EtopEbotVsEtot_noIVc5_%i",i),Form("hCrs_EtopEbotVsEtot_noIVc5_%i; Etop-Ebot/Etot; Etot [MeV]",i),300, -1.5, 1.5, Nbin_Etot, min_Etot, max_Etot);
+	hCrs_EtopEbotVsEseed_noIVc5[i] = new TH2D(Form("hCrs_EtopEbotVsEseed_noIVc5_%i",i),Form("hCrs_EtopEbotVsEseed_noIVc5_%i; Etop-Ebot/Etot; Eseed [MeV]",i),300, -1.5, 1.5, Nbin_Etot, min_Etot, max_Etot);
+	hCrs_Eseed_CutEasym_noIVc5[i] = new TH1D(Form("hCrs_Eseed_CutEasym_noIVc5_%i",i), Form("hCrs_Eseed_CutEasym_noIVc5_%i; Eseed [MeV]; Hz/MeV",i), Nbin_Etot, min_Etot, max_Etot);
 
+
+	hCrs_Etot_noOVc1[i] = new TH1D(Form("hCrs_Etot_noOVc1_%i",i), Form("hCrs_Etot_noOVc1_%i; Etot [MeV]; Hz/MeV",i), Nbin_Etot, min_Etot, max_Etot);
+	hCrs_multiplicity_noOVc1[i] = new TH1D(Form("hCrs_multiplicity_noOVc1_%i",i), Form("hCrs_multiplicity_noOVc1_%i; multiplicity; counts",i), 45, -0.5, 44.5);
+	//hCrs_Eseed_noOVc1[i] = new TH1D(Form("hCrs_Eseed_noOVc1_%i",i), Form("hCrs_Eseed_noOVc1_%i; Eseed [MeV]; Hz/MeV",i), Nbin_Etot, min_Etot, max_Etot);
+	hCrs_Etop_noOVc1[i] = new TH1D(Form("hCrs_Etop_noOVc1_%i",i), Form("hCrs_Etop_noOVc1_%i; Etop [MeV]; Hz/MeV",i), Nbin_Etot, min_Etot, max_Etot);
+	hCrs_Ebottom_noOVc1[i] = new TH1D(Form("hCrs_Ebottom_noOVc1_%i",i), Form("hCrs_Ebottom_noOVc1_%i; Ebottom [MeV]; Hz/MeV",i), Nbin_Etot, min_Etot, max_Etot);
+	hCrs_R_EtopEtot_noOVc1[i] = new TH1D(Form("hCrs_R_EtopEtot_noOVc1_%i",i), Form("hCrs_R_EtopEtot_noOVc1_%i; Etop/Etot; counts",i), 110, -0.5, 1.5);
+	hCrs_R_EbottomEtot_noOVc1[i] = new TH1D(Form("hCrs_R_EbottomEtot_noOVc1_%i",i), Form("hCrs_R_EbottomEtot_noOVc1_%i; Ebottom/Etot; counts",i), 110, -0.5, 1.5);
+	hCrs_EtotVsEtop_noOVc1[i] = new TH2D(Form("hCrs_EtotVsEtop_noOVc1_%i",i),Form("hCrs_EtotVsEtop_noOVc1_%i; Etot [MeV]; Etop [MeV]",i),Nbin_Etot, min_Etot, max_Etot, Nbin_Etot, min_Etot, max_Etot);
+	hCrs_XYseed_noOVc1[i] = new TH2D(Form("hCrs_XYseed_noOVc1_%i",i),Form("hCrs_XYseed_noOVc1_%i; X; Y",i),11,-5.5,5.5,11,-5.5,5.5);
+	hCrs_XY_XYseed_noOVc1[i] = new TH2D(Form("hCrs_XY_XYseed_noOVc1_%i",i),Form("hCrs_XY_XYseed_noOVc1_%i; X-Xseed; Y-Yseed",i),11,-5.5,5.5,11,-5.5,5.5);
+	hCrs_EseedVSEtot_noOVc1[i] = new TH2D(Form("hCrs_EseedVSEtot_noOVc1_%i",i),Form("hCrs_EseedVSEtot_noOVc1_%i; Eseed [MeV]; Etot [MeV]",i),Nbin_Etot, min_Etot, max_Etot, Nbin_Etot, min_Etot, max_Etot);
+	hCrs_EseedVSMulti_noOVc1[i] = new TH2D(Form("hCrs_EseedVSMulti_noOVc1_%i",i),Form("hCrs_EseedVSMulti_noOVc1_%i; Eseed [MeV]; Multiplicity",i),Nbin_Etot, min_Etot, max_Etot,45, -0.5, 44.5);
+	hCrs_EtotVSMulti_noOVc1[i] = new TH2D(Form("hCrs_EtotVSMulti_noOVc1_%i",i),Form("hCrs_EtotVSMulti_noOVc1_%i; Etot [MeV]; Multiplicity",i),Nbin_Etot, min_Etot, max_Etot,45, -0.5, 44.5);
+
+	hCrs_Etot_noOVc2[i] = new TH1D(Form("hCrs_Etot_noOVc2_%i",i), Form("hCrs_Etot_noOVc2_%i; Etot [MeV]; Hz/MeV",i), Nbin_Etot, min_Etot, max_Etot);
+	hCrs_multiplicity_noOVc2[i] = new TH1D(Form("hCrs_multiplicity_noOVc2_%i",i), Form("hCrs_multiplicity_noOVc2_%i; multiplicity; counts",i), 45, -0.5, 44.5);
+	//hCrs_Eseed_noOVc2[i] = new TH1D(Form("hCrs_Eseed_noOVc2_%i",i), Form("hCrs_Eseed_noOVc2_%i; Eseed [MeV]; Hz/MeV",i), Nbin_Etot, min_Etot, max_Etot);
+	hCrs_Etop_noOVc2[i] = new TH1D(Form("hCrs_Etop_noOVc2_%i",i), Form("hCrs_Etop_noOVc2_%i; Etop [MeV]; Hz/MeV",i), Nbin_Etot, min_Etot, max_Etot);
+	hCrs_Ebottom_noOVc2[i] = new TH1D(Form("hCrs_Ebottom_noOVc2_%i",i), Form("hCrs_Ebottom_noOVc2_%i; Ebottom [MeV]; Hz/MeV",i), Nbin_Etot, min_Etot, max_Etot);
+	hCrs_R_EtopEtot_noOVc2[i] = new TH1D(Form("hCrs_R_EtopEtot_noOVc2_%i",i), Form("hCrs_R_EtopEtot_noOVc2_%i; Etop/Etot; counts",i), 110, -0.5, 1.5);
+	hCrs_R_EbottomEtot_noOVc2[i] = new TH1D(Form("hCrs_R_EbottomEtot_noOVc2_%i",i), Form("hCrs_R_EbottomEtot_noOVc2_%i; Ebottom/Etot; counts",i), 110, -0.5, 1.5);
+	hCrs_EtotVsEtop_noOVc2[i] = new TH2D(Form("hCrs_EtotVsEtop_noOVc2_%i",i),Form("hCrs_EtotVsEtop_noOVc2_%i; Etot [MeV]; Etop [MeV]",i),Nbin_Etot, min_Etot, max_Etot, Nbin_Etot, min_Etot, max_Etot);
+	hCrs_XYseed_noOVc2[i] = new TH2D(Form("hCrs_XYseed_noOVc2_%i",i),Form("hCrs_XYseed_noOVc2_%i; X; Y",i),11,-5.5,5.5,11,-5.5,5.5);
+	hCrs_XY_XYseed_noOVc2[i] = new TH2D(Form("hCrs_XY_XYseed_noOVc2_%i",i),Form("hCrs_XY_XYseed_noOVc2_%i; X-Xseed; Y-Yseed",i),11,-5.5,5.5,11,-5.5,5.5);
+	hCrs_EseedVSEtot_noOVc2[i] = new TH2D(Form("hCrs_EseedVSEtot_noOVc2_%i",i),Form("hCrs_EseedVSEtot_noOVc2_%i; Eseed [MeV]; Etot [MeV]",i),Nbin_Etot, min_Etot, max_Etot, Nbin_Etot, min_Etot, max_Etot);
+	hCrs_EseedVSMulti_noOVc2[i] = new TH2D(Form("hCrs_EseedVSMulti_noOVc2_%i",i),Form("hCrs_EseedVSMulti_noOVc2_%i; Eseed [MeV]; Multiplicity",i),Nbin_Etot, min_Etot, max_Etot,45, -0.5, 44.5);
+	hCrs_EtotVSMulti_noOVc2[i] = new TH2D(Form("hCrs_EtotVSMulti_noOVc2_%i",i),Form("hCrs_EtotVSMulti_noOVc2_%i; Etot [MeV]; Multiplicity",i),Nbin_Etot, min_Etot, max_Etot,45, -0.5, 44.5);
+
+	hCrs_Etot_noOVc5[i] = new TH1D(Form("hCrs_Etot_noOVc5_%i",i), Form("hCrs_Etot_noOVc5_%i; Etot [MeV]; Hz/MeV",i), Nbin_Etot, min_Etot, max_Etot);
+	hCrs_multiplicity_noOVc5[i] = new TH1D(Form("hCrs_multiplicity_noOVc5_%i",i), Form("hCrs_multiplicity_noOVc5_%i; multiplicity; counts",i), 45, -0.5, 44.5);
+	//hCrs_Eseed_noOVc5[i] = new TH1D(Form("hCrs_Eseed_noOVc5_%i",i), Form("hCrs_Eseed_noOVc5_%i; Eseed [MeV]; Hz/MeV",i), Nbin_Etot, min_Etot, max_Etot);
+	hCrs_Etop_noOVc5[i] = new TH1D(Form("hCrs_Etop_noOVc5_%i",i), Form("hCrs_Etop_noOVc5_%i; Etop [MeV]; Hz/MeV",i), Nbin_Etot, min_Etot, max_Etot);
+	hCrs_Ebottom_noOVc5[i] = new TH1D(Form("hCrs_Ebottom_noOVc5_%i",i), Form("hCrs_Ebottom_noOVc5_%i; Ebottom [MeV]; Hz/MeV",i), Nbin_Etot, min_Etot, max_Etot);
+	hCrs_R_EtopEtot_noOVc5[i] = new TH1D(Form("hCrs_R_EtopEtot_noOVc5_%i",i), Form("hCrs_R_EtopEtot_noOVc5_%i; Etop/Etot; counts",i), 110, -0.5, 1.5);
+	hCrs_R_EbottomEtot_noOVc5[i] = new TH1D(Form("hCrs_R_EbottomEtot_noOVc5_%i",i), Form("hCrs_R_EbottomEtot_noOVc5_%i; Ebottom/Etot; counts",i), 110, -0.5, 1.5);
+	hCrs_EtotVsEtop_noOVc5[i] = new TH2D(Form("hCrs_EtotVsEtop_noOVc5_%i",i),Form("hCrs_EtotVsEtop_noOVc5_%i; Etot [MeV]; Etop [MeV]",i),Nbin_Etot, min_Etot, max_Etot, Nbin_Etot, min_Etot, max_Etot);
+	hCrs_XYseed_noOVc5[i] = new TH2D(Form("hCrs_XYseed_noOVc5_%i",i),Form("hCrs_XYseed_noOVc5_%i; X; Y",i),11,-5.5,5.5,11,-5.5,5.5);
+	hCrs_XY_XYseed_noOVc5[i] = new TH2D(Form("hCrs_XY_XYseed_noOVc5_%i",i),Form("hCrs_XY_XYseed_noOVc5_%i; X-Xseed; Y-Yseed",i),11,-5.5,5.5,11,-5.5,5.5);
+	hCrs_EseedVSEtot_noOVc5[i] = new TH2D(Form("hCrs_EseedVSEtot_noOVc5_%i",i),Form("hCrs_EseedVSEtot_noOVc5_%i; Eseed [MeV]; Etot [MeV]",i),Nbin_Etot, min_Etot, max_Etot, Nbin_Etot, min_Etot, max_Etot);
+	hCrs_EseedVSMulti_noOVc5[i] = new TH2D(Form("hCrs_EseedVSMulti_noOVc5_%i",i),Form("hCrs_EseedVSMulti_noOVc5_%i; Eseed [MeV]; Multiplicity",i),Nbin_Etot, min_Etot, max_Etot,45, -0.5, 44.5);
+	hCrs_EtotVSMulti_noOVc5[i] = new TH2D(Form("hCrs_EtotVSMulti_noOVc5_%i",i),Form("hCrs_EtotVSMulti_noOVc5_%i; Etot [MeV]; Multiplicity",i),Nbin_Etot, min_Etot, max_Etot,45, -0.5, 44.5);
+	hCrs_EtopEbotVsEtot_noOVc5[i] = new TH2D(Form("hCrs_EtopEbotVsEtot_noOVc5_%i",i),Form("hCrs_EtopEbotVsEtot_noOVc5_%i; Etop-Ebot/Etot; Etot [MeV]",i),300, -1.5, 1.5, Nbin_Etot, min_Etot, max_Etot);
+	hCrs_EtopEbotVsEseed_noOVc5[i] = new TH2D(Form("hCrs_EtopEbotVsEseed_noOVc5_%i",i),Form("hCrs_EtopEbotVsEseed_noOVc5_%i; Etop-Ebot/Etot; Eseed [MeV]",i),300, -1.5, 1.5, Nbin_Etot, min_Etot, max_Etot);
+	hCrs_Eseed_CutEasym_noOVc5[i] = new TH1D(Form("hCrs_Eseed_CutEasym_noOVc5_%i",i), Form("hCrs_Eseed_CutEasym_noOVc5_%i; Eseed [MeV]; Hz/MeV",i), Nbin_Etot, min_Etot, max_Etot);
+
+
+
+	hQIVmaxVSQIVtot_noIVc5[i] = new TH2D(Form("hQIVmaxVSQIVtot_noIVc5_%i",i),Form("hQIVmaxVSQIVtot_noIVc5_%i; QIVmax; IVtot",i),Nbin_Atot, min_Atot, max_Atot, Nbin_Atot, min_Atot, max_Atot);
+	hQIVmaxVSQIVtot_noIVc5_Eseed_gr_100[i]=new TH2D(Form("hQIVmaxVSQIVtot_noIVc5_Eseed_gr_100_%i",i),Form("hQIVmaxVSQIVtot_noIVc5_Eseed_gr_100_%i; QIVmax; IVtot",i),Nbin_Atot, min_Atot, max_Atot, Nbin_Atot, min_Atot, max_Atot);
+
+
+
+	hCrs_Etot_noVc5[i] = new TH1D(Form("hCrs_Etot_noVc5_%i",i), Form("hCrs_Etot_noVc5_%i; Etot [MeV]; Hz/MeV",i), Nbin_Etot, min_Etot, max_Etot);
+	hCrs_Eseed_noVc5[i] = new TH1D(Form("hCrs_Eseed_noVc5_%i",i), Form("hCrs_Eseed_noVc5_%i; Eseed [MeV]; Hz/MeV",i), Nbin_Etot, min_Etot, max_Etot);
+	hCrs_EtopEbotVsEtot_noVc5[i] = new TH2D(Form("hCrs_EtopEbotVsEtot_noVc5_%i",i),Form("hCrs_EtopEbotVsEtot_noVc5_%i; Etop-Ebot/Etot; Etot [MeV]",i),300, -1.5, 1.5, Nbin_Etot, min_Etot, max_Etot);
+	hCrs_EtopEbotVsEseed_noVc5[i] = new TH2D(Form("hCrs_EtopEbotVsEseed_noVc5_%i",i),Form("hCrs_EtopEbotVsEseed_noVc5_%i; Etop-Ebot/Etot; Eseed [MeV]",i),300, -1.5, 1.5, Nbin_Etot, min_Etot, max_Etot);
+	hCrs_Eseed_CutEasym_noVc5[i] = new TH1D(Form("hCrs_Eseed_CutEasym_noVc5_%i",i), Form("hCrs_Eseed_CutEasym_noVc5_%i; Eseed [MeV]; Hz/MeV",i), Nbin_Etot, min_Etot, max_Etot);
 
 
 	hCrs_Eseed_IVc1[i] = new TH1D(Form("hCrs_Eseed_IVc1_%i",i), Form("hCrs_Eseed_IVc1_%i; Eseed [MeV]; Hz/MeV",i), Nbin_Etot, min_Etot, max_Etot);
@@ -185,6 +253,14 @@ void BDXDSTSelector1::SlaveBegin(TTree * /*tree*/) {
 	hCrs_Eseed_NoIVc4[i] = new TH1D(Form("hCrs_Eseed_NoIVc4_%i",i), Form("hCrs_Eseed_NoIVc4_%i; Eseed [MeV]; Hz/MeV",i), Nbin_Etot, min_Etot, max_Etot);
 	hCrs_Eseed_NoIVc5[i] = new TH1D(Form("hCrs_Eseed_NoIVc5_%i",i), Form("hCrs_Eseed_NoIVc5_%i; Eseed [MeV]; Hz/MeV",i), Nbin_Etot, min_Etot, max_Etot);
 
+	hCrs_Eseed_NoOVc1[i] = new TH1D(Form("hCrs_Eseed_NoOVc1_%i",i), Form("hCrs_Eseed_NoOVc1_%i; Eseed [MeV]; Hz/MeV",i), Nbin_Etot, min_Etot, max_Etot);
+	hCrs_Eseed_NoOVc2[i] = new TH1D(Form("hCrs_Eseed_NoOVc2_%i",i), Form("hCrs_Eseed_NoOVc2_%i; Eseed [MeV]; Hz/MeV",i), Nbin_Etot, min_Etot, max_Etot);
+	hCrs_Eseed_NoOVc3[i] = new TH1D(Form("hCrs_Eseed_NoOVc3_%i",i), Form("hCrs_Eseed_NoOVc3_%i; Eseed [MeV]; Hz/MeV",i), Nbin_Etot, min_Etot, max_Etot);
+	hCrs_Eseed_NoOVc4[i] = new TH1D(Form("hCrs_Eseed_NoOVc4_%i",i), Form("hCrs_Eseed_NoOVc4_%i; Eseed [MeV]; Hz/MeV",i), Nbin_Etot, min_Etot, max_Etot);
+	hCrs_Eseed_NoOVc5[i] = new TH1D(Form("hCrs_Eseed_NoOVc5_%i",i), Form("hCrs_Eseed_NoOVc5_%i; Eseed [MeV]; Hz/MeV",i), Nbin_Etot, min_Etot, max_Etot);
+
+
+
    }
 
 
@@ -194,23 +270,34 @@ void BDXDSTSelector1::SlaveBegin(TTree * /*tree*/) {
 	outTree1->Branch("eventNumber", &eventNumber, "eventNumber/I");
 
 	// veto BRANCH
+
 	outTree1->Branch("QOV",&QOV, "QOV[11]/D");
 	outTree1->Branch("QIV",&QIV, "QIV[11]/D");
 	outTree1->Branch("TOV",&TOV, "TOV[11]/D");
 	outTree1->Branch("TIV",&TIV, "TIV[11]/D");
+
 	outTree1->Branch("QIV_tot",&QIV_tot, "QIV_tot/D");
+	outTree1->Branch("QIV_tot_corr",&QIV_tot_corr, "QIV_tot_corr/D");
 	outTree1->Branch("IV_A_max",&IV_A_max, "IV_A_max/D");
 	outTree1->Branch("IV_T_max",&IV_T_max, "IV_T_max/D");
 	outTree1->Branch("multi_IVtot",&multi_IVtot, "multi_IVtot/I");
 	outTree1->Branch("m_IVtot",&m_IVtot, "m_IVtot/I");
 
+	outTree1->Branch("QOV_tot",&QOV_tot, "QOV_tot/D");
+	outTree1->Branch("OV_A_max",&OV_A_max, "OV_A_max/D");
+	outTree1->Branch("OV_T_max",&OV_T_max, "OV_T_max/D");
+	outTree1->Branch("multi_OVtot",&multi_OVtot, "multi_OVtot/I");
+	outTree1->Branch("m_OVtot",&m_OVtot, "m_OVtot/I");
 
 	// CRS BRANCH
-	outTree1->Branch("Ecrs",&Ecrs, "Ecrs[45]/D");
 	outTree1->Branch("Eseed",&Eseed, "Eseed/D");
+	/*
+	outTree1->Branch("Ecrs",&Ecrs, "Ecrs[45]/D");
 	outTree1->Branch("Tcrs",&Tcrs, "Tcrs[45]/D");
 	outTree1->Branch("Acrs",&Acrs, "Acrs[45]/D");
+	*/
 	outTree1->Branch("multip",&multip, "multip/I");
+	outTree1->Branch("Iseed",&Iseed, "Iseed/I");
 	outTree1->Branch("Etot",&Etot, "Etot/D");
 	outTree1->Branch("Etop",&Etop, "Etop/D");
 	outTree1->Branch("Ebottom",&Ebottom, "Ebottom/D");
@@ -221,7 +308,11 @@ void BDXDSTSelector1::SlaveBegin(TTree * /*tree*/) {
 	outTree1->Branch("IVc4",&IVc4,"IVc4/I");
 	outTree1->Branch("IVc5",&IVc5,"IVc5/I");
 
-
+	outTree1->Branch("OVc1",&OVc1,"OVc1/I");
+	outTree1->Branch("OVc2",&OVc2,"OVc2/I");
+	outTree1->Branch("OVc3",&OVc3,"OVc3/I");
+	outTree1->Branch("OVc4",&OVc4,"OVc4/I");
+	outTree1->Branch("OVc5",&OVc5,"OVc5/I");
 
 
 	Info("SlaveBegin", "AllHistos to fOutput");
@@ -275,6 +366,7 @@ Bool_t BDXDSTSelector1::Process(Long64_t entry) {
 	double Tmin = 50;
 	double Tmax = 500;
 
+
 	 IV_A_max=0;
 	 IV_T_max=0;
 	 int IV_max=0;
@@ -286,6 +378,22 @@ Bool_t BDXDSTSelector1::Process(Long64_t entry) {
     multi_IVtot=0;
 	QIV_tot=0;
 	m_IVtot=0;
+	QIV_tot_corr=0;
+
+	 OV_A_max=0;
+	 OV_T_max=0;
+	 int OV_max=0;
+	double OV_Atot_oct=0;
+	double OV_Amax_oct=0;
+	double OV_Tmax_oct=0;
+	int OV_max_oct=0;
+	int multi_OVOct=0;
+    multi_OVtot=0;
+	QOV_tot=0;
+	m_OVtot=0;
+	Iseed=0;
+
+
 
 	int multiplicity_OV =0;
 	int multiplicity_IV =0;
@@ -298,6 +406,12 @@ Bool_t BDXDSTSelector1::Process(Long64_t entry) {
 	 IVc3=0;
 	 IVc4=0;
 	 IVc5=0;
+
+	 OVc1=0;
+	 OVc2=0;
+	 OVc3=0;
+	 OVc4=0;
+	 OVc5=0;
 
 	//VETO  Variables //
 	for(int i=0; i<11; i++){
@@ -363,13 +477,13 @@ if(isGarbage==true) {
 	hTrigAllEvents_rate_garbage->Fill(thisEventT);
 	hHALLA_cur_garbage->Fill(thisEventT, current);
 	 m_Event->Clear("C");
-	return kTRUE;
+ 	return kTRUE;
 }
 	}
 
 
 if((isGarbage==false)||(isMC==1)){
-
+//if(1){
      if(isMC==0 && current<=0.03){
     	 isCosmic=true;
     	 hHALLA_cur_cosmic->Fill(thisEventT, current);
@@ -400,6 +514,26 @@ if((isGarbage==false)||(isMC==1)){
 			  QOV[fIntVetoHit->m_channel.component] = fIntVetoHit->A;
 			  TOV[fIntVetoHit->m_channel.component] = fIntVetoHit->T;
 			  OVAtot += fIntVetoHit->A;
+              QOV_tot += fIntVetoHit->A;
+              if(fIntVetoHit->A>0) m_OVtot++;
+              if(fIntVetoHit->A>OV_A_max) {
+            	  OV_A_max = fIntVetoHit->A;
+            	  OV_T_max = fIntVetoHit->T;
+            	  OV_max = fIntVetoHit->m_channel.component;
+             //	IV_seed=fIntVetoHit->m_channel.component;
+              }
+
+              if(fIntVetoHit->m_channel.component<9){
+                  if(fIntVetoHit->A>OV_Amax_oct) {
+                	  OV_Amax_oct = fIntVetoHit->A;
+                	  OV_Tmax_oct = fIntVetoHit->T;
+                	  OV_max_oct = fIntVetoHit->m_channel.component;
+                 //	IV_seed=fIntVetoHit->m_channel.component;
+                  }
+                  OV_Atot_oct += fIntVetoHit->A;
+
+              }
+
 		      if(isMC==1){
 			     if(fIntVetoHit->A > OV_th ){
 
@@ -415,6 +549,8 @@ if((isGarbage==false)||(isMC==1)){
 		      }
 
 		  }
+
+
 
 		  if (fIntVetoHit->m_channel.layer == 1) {
 			  QIV[fIntVetoHit->m_channel.component] = fIntVetoHit->A;
@@ -461,7 +597,9 @@ if((isGarbage==false)||(isMC==1)){
 
 	if(IV_A_max>2.5) {
 		multi_IVtot =1;
+		QIV_tot_corr = IV_A_max;
 	for(int i=1; i<=10; i++){
+		if(i!=IV_max&&abs(TIV[i]-IV_T_max)<100) QIV_tot_corr += QIV[i];
 	  if(i!=IV_max&&QIV[i]>2.5&&abs(TIV[i]-IV_T_max)<100) multi_IVtot = multi_IVtot+1;
 	}
 	}
@@ -470,6 +608,20 @@ if((isGarbage==false)||(isMC==1)){
 		multi_IVOct =1;
 	for(int i=1; i<=8; i++){
 	  if(i!=IV_max_oct&&QIV[i]>2.5&&abs(TIV[i]-IV_Tmax_oct)<100) multi_IVOct = multi_IVOct+1;
+	}
+	}
+
+	if(OV_A_max>3.5) {
+		multi_OVtot =1;
+	for(int i=1; i<=10; i++){
+	  if(i!=OV_max&&QOV[i]>3.5&&abs(TOV[i]-OV_T_max)<100) multi_OVtot = multi_OVtot+1;
+	}
+	}
+
+	if(OV_Amax_oct>2.5) {
+		multi_OVOct =1;
+	for(int i=1; i<=8; i++){
+	  if(i!=OV_max_oct&&QOV[i]>2.5&&abs(TOV[i]-OV_Tmax_oct)<100) multi_OVOct = multi_OVOct+1;
 	}
 	}
 
@@ -554,6 +706,8 @@ if((isGarbage==false)||(isMC==1)){
 		Xseed = fCaloHit->m_channel.x;
 		Yseed = fCaloHit->m_channel.y;
 		Zseed = fCaloHit->m_channel.sector;
+		if(Zseed ==0 ) Iseed = this->getCaloIDXFromXY(Xseed, Yseed);
+		if(Zseed ==1 ) Iseed = this->getCaloIDXFromXY(Xseed, Yseed) + 22;
 	      }
 	    }
 	  }
@@ -606,6 +760,9 @@ if((isGarbage==false)||(isMC==1)){
 	   hCrs_EseedVSEtot[INDEX]->Fill(Eseed, Etot, weight);
 	   hCrs_EseedVSMulti[INDEX]->Fill(Eseed, multip, weight);
 	   hCrs_EtotVSMulti[INDEX]->Fill(Etot, multip, weight);
+		hCrs_EtopEbotVsEtot[INDEX]->Fill((Etop-Ebottom)/Etot, Etot, weight);
+		hCrs_EtopEbotVsEseed[INDEX]->Fill((Etop-Ebottom)/Etot, Eseed, weight);
+		if(abs((Etop-Ebottom)/Etot)<0.8)hCrs_Eseed_CutEasym[INDEX]->Fill(Eseed, weight);
 
 	}
 
@@ -630,12 +787,21 @@ if((isGarbage==false)||(isMC==1)){
 
 	}
 
-
+// IV event conditions
 	if(IV_A_max>5.5) IVc1=1;
 	if((IV_Amax_oct>4&&IV_Atot_oct>11)||(QIV[9]>5.5)||(QIV[10]>5.5)) IVc2=1;
     if(multi_IVOct>1||(QIV[9]>5.5)||(QIV[10]>5.5)) IVc3=1;
     if((multi_IVOct==1&&IV_Amax_oct>5.5)||multi_IVOct>1||(QIV[9]>5.5)||(QIV[10]>5.5)) IVc4=1;
     if((multi_IVtot==1&&IV_A_max>5.5)||multi_IVtot>1) IVc5=1;
+
+    // OV event conditions
+	if(OV_A_max>5.5) OVc1=1;
+	if((OV_Amax_oct>4&&OV_Atot_oct>11)||(QOV[9]>5.5)||(QOV[10]>5.5)) OVc2=1;
+    if(multi_OVOct>1||(QOV[9]>5.5)||(QOV[10]>5.5)) OVc3=1;
+    if((multi_OVOct==1&&OV_Amax_oct>5.5)||multi_OVOct>1||(QOV[9]>5.5)||(QOV[10]>5.5)) OVc4=1;
+    if((multi_OVtot==1&&OV_A_max>6.5)||multi_OVtot>1) OVc5=1;
+
+
 
    if(Eseed>0){
 	if(IV_A_max>5.5) hCrs_Eseed_IVc1[INDEX]->Fill(Eseed);
@@ -644,26 +810,25 @@ if((isGarbage==false)||(isMC==1)){
     if((multi_IVOct==1&&IV_Amax_oct>5.5)||multi_IVOct>1||(QIV[9]>5.5)||(QIV[10]>5.5)) hCrs_Eseed_IVc4[INDEX]->Fill(Eseed);
     if((multi_IVtot==1&&IV_A_max>5.5)||multi_IVtot>1) hCrs_Eseed_IVc5[INDEX]->Fill(Eseed);
 
-	if(!(IV_A_max>5.5)) hCrs_Eseed_NoIVc1[INDEX]->Fill(Eseed);
-	if(!((IV_Amax_oct>4&&IV_Atot_oct>11)||(QIV[9]>5.5)||(QIV[10]>5.5))) hCrs_Eseed_NoIVc2[INDEX]->Fill(Eseed);
+
     if(!(multi_IVOct>1||(QIV[9]>5.5)||(QIV[10]>5.5))) hCrs_Eseed_NoIVc3[INDEX]->Fill(Eseed);
     if(!((multi_IVOct==1&&IV_Amax_oct>5.5)||multi_IVOct>1||(QIV[9]>5.5)||(QIV[10]>5.5))) hCrs_Eseed_NoIVc4[INDEX]->Fill(Eseed);
-    if(!((multi_IVtot==1&&IV_A_max>5.5)||multi_IVtot>1)) hCrs_Eseed_NoIVc5[INDEX]->Fill(Eseed);
+
 
 
 
 
     if(IVc1==0){
-
+       hCrs_Eseed_NoIVc1[INDEX]->Fill(Eseed);
  	   hCrs_Etot_noIVc1[INDEX]->Fill(Etot, weight);
  	   hCrs_multiplicity_noIVc1[INDEX]->Fill(multip, weight);
-       hCrs_Eseed_noIVc1[INDEX]->Fill(Eseed, weight);
+     //  hCrs_Eseed_noIVc1[INDEX]->Fill(Eseed, weight);
  	   hCrs_Etop_noIVc1[INDEX]->Fill(Etop, weight);
  	   hCrs_Ebottom_noIVc1[INDEX]->Fill(Ebottom, weight);
  	   hCrs_R_EtopEtot_noIVc1[INDEX]->Fill(Etop/Etot, weight);
  	   hCrs_R_EbottomEtot_noIVc1[INDEX]->Fill(Ebottom/Etot, weight);
  	   hCrs_EtotVsEtop_noIVc1[INDEX]->Fill(Etot, Etop, weight);
-        hCrs_XYseed_noIVc1[INDEX]->Fill(Xseed, Yseed, weight);
+       hCrs_XYseed_noIVc1[INDEX]->Fill(Xseed, Yseed, weight);
  	   hCrs_EseedVSEtot_noIVc1[INDEX]->Fill(Eseed, Etot, weight);
  	   hCrs_EseedVSMulti_noIVc1[INDEX]->Fill(Eseed, multip, weight);
  	   hCrs_EtotVSMulti_noIVc1[INDEX]->Fill(Etot, multip, weight);
@@ -672,10 +837,10 @@ if((isGarbage==false)||(isMC==1)){
     }
 
     if(IVc2==0){
-
+    	hCrs_Eseed_NoIVc2[INDEX]->Fill(Eseed);
  	   hCrs_Etot_noIVc2[INDEX]->Fill(Etot, weight);
  	   hCrs_multiplicity_noIVc2[INDEX]->Fill(multip, weight);
-       hCrs_Eseed_noIVc2[INDEX]->Fill(Eseed, weight);
+      // hCrs_Eseed_noIVc2[INDEX]->Fill(Eseed, weight);
  	   hCrs_Etop_noIVc2[INDEX]->Fill(Etop, weight);
  	   hCrs_Ebottom_noIVc2[INDEX]->Fill(Ebottom, weight);
  	   hCrs_R_EtopEtot_noIVc2[INDEX]->Fill(Etop/Etot, weight);
@@ -691,10 +856,10 @@ if((isGarbage==false)||(isMC==1)){
 
 
     if(IVc5==0){
-
+    	hCrs_Eseed_NoIVc5[INDEX]->Fill(Eseed);
  	   hCrs_Etot_noIVc5[INDEX]->Fill(Etot, weight);
  	   hCrs_multiplicity_noIVc5[INDEX]->Fill(multip, weight);
-       hCrs_Eseed_noIVc5[INDEX]->Fill(Eseed, weight);
+     //  hCrs_Eseed_noIVc5[INDEX]->Fill(Eseed, weight);
  	   hCrs_Etop_noIVc5[INDEX]->Fill(Etop, weight);
  	   hCrs_Ebottom_noIVc5[INDEX]->Fill(Ebottom, weight);
  	   hCrs_R_EtopEtot_noIVc5[INDEX]->Fill(Etop/Etot, weight);
@@ -704,12 +869,88 @@ if((isGarbage==false)||(isMC==1)){
  	   hCrs_EseedVSEtot_noIVc5[INDEX]->Fill(Eseed, Etot, weight);
  	   hCrs_EseedVSMulti_noIVc5[INDEX]->Fill(Eseed, multip, weight);
  	   hCrs_EtotVSMulti_noIVc5[INDEX]->Fill(Etot, multip, weight);
+	  hCrs_EtopEbotVsEtot_noIVc5[INDEX]->Fill((Etop-Ebottom)/Etot, Etot, weight);
+		hCrs_EtopEbotVsEseed_noIVc5[INDEX]->Fill((Etop-Ebottom)/Etot, Eseed, weight);
+
+		hQIVmaxVSQIVtot_noIVc5[INDEX]->Fill(IV_A_max, QIV_tot, weight);
+		if(Eseed>=100) hQIVmaxVSQIVtot_noIVc5_Eseed_gr_100[INDEX]->Fill(IV_A_max, QIV_tot, weight);
+		if(abs((Etop-Ebottom)/Etot)<0.8)hCrs_Eseed_CutEasym_noIVc5[INDEX]->Fill(Eseed, weight);
 
 
     }
 
 
-}
+    if(OVc1==0){
+
+ 	   hCrs_Etot_noOVc1[INDEX]->Fill(Etot, weight);
+ 	   hCrs_multiplicity_noOVc1[INDEX]->Fill(multip, weight);
+       hCrs_Eseed_NoOVc1[INDEX]->Fill(Eseed, weight);
+ 	   hCrs_Etop_noOVc1[INDEX]->Fill(Etop, weight);
+ 	   hCrs_Ebottom_noOVc1[INDEX]->Fill(Ebottom, weight);
+ 	   hCrs_R_EtopEtot_noOVc1[INDEX]->Fill(Etop/Etot, weight);
+ 	   hCrs_R_EbottomEtot_noOVc1[INDEX]->Fill(Ebottom/Etot, weight);
+ 	   hCrs_EtotVsEtop_noOVc1[INDEX]->Fill(Etot, Etop, weight);
+       hCrs_XYseed_noOVc1[INDEX]->Fill(Xseed, Yseed, weight);
+ 	   hCrs_EseedVSEtot_noOVc1[INDEX]->Fill(Eseed, Etot, weight);
+ 	   hCrs_EseedVSMulti_noOVc1[INDEX]->Fill(Eseed, multip, weight);
+ 	   hCrs_EtotVSMulti_noOVc1[INDEX]->Fill(Etot, multip, weight);
+
+
+    }
+
+    if(OVc2==0){
+
+ 	   hCrs_Etot_noOVc2[INDEX]->Fill(Etot, weight);
+ 	   hCrs_multiplicity_noOVc2[INDEX]->Fill(multip, weight);
+       hCrs_Eseed_NoOVc2[INDEX]->Fill(Eseed, weight);
+ 	   hCrs_Etop_noOVc2[INDEX]->Fill(Etop, weight);
+ 	   hCrs_Ebottom_noOVc2[INDEX]->Fill(Ebottom, weight);
+ 	   hCrs_R_EtopEtot_noOVc2[INDEX]->Fill(Etop/Etot, weight);
+ 	   hCrs_R_EbottomEtot_noOVc2[INDEX]->Fill(Ebottom/Etot, weight);
+ 	   hCrs_EtotVsEtop_noOVc2[INDEX]->Fill(Etot, Etop, weight);
+        hCrs_XYseed_noOVc2[INDEX]->Fill(Xseed, Yseed, weight);
+ 	   hCrs_EseedVSEtot_noOVc2[INDEX]->Fill(Eseed, Etot, weight);
+ 	   hCrs_EseedVSMulti_noOVc2[INDEX]->Fill(Eseed, multip, weight);
+ 	   hCrs_EtotVSMulti_noOVc2[INDEX]->Fill(Etot, multip, weight);
+
+
+    }
+
+
+    if(OVc5==0){
+
+ 	   hCrs_Etot_noOVc5[INDEX]->Fill(Etot, weight);
+ 	   hCrs_multiplicity_noOVc5[INDEX]->Fill(multip, weight);
+       hCrs_Eseed_NoOVc5[INDEX]->Fill(Eseed, weight);
+ 	   hCrs_Ebottom_noOVc5[INDEX]->Fill(Ebottom, weight);
+ 	   hCrs_R_EtopEtot_noOVc5[INDEX]->Fill(Etop/Etot, weight);
+ 	   hCrs_R_EbottomEtot_noOVc5[INDEX]->Fill(Ebottom/Etot, weight);
+ 	   hCrs_EtotVsEtop_noOVc5[INDEX]->Fill(Etot, Etop, weight);
+
+       hCrs_XYseed_noOVc5[INDEX]->Fill(Xseed, Yseed, weight);
+ 	   hCrs_EseedVSEtot_noOVc5[INDEX]->Fill(Eseed, Etot, weight);
+ 	   hCrs_EseedVSMulti_noOVc5[INDEX]->Fill(Eseed, multip, weight);
+ 	   hCrs_EtotVSMulti_noOVc5[INDEX]->Fill(Etot, multip, weight);
+	   hCrs_EtopEbotVsEtot_noOVc5[INDEX]->Fill((Etop-Ebottom)/Etot, Etot, weight);
+		hCrs_EtopEbotVsEseed_noOVc5[INDEX]->Fill((Etop-Ebottom)/Etot, Eseed, weight);
+
+		if(abs((Etop-Ebottom)/Etot)<0.8)hCrs_Eseed_CutEasym_noOVc5[INDEX]->Fill(Eseed, weight);
+
+
+    }
+
+
+    if(IVc5==0 && OVc5==0){
+		hCrs_Etot_noVc5[INDEX]->Fill(Etot, weight);
+		hCrs_Eseed_noVc5[INDEX]->Fill(Eseed, weight);
+		hCrs_EtopEbotVsEtot_noVc5[INDEX]->Fill((Etop-Ebottom)/Etot, Etot, weight);
+		hCrs_EtopEbotVsEseed_noVc5[INDEX]->Fill((Etop-Ebottom)/Etot, Eseed, weight);
+		if(abs((Etop-Ebottom)/Etot)<0.8)hCrs_Eseed_CutEasym_noVc5[INDEX]->Fill(Eseed, weight);
+
+    }
+
+
+} //end if Eseed
 
 
 
@@ -784,6 +1025,9 @@ void BDXDSTSelector1::Terminate() {
   hCrs_EseedVSEtot[i] = (TH2D*)fOutput->FindObject(Form("hCrs_EseedVSEtot_%i",i));
   hCrs_EseedVSMulti[i] = (TH2D*)fOutput->FindObject(Form("hCrs_EseedVSMulti_%i",i));
   hCrs_EtotVSMulti[i] = (TH2D*)fOutput->FindObject(Form("hCrs_EtotVSMulti_%i",i));
+  hCrs_EtopEbotVsEtot[i] = (TH2D*)fOutput->FindObject(Form("hCrs_EtopEbotVsEtot_%i",i));
+  hCrs_EtopEbotVsEseed[i] = (TH2D*)fOutput->FindObject(Form("hCrs_EtopEbotVsEseed_%i",i));
+  hCrs_Eseed_CutEasym[i] = (TH1D*)fOutput->FindObject(Form("hCrs_Eseed_CutEasym_%i",i));
 
   hCrs_Etot_NoVETO[i] = (TH1D*)fOutput->FindObject(Form("hCrs_Etot_NoVETO_%i",i));
   hCrs_multiplicity_NoVETO[i] = (TH1D*)fOutput->FindObject(Form("hCrs_multiplicity_NoVETO_%i",i));
@@ -800,9 +1044,9 @@ void BDXDSTSelector1::Terminate() {
   hCrs_EtotVSMulti_NoVETO[i] = (TH2D*)fOutput->FindObject(Form("hCrs_EtotVSMulti_NoVETO_%i",i));
 
 
+
   hCrs_Etot_noIVc1[i] = (TH1D*)fOutput->FindObject(Form("hCrs_Etot_noIVc1_%i",i));
   hCrs_multiplicity_noIVc1[i] = (TH1D*)fOutput->FindObject(Form("hCrs_multiplicity_noIVc1_%i",i));
-  hCrs_Eseed_noIVc1[i] = (TH1D*)fOutput->FindObject(Form("hCrs_Eseed_noIVc1_%i",i));
   hCrs_Etop_noIVc1[i] = (TH1D*)fOutput->FindObject(Form("hCrs_Etop_noIVc1_%i",i));
   hCrs_Ebottom_noIVc1[i] = (TH1D*)fOutput->FindObject(Form("hCrs_Ebottom_noIVc1_%i",i));
   hCrs_R_EtopEtot_noIVc1[i] = (TH1D*)fOutput->FindObject(Form("hCrs_R_EtopEtot_noIVc1_%i",i));
@@ -817,7 +1061,6 @@ void BDXDSTSelector1::Terminate() {
 
   hCrs_Etot_noIVc2[i] = (TH1D*)fOutput->FindObject(Form("hCrs_Etot_noIVc2_%i",i));
   hCrs_multiplicity_noIVc2[i] = (TH1D*)fOutput->FindObject(Form("hCrs_multiplicity_noIVc2_%i",i));
-  hCrs_Eseed_noIVc2[i] = (TH1D*)fOutput->FindObject(Form("hCrs_Eseed_noIVc2_%i",i));
   hCrs_Etop_noIVc2[i] = (TH1D*)fOutput->FindObject(Form("hCrs_Etop_noIVc2_%i",i));
   hCrs_Ebottom_noIVc2[i] = (TH1D*)fOutput->FindObject(Form("hCrs_Ebottom_noIVc2_%i",i));
   hCrs_R_EtopEtot_noIVc2[i] = (TH1D*)fOutput->FindObject(Form("hCrs_R_EtopEtot_noIVc2_%i",i));
@@ -832,7 +1075,6 @@ void BDXDSTSelector1::Terminate() {
 
   hCrs_Etot_noIVc5[i] = (TH1D*)fOutput->FindObject(Form("hCrs_Etot_noIVc5_%i",i));
   hCrs_multiplicity_noIVc5[i] = (TH1D*)fOutput->FindObject(Form("hCrs_multiplicity_noIVc5_%i",i));
-  hCrs_Eseed_noIVc5[i] = (TH1D*)fOutput->FindObject(Form("hCrs_Eseed_noIVc5_%i",i));
   hCrs_Etop_noIVc5[i] = (TH1D*)fOutput->FindObject(Form("hCrs_Etop_noIVc5_%i",i));
   hCrs_Ebottom_noIVc5[i] = (TH1D*)fOutput->FindObject(Form("hCrs_Ebottom_noIVc5_%i",i));
   hCrs_R_EtopEtot_noIVc5[i] = (TH1D*)fOutput->FindObject(Form("hCrs_R_EtopEtot_noIVc5_%i",i));
@@ -843,6 +1085,12 @@ void BDXDSTSelector1::Terminate() {
   hCrs_EseedVSEtot_noIVc5[i] = (TH2D*)fOutput->FindObject(Form("hCrs_EseedVSEtot_noIVc5_%i",i));
   hCrs_EseedVSMulti_noIVc5[i] = (TH2D*)fOutput->FindObject(Form("hCrs_EseedVSMulti_noIVc5_%i",i));
   hCrs_EtotVSMulti_noIVc5[i] = (TH2D*)fOutput->FindObject(Form("hCrs_EtotVSMulti_noIVc5_%i",i));
+  hCrs_EtopEbotVsEtot_noIVc5[i] = (TH2D*)fOutput->FindObject(Form("hCrs_EtopEbotVsEtot_noIVc5_%i",i));
+  hCrs_EtopEbotVsEseed_noIVc5[i] = (TH2D*)fOutput->FindObject(Form("hCrs_EtopEbotVsEseed_noIVc5_%i",i));
+  hCrs_Eseed_CutEasym_noIVc5[i] = (TH1D*)fOutput->FindObject(Form("hCrs_Eseed_CutEasym_noIVc5_%i",i));
+
+	hQIVmaxVSQIVtot_noIVc5[i] = (TH2D*)fOutput->FindObject(Form("hQIVmaxVSQIVtot_noIVc5_%i",i));
+	hQIVmaxVSQIVtot_noIVc5_Eseed_gr_100[i] = (TH2D*)fOutput->FindObject(Form("hQIVmaxVSQIVtot_noIVc5_Eseed_gr_100_%i",i));
 
   hCrs_Eseed_IVc1[i] = (TH1D*)fOutput->FindObject(Form("hCrs_Eseed_IVc1_%i",i));
   hCrs_Eseed_IVc2[i] = (TH1D*)fOutput->FindObject(Form("hCrs_Eseed_IVc2_%i",i));
@@ -855,7 +1103,70 @@ void BDXDSTSelector1::Terminate() {
   hCrs_Eseed_NoIVc3[i] = (TH1D*)fOutput->FindObject(Form("hCrs_Eseed_NoIVc3_%i",i));
   hCrs_Eseed_NoIVc4[i] = (TH1D*)fOutput->FindObject(Form("hCrs_Eseed_NoIVc4_%i",i));
   hCrs_Eseed_NoIVc5[i] = (TH1D*)fOutput->FindObject(Form("hCrs_Eseed_NoIVc5_%i",i));
- }
+
+  hCrs_Eseed_NoOVc1[i] = (TH1D*)fOutput->FindObject(Form("hCrs_Eseed_NoOVc1_%i",i));
+  hCrs_Eseed_NoOVc2[i] = (TH1D*)fOutput->FindObject(Form("hCrs_Eseed_NoOVc2_%i",i));
+  hCrs_Eseed_NoOVc3[i] = (TH1D*)fOutput->FindObject(Form("hCrs_Eseed_NoOVc3_%i",i));
+  hCrs_Eseed_NoOVc4[i] = (TH1D*)fOutput->FindObject(Form("hCrs_Eseed_NoOVc4_%i",i));
+  hCrs_Eseed_NoOVc5[i] = (TH1D*)fOutput->FindObject(Form("hCrs_Eseed_NoOVc5_%i",i));
+
+
+
+  hCrs_Etot_noOVc1[i] = (TH1D*)fOutput->FindObject(Form("hCrs_Etot_noOVc1_%i",i));
+  hCrs_multiplicity_noOVc1[i] = (TH1D*)fOutput->FindObject(Form("hCrs_multiplicity_noOVc1_%i",i));
+  hCrs_Etop_noOVc1[i] = (TH1D*)fOutput->FindObject(Form("hCrs_Etop_noOVc1_%i",i));
+  hCrs_Ebottom_noOVc1[i] = (TH1D*)fOutput->FindObject(Form("hCrs_Ebottom_noOVc1_%i",i));
+  hCrs_R_EtopEtot_noOVc1[i] = (TH1D*)fOutput->FindObject(Form("hCrs_R_EtopEtot_noOVc1_%i",i));
+  hCrs_R_EbottomEtot_noOVc1[i] = (TH1D*)fOutput->FindObject(Form("hCrs_R_EbottomEtot_noOVc1_%i",i));
+  hCrs_EtotVsEtop_noOVc1[i] = (TH2D*)fOutput->FindObject(Form("hCrs_EtotVsEtop_noOVc1_%i",i));
+  hCrs_XYseed_noOVc1[i] = (TH2D*)fOutput->FindObject(Form("hCrs_XYseed_noOVc1_%i",i));
+  hCrs_XY_XYseed_noOVc1[i] = (TH2D*)fOutput->FindObject(Form("hCrs_XY_XYseed_noOVc1_%i",i));
+  hCrs_EseedVSEtot_noOVc1[i] = (TH2D*)fOutput->FindObject(Form("hCrs_EseedVSEtot_noOVc1_%i",i));
+  hCrs_EseedVSMulti_noOVc1[i] = (TH2D*)fOutput->FindObject(Form("hCrs_EseedVSMulti_noOVc1_%i",i));
+  hCrs_EtotVSMulti_noOVc1[i] = (TH2D*)fOutput->FindObject(Form("hCrs_EtotVSMulti_noOVc1_%i",i));
+
+
+  hCrs_Etot_noOVc2[i] = (TH1D*)fOutput->FindObject(Form("hCrs_Etot_noOVc2_%i",i));
+  hCrs_multiplicity_noOVc2[i] = (TH1D*)fOutput->FindObject(Form("hCrs_multiplicity_noOVc2_%i",i));
+  hCrs_Etop_noOVc2[i] = (TH1D*)fOutput->FindObject(Form("hCrs_Etop_noOVc2_%i",i));
+  hCrs_Ebottom_noOVc2[i] = (TH1D*)fOutput->FindObject(Form("hCrs_Ebottom_noOVc2_%i",i));
+  hCrs_R_EtopEtot_noOVc2[i] = (TH1D*)fOutput->FindObject(Form("hCrs_R_EtopEtot_noOVc2_%i",i));
+  hCrs_R_EbottomEtot_noOVc2[i] = (TH1D*)fOutput->FindObject(Form("hCrs_R_EbottomEtot_noOVc2_%i",i));
+  hCrs_EtotVsEtop_noOVc2[i] = (TH2D*)fOutput->FindObject(Form("hCrs_EtotVsEtop_noOVc2_%i",i));
+  hCrs_XYseed_noOVc2[i] = (TH2D*)fOutput->FindObject(Form("hCrs_XYseed_noOVc2_%i",i));
+  hCrs_XY_XYseed_noOVc2[i] = (TH2D*)fOutput->FindObject(Form("hCrs_XY_XYseed_noOVc2_%i",i));
+  hCrs_EseedVSEtot_noOVc2[i] = (TH2D*)fOutput->FindObject(Form("hCrs_EseedVSEtot_noOVc2_%i",i));
+  hCrs_EseedVSMulti_noOVc2[i] = (TH2D*)fOutput->FindObject(Form("hCrs_EseedVSMulti_noOVc2_%i",i));
+  hCrs_EtotVSMulti_noOVc2[i] = (TH2D*)fOutput->FindObject(Form("hCrs_EtotVSMulti_noOVc2_%i",i));
+
+
+  hCrs_Etot_noOVc5[i] = (TH1D*)fOutput->FindObject(Form("hCrs_Etot_noOVc5_%i",i));
+  hCrs_multiplicity_noOVc5[i] = (TH1D*)fOutput->FindObject(Form("hCrs_multiplicity_noOVc5_%i",i));
+  hCrs_Etop_noOVc5[i] = (TH1D*)fOutput->FindObject(Form("hCrs_Etop_noOVc5_%i",i));
+  hCrs_Ebottom_noOVc5[i] = (TH1D*)fOutput->FindObject(Form("hCrs_Ebottom_noOVc5_%i",i));
+  hCrs_R_EtopEtot_noOVc5[i] = (TH1D*)fOutput->FindObject(Form("hCrs_R_EtopEtot_noOVc5_%i",i));
+  hCrs_R_EbottomEtot_noOVc5[i] = (TH1D*)fOutput->FindObject(Form("hCrs_R_EbottomEtot_noOVc5_%i",i));
+  hCrs_EtotVsEtop_noOVc5[i] = (TH2D*)fOutput->FindObject(Form("hCrs_EtotVsEtop_noOVc5_%i",i));
+  hCrs_XYseed_noOVc5[i] = (TH2D*)fOutput->FindObject(Form("hCrs_XYseed_noOVc5_%i",i));
+  hCrs_XY_XYseed_noOVc5[i] = (TH2D*)fOutput->FindObject(Form("hCrs_XY_XYseed_noOVc5_%i",i));
+  hCrs_EseedVSEtot_noOVc5[i] = (TH2D*)fOutput->FindObject(Form("hCrs_EseedVSEtot_noOVc5_%i",i));
+  hCrs_EseedVSMulti_noOVc5[i] = (TH2D*)fOutput->FindObject(Form("hCrs_EseedVSMulti_noOVc5_%i",i));
+  hCrs_EtotVSMulti_noOVc5[i] = (TH2D*)fOutput->FindObject(Form("hCrs_EtotVSMulti_noOVc5_%i",i));
+  hCrs_EtopEbotVsEtot_noOVc5[i] = (TH2D*)fOutput->FindObject(Form("hCrs_EtopEbotVsEtot_noOVc5_%i",i));
+  hCrs_EtopEbotVsEseed_noOVc5[i] = (TH2D*)fOutput->FindObject(Form("hCrs_EtopEbotVsEseed_noOVc5_%i",i));
+  hCrs_Eseed_CutEasym_noOVc5[i] = (TH1D*)fOutput->FindObject(Form("hCrs_Eseed_CutEasym_noOVc5_%i",i));
+
+  hCrs_Etot_noVc5[i] = (TH1D*)fOutput->FindObject(Form("hCrs_Etot_noVc5_%i",i));
+  hCrs_Eseed_noVc5[i]= (TH1D*)fOutput->FindObject(Form("hCrs_Eseed_noVc5_%i",i));
+  hCrs_EtopEbotVsEtot_noVc5[i] = (TH2D*)fOutput->FindObject(Form("hCrs_EtopEbotVsEtot_noVc5_%i",i));
+  hCrs_EtopEbotVsEseed_noVc5[i] = (TH2D*)fOutput->FindObject(Form("hCrs_EtopEbotVsEseed_noVc5_%i",i));
+  hCrs_Eseed_CutEasym_noVc5[i] = (TH1D*)fOutput->FindObject(Form("hCrs_Eseed_CutEasym_noVc5_%i",i));
+
+
+
+
+
+  }
 
 
   hTrigAllEvents_rate_garbage->Sumw2();
