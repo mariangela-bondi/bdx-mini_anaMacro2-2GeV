@@ -393,12 +393,17 @@ public:
 	double OV_A_max;
 	double OV_T_max;
 	int multi_OVtot, m_OVtot;
+
     //variables CRS
 
     double Ecrs[45], Tcrs[45], Acrs[45];
 	double Etot;
 	double Etop;
 	double Ebottom;
+	double Eseed;
+	int Iseed;
+	int multip;
+	double Tseed;
 
        // HISTO VETO
 
@@ -591,9 +596,7 @@ public:
 	int OVc4;
 	int OVc5;
 
-	double Eseed;
-	int Iseed;
-	int multip;
+
 
 	vector<TTree*> tQmatrix;
 

@@ -270,7 +270,7 @@ void BDXDSTSelector1::SlaveBegin(TTree * /*tree*/) {
 	outTree1->Branch("eventNumber", &eventNumber, "eventNumber/I");
 
 	// veto BRANCH
-
+/*
 	outTree1->Branch("QOV",&QOV, "QOV[11]/D");
 	outTree1->Branch("QIV",&QIV, "QIV[11]/D");
 	outTree1->Branch("TOV",&TOV, "TOV[11]/D");
@@ -288,30 +288,33 @@ void BDXDSTSelector1::SlaveBegin(TTree * /*tree*/) {
 	outTree1->Branch("OV_T_max",&OV_T_max, "OV_T_max/D");
 	outTree1->Branch("multi_OVtot",&multi_OVtot, "multi_OVtot/I");
 	outTree1->Branch("m_OVtot",&m_OVtot, "m_OVtot/I");
-
+*/
 	// CRS BRANCH
 	outTree1->Branch("Eseed",&Eseed, "Eseed/D");
-	/*
+	outTree1->Branch("Tseed",&Tseed, "Tseed/D");
+
 	outTree1->Branch("Ecrs",&Ecrs, "Ecrs[45]/D");
 	outTree1->Branch("Tcrs",&Tcrs, "Tcrs[45]/D");
-	outTree1->Branch("Acrs",&Acrs, "Acrs[45]/D");
-	*/
+//	outTree1->Branch("Acrs",&Acrs, "Acrs[45]/D");
+
 	outTree1->Branch("multip",&multip, "multip/I");
 	outTree1->Branch("Iseed",&Iseed, "Iseed/I");
 	outTree1->Branch("Etot",&Etot, "Etot/D");
 	outTree1->Branch("Etop",&Etop, "Etop/D");
 	outTree1->Branch("Ebottom",&Ebottom, "Ebottom/D");
-
+/*
 	outTree1->Branch("IVc1",&IVc1,"IVc1/I");
 	outTree1->Branch("IVc2",&IVc2,"IVc2/I");
 	outTree1->Branch("IVc3",&IVc3,"IVc3/I");
 	outTree1->Branch("IVc4",&IVc4,"IVc4/I");
+	*/
 	outTree1->Branch("IVc5",&IVc5,"IVc5/I");
-
+/*
 	outTree1->Branch("OVc1",&OVc1,"OVc1/I");
 	outTree1->Branch("OVc2",&OVc2,"OVc2/I");
 	outTree1->Branch("OVc3",&OVc3,"OVc3/I");
 	outTree1->Branch("OVc4",&OVc4,"OVc4/I");
+	*/
 	outTree1->Branch("OVc5",&OVc5,"OVc5/I");
 
 
@@ -434,6 +437,7 @@ Bool_t BDXDSTSelector1::Process(Long64_t entry) {
 	 Etop = 0;
 	 Ebottom = 0;
 	 Eseed = 0;
+	 Tseed =0;
 	double Ehit =0;
 	 multip = 0;
 	int Xseed = 0;
@@ -666,6 +670,19 @@ if((isGarbage==false)||(isMC==1)){
 
 			  }
 
+			  Ehit =  (fCaloHit->E);
+
+		      if(Ehit>Eseed){
+			Eseed = Ehit;
+			Tseed = (fCaloHit->T);
+			Xseed = fCaloHit->m_channel.x;
+			Yseed = fCaloHit->m_channel.y;
+			Zseed = fCaloHit->m_channel.sector;
+			if(Zseed ==0 ) Iseed = this->getCaloIDXFromXY(Xseed, Yseed);
+			if(Zseed ==1 ) Iseed = this->getCaloIDXFromXY(Xseed, Yseed) + 22;
+		      }
+
+
 		  }
 		  }
 
@@ -680,35 +697,38 @@ if((isGarbage==false)||(isMC==1)){
 
 	    Ehit=0;
 	    //MINIMUM ENERGY PER CRS //
-	    if(fCaloHit->E > E_singleCrs_thr){
-
+	  //  if(fCaloHit->E > E_singleCrs_thr){
+	    if(fCaloHit->E>4&&abs(Tseed -fCaloHit->T)<100){
 	      //Multiplicity//
 	      multip ++;
 
 	      //Hit Energy//
-	      Ehit =  (fCaloHit->E);
+	    //  Ehit =  (fCaloHit->E);
 
 	      // Total Energy
-	      Etot = Etot + Ehit;
+	      Etot = Etot + (fCaloHit->E);
 
 	      int sector =  fCaloHit->m_channel.sector;
 
 	      // Top Energy
-	      if(fCaloHit->m_channel.sector ==0) Etop = Etop + Ehit;
+	      if(fCaloHit->m_channel.sector ==0) Etop = Etop + (fCaloHit->E);
 
 	      // Bottom Energy
-	      if(fCaloHit->m_channel.sector ==1) Ebottom = Ebottom + Ehit;
+	      if(fCaloHit->m_channel.sector ==1) Ebottom = Ebottom + (fCaloHit->E);
 
 
 	      // Eseed, Seed XY //
+	      /*
 	      if(Ehit>Eseed){
 		Eseed = Ehit;
+		Tseed = (fCaloHit->T);
 		Xseed = fCaloHit->m_channel.x;
 		Yseed = fCaloHit->m_channel.y;
 		Zseed = fCaloHit->m_channel.sector;
 		if(Zseed ==0 ) Iseed = this->getCaloIDXFromXY(Xseed, Yseed);
 		if(Zseed ==1 ) Iseed = this->getCaloIDXFromXY(Xseed, Yseed) + 22;
 	      }
+	      */
 	    }
 	  }
 	}
