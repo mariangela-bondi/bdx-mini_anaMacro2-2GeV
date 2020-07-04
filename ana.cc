@@ -566,7 +566,7 @@ cout <<"after BDXDSTSelector1"<<endl;
 
 
 		if (doTree) {
-		if(isMC==0)	myBDXDSTSelector->GetOutTree()->CloneTree()->Write();
+	//	if(isMC==0)	myBDXDSTSelector->GetOutTree()->CloneTree()->Write();
 			myBDXDSTSelector1->GetOutTree()->CloneTree()->Write();
 		}
 
