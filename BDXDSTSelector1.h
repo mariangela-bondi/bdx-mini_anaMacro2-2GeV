@@ -84,7 +84,7 @@ public:
 		/*OutputTree and related stuff*/
 		outProofFile = 0;
 		outFile = 0;
-		outTree1 = 0;
+		
 
 		hTrigAllEvents_rate_garbage =0;
 		hHALLA_cur_garbage=0;
@@ -214,8 +214,7 @@ public:
 
 	int eventNumber, runNumber;
 	double weight;
-	bool doTree;
-
+	
 
 	/*Pointers. Note that EACH histogram pointer MUST be initialized to 0 in the TSelector constructor*/
 	TEventHeader *m_EventHeader;
@@ -319,7 +318,7 @@ public:
 
 	vector<TTree*> tQmatrix;
 
-	TTree *outTree1;
+	
 	TProofOutputFile *outProofFile;
 	TFile *outFile;
 
@@ -411,9 +410,7 @@ public:
 		if(x==1 && y==3) return 22;
 	}
 
-	TTree *GetOutTree(){
-		return this->outTree1;
-	}
+	
 
 ClassDef(BDXDSTSelector1,1);
 
