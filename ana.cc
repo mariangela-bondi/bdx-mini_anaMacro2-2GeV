@@ -40,7 +40,7 @@ int nproof;
 int Ntot;
 int N0;
 
-bool showGUI, doTree;
+bool showGUI;
 
 string ofname, fname;
 vector<string> fnames;
@@ -129,7 +129,7 @@ void parseCommandLine(int argc, char **argv) {
 		} else if (command == "-Ntot") {
 			Ntot = atoi(argv[ii + 1]);
 		} else if (command == "-GUI") showGUI = true;
-		else if (command == "-tree") doTree = true;
+		
 	}
 }
 
@@ -160,7 +160,7 @@ int main(int argc, char **argv) {
 	cout << "******"<<endl;
 
 	cout<< opt<<endl;
-	if (doTree) opt = "Tree:" + opt;
+	
 
 	BDXDSTSelector *myBDXDSTSelector = new BDXDSTSelector();
 	BDXDSTSelector1 *myBDXDSTSelector1 = new BDXDSTSelector1();
@@ -564,11 +564,6 @@ cout <<"after BDXDSTSelector1"<<endl;
 			if (obj1->InheritsFrom(TH1::Class())) obj1->Write();
 		}
 
-
-		if (doTree) {
-		if(isMC==0)	myBDXDSTSelector->GetOutTree()->CloneTree()->Write();
-			myBDXDSTSelector1->GetOutTree()->CloneTree()->Write();
-		}
 
 		ofile->Close();
 	}
