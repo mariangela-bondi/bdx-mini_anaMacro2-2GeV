@@ -41,10 +41,6 @@ void BDXDSTSelector1::Begin(TTree * /*tree*/) {
 		isMC = 1;
 	}
 
-	if (option.Contains("Tree") == true) {
-		doTree = 1;
-	}
-
 	thisEventFineTime = 0;
 	prevEventFineTime = 0;
 }
@@ -60,15 +56,10 @@ void BDXDSTSelector1::SlaveBegin(TTree * /*tree*/) {
 	int N = (int) (this->Ttot / dT);
 	isMC = 0;
 
-	doTree = 0;
-
 	if (option.Contains("MC") == true) {
 		isMC = 1;
 	}
-	if (option.Contains("Tree") == true) {
-		doTree = 1;
-	}
-
+	
 	/*Create here the histograms.*/
 	hTrigAllEvents_rate_garbage = new TH1D("hTrigAllEvents_rate_garbage", "hTrigAllEvents_rate_garbage;T(s);Rate(Hz)",N,0,N * dT);
 
@@ -139,29 +130,6 @@ void BDXDSTSelector1::SlaveBegin(TTree * /*tree*/) {
 	}
 
    }
-
-
-	outTree1 = new TTree("outTree1", "outTree1");
-	
-	outTree1->Branch("runNumber", &runNumber, "runNumber/I");
-	outTree1->Branch("eventNumber", &eventNumber, "eventNumber/I");
-/*
-	// veto BRANCH
-	outTree1->Branch("QOV",&QOV, "QOV[11]/D");
-	outTree1->Branch("QIV",&QIV, "QIV[11]/D");
-	outTree1->Branch("TOV",&TOV, "TOV[11]/D");
-	outTree1->Branch("TIV",&TIV, "TIV[11]/D");
-
-	// CRS BRANCH
-	outTree1->Branch("Ecrs",&Ecrs, "Ecrs[45]/D");
-	outTree1->Branch("Eseed",&Eseed, "Eseed/D");
-	outTree1->Branch("Tcrs",&Tcrs, "Tcrs[45]/D");
-	outTree1->Branch("Acrs",&Acrs, "Acrs[45]/D");
-	outTree1->Branch("multip",&multip, "multip/I");
-
-*/
-
-
 
 
 	Info("SlaveBegin", "AllHistos to fOutput");
@@ -579,14 +547,7 @@ if((isGarbage==false)||(isMC==1)){
 
 }
 
-
-
-
-
-
-	outTree1->Fill();
 	
-
 	//cout <<"end event"<<endl;
 	 m_Event->Clear("C");
 	return kTRUE;
@@ -714,20 +675,6 @@ for (int j=0; j<3; j++){
   
  
 
-  
-  
-  /*if (doTree) {
-    outProofFile = dynamic_cast<TProofOutputFile*>(fOutput->FindObject("BDXDSTSELECTOR.root"));
-    TString outputFile(outProofFile->GetOutputFileName());
-    //Info("Terminate", "outputFile is: %s", outputFile.c_str());
-    
-    outFile = TFile::Open(outputFile);
-    if (outFile) {
-      outTree = (TTree*) outFile->Get("outTree");
-      
-      }
-    
-  }*/
 }
 
 
