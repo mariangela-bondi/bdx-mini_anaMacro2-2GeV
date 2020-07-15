@@ -43,7 +43,6 @@
 #include "EventBuilder/TEventHeader.h"
 #include "MC/GenParticle.h"
 
-
 class BDXDSTSelector: public TSelector {
 public:
 
@@ -58,41 +57,42 @@ public:
 		m_Event = 0;
 
 		T0 = 0;
-		Ttot=0;
-		Tlive=0;
-		time_Tlive=0;
-		time_current=0;
-		time_current_temp=0;
-		N_event=0;
+		Ttot = 0;
+		Tlive = 0;
+		time_Tlive = 0;
+		time_current = 0;
+		time_current_temp = 0;
+		N_event = 0;
 
 		nEventsTotal = 0;
 		thisEventN = 0;
 		thisEventT = 0;
 
-	       
 		/*OutputTree and related stuff*/
 		outProofFile = 0;
 		outFile = 0;
-		outTree = 0;
 
 
-		hHALLA_cur=0;
-		hTlive=0;
-		hTlive_temp=0;
-		hTrigAllEvents =0;
-		hTrigAllEvents_rate=0;
-		hTrigAllEvents_current_temp=0;
-		hBDXMiniStability_hasChannel_Alltrg=0;
-		hBDXMiniStability_hasChannel_trg0=0;
-		hBDXMiniStability_hasChannel_trg1=0;
+		hHALLA_cur = 0;
+		hTlive = 0;
+		hTlive_temp = 0;
+		hTrigAllEvents = 0;
+		hTrigAllEvents_rate = 0;
+		hTrigAllEvents_current_temp = 0;
+		hBDXMiniStability_hasChannel_Alltrg = 0;
+		hBDXMiniStability_hasChannel_trg0 = 0;
+		hBDXMiniStability_hasChannel_trg1 = 0;
 
-	//	hBDXMiniStability_trg=0;
+		//	hBDXMiniStability_trg=0;
 
-		for(int i=0; i<32; i++){
-		hBDXMiniStability_trg[i] = 0;
+		dT = 1;
+		dT1 = 60;
+
+		for (int i = 0; i < 32; i++) {
+			hBDXMiniStability_trg[i] = 0;
 		}
 
-		for(int i=0; i<11; i++){
+		for (int i = 0; i < 11; i++) {
 			hBDXMini_OV_A[i] = 0;
 			hBDXMini_IV_A[i] = 0;
 			hBDXMini_OV_T[i] = 0;
@@ -103,16 +103,15 @@ public:
 			hBDXMini_OV_AvT[i] = 0;
 		}
 
-		for(int i=0; i<45; i++){
+		for (int i = 0; i < 45; i++) {
 
-			hBDXMini_crs_T[i]=0;
-			hBDXMini_crs_E[i]=0;
-			hBDXMini_crs_EvT[i]=0;
-
-		}
-
+			hBDXMini_crs_T[i] = 0;
+			hBDXMini_crs_E[i] = 0;
+			hBDXMini_crs_EvT[i] = 0;
 
 		}
+
+	}
 
 	virtual ~BDXDSTSelector() {
 	}
@@ -142,18 +141,14 @@ public:
 	virtual void SlaveTerminate();
 	virtual void Terminate();
 
-
 	int eventNumber, runNumber;
 	double weight;
-	bool doTree;
 
 
 	/*Pointers. Note that EACH histogram pointer MUST be initialized to 0 in the TSelector constructor*/
 	TEventHeader *m_EventHeader;
 	TEvent *m_Event;
 
-
-  
 	TH2D *hHALLA_cur, *hTlive;
 	/*trigger histograms*/
 	TH1D *hTlive_temp;
@@ -163,7 +158,7 @@ public:
 	TH1D *hBDXMiniStability_hasChannel_trg0;
 	TH1D *hBDXMiniStability_hasChannel_trg1;
 
-    // Veto histograms
+	// Veto histograms
 	TH1D *hBDXMini_OV_A[11];
 	TH1D *hBDXMini_IV_A[11];
 	TH1D *hBDXMini_OV_T[11];
@@ -179,17 +174,14 @@ public:
 	TH2D *hBDXMini_crs_EvT[45];
 
 
-	TTree *outTree;
-	TProofOutputFile *outProofFile;
-	TFile *outFile;
+
 
 	//	hBDXMiniStability_trg = new TH1D*[32];
 
-	
 	/*Variables*/
-    bool isGarbage;
-    bool isCosmic;
-    bool isBeam;
+	bool isGarbage;
+	bool isCosmic;
+	bool isBeam;
 	double T0, Ttot;
 	int N0, N_event;
 	int thisEventN;
@@ -197,12 +189,16 @@ public:
 	int nEventsTotal;
 	int NProof;
 	double current, Tlive, time_Tlive, time_current, time_current_temp;
-    vector<double> Vect_current;
-    vector<double> Vect_time_current;
+
+	double dT, dT1;
+
+	vector<double> Vect_current;
+	vector<double> Vect_time_current;
 
 	uint64_t thisEventFineTime, prevEventFineTime; //works only if proof = 0
 
 	int isMC;
+	int isProd; //this variable is used to reduce the amount of histograms in the output when doing the production runs, otherwise proof and hadd is very slow.
 
 	/*Methods*/
 	double getTimeInterval() {
@@ -220,6 +216,19 @@ public:
 		Info("setT0", Form("time0 set to %f", T0));
 	}
 
+	void setdT(double dT) {
+		this->dT = dT;
+	}
+	double getdT() {
+		return dT;
+	}
+
+	void setdT1(double dT1) {
+		this->dT1 = dT1;
+	}
+	double getdT1() {
+		return dT1;
+	}
 
 	double getN0() {
 		return N0;
@@ -229,51 +238,48 @@ public:
 		Info("setN0", Form("events set to %f", N0));
 	}
 
-
-
 	void setNProof(int N) {
 		NProof = N;
 	}
 
 	int getCaloIDXFromXY(const int &x, const int &y) {
 
-		if(x==-2 && y==-2) return 1;
-		if(x==-1 && y==-2) return 2;
-		if(x==0 && y==-2) return 3;
-		if(x==1 && y==-2) return 4;
-		if(x==2 && y==-2) return 5;
+		if (x == -2 && y == -2) return 1;
+		if (x == -1 && y == -2) return 2;
+		if (x == 0 && y == -2) return 3;
+		if (x == 1 && y == -2) return 4;
+		if (x == 2 && y == -2) return 5;
 
-		if(x==0 && y==-1) return 6;
+		if (x == 0 && y == -1) return 6;
 
-		if(x==-2 && y==0) return 7;
-		if(x==-1 && y==0) return 8;
-		if(x==0 && y==0) return 9;
-		if(x==1 && y==0) return 10;
-		if(x==2 && y==0) return 11;
+		if (x == -2 && y == 0) return 7;
+		if (x == -1 && y == 0) return 8;
+		if (x == 0 && y == 0) return 9;
+		if (x == 1 && y == 0) return 10;
+		if (x == 2 && y == 0) return 11;
 
-		if(x==-2 && y==1) return 12;
-		if(x==-1 && y==1) return 13;
-		if(x==0 && y==1) return 14;
-		if(x==1 && y==1) return 15;
-		if(x==2 && y==1) return 16;
+		if (x == -2 && y == 1) return 12;
+		if (x == -1 && y == 1) return 13;
+		if (x == 0 && y == 1) return 14;
+		if (x == 1 && y == 1) return 15;
+		if (x == 2 && y == 1) return 16;
 
-		if(x==-2 && y==2) return 17;
-		if(x==-1 && y==2) return 18;
-		if(x==1 && y==2) return 19;
-		if(x==2 && y==2) return 20;
+		if (x == -2 && y == 2) return 17;
+		if (x == -1 && y == 2) return 18;
+		if (x == 1 && y == 2) return 19;
+		if (x == 2 && y == 2) return 20;
 
 		//if(x==1 && y==3) return 21;
 		//if(x==2 && y==3) return 22;
 
-		if(x==-1 && y==3) return 21;
-		if(x==1 && y==3) return 22;
+		if (x == -1 && y == 3) return 21;
+		if (x == 1 && y == 3) return 22;
 	}
 
-	TTree *GetOutTree(){
-		return this->outTree;
-	}
 
-ClassDef(BDXDSTSelector,1);
+
+ClassDef(BDXDSTSelector,1)
+	;
 
 };
 

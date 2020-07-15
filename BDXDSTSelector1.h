@@ -41,7 +41,6 @@
 #include "EventBuilder/TEventHeader.h"
 #include "MC/GenParticle.h"
 
-
 class BDXDSTSelector1: public TSelector {
 public:
 
@@ -58,128 +57,115 @@ public:
 
 		Ttot = 0;
 		T0 = 0;
-		time=0;
-		N0=0;
+		time = 0;
+		N0 = 0;
 
-        INDEX =0;
+		INDEX = 0;
 		nEventsTotal = 0;
 		thisEventN = 0;
 		thisEventT = 0;
 
-	
-		N_event=0;
-		t_start=0;
-		t_stop=0;
-		dt=0;
-		DT_noBEAM=0;
-		ii_time=0;
-		DT_true =0;
-      
+		N_event = 0;
+		t_start = 0;
+		t_stop = 0;
+		dt = 0;
+		DT_noBEAM = 0;
+		ii_time = 0;
+		DT_true = 0;
 
-		EOT =0;
-		mean_tlive =0;
+		EOT = 0;
+		mean_tlive = 0;
 
-
-	       
 		/*OutputTree and related stuff*/
 		outProofFile = 0;
 		outFile = 0;
-		
 
-		hTrigAllEvents_rate_garbage =0;
-		hHALLA_cur_garbage=0;
-		hHALLA_cur_cosmic=0;
-		hHALLA_cur_beam=0;
+		hTrigAllEvents_rate_garbage = 0;
+		hStatus_selector = 0;
 
+		hNormalization=0;
 		//variables VETO
 
-		for(int i=0; i<11; i++){
-			QOV[i]=0;
-			QIV[i]=0;
-			TOV[i]=0;
-			TIV[i]=0;
+		for (int i = 0; i < 11; i++) {
+			QOV[i] = 0;
+			QIV[i] = 0;
+			TOV[i] = 0;
+			TIV[i] = 0;
 		}
 
 		//variables CRS
-		for(int i=0; i<45; i++){
-			Ecrs[i]=0;
-			Tcrs[i]=0;
-			Acrs[i]=0;
+		for (int i = 0; i < 45; i++) {
+			Ecrs[i] = 0;
+			Tcrs[i] = 0;
+			Acrs[i] = 0;
 		}
-
 
 		// HISTO VETO
-		for(int i=0; i<3; i++){
-	    hOV_Atot[i] = 0;
-	    hOV_multiplicity[i] = 0;
-		hIV_Atot[i] = 0;
-		hIV_multiplicity[i] = 0;
-		hOV_Atot_vs_multiplicity[i] = 0;
-		hIV_Atot_vs_multiplicity[i] = 0;
+		for (int i = 0; i < 3; i++) {
+			hOV_Atot[i] = 0;
+			hOV_multiplicity[i] = 0;
+			hIV_Atot[i] = 0;
+			hIV_multiplicity[i] = 0;
+			hOV_Atot_vs_multiplicity[i] = 0;
+			hIV_Atot_vs_multiplicity[i] = 0;
 
+			// HISTO CALORIMETER
+			hCrs_Etot[i] = 0;
+			hCrs_multiplicity[i] = 0;
+			hCrs_Eseed[i] = 0;
+			hCrs_Etop[i] = 0;
+			hCrs_Ebottom[i] = 0;
+			hCrs_R_EtopEtot[i] = 0;
+			hCrs_R_EbottomEtot[i] = 0;
+			hCrs_EtotVsEtop[i] = 0;
+			hCrs_XYseed[i] = 0;
+			hCrs_XY_XYseed[i] = 0;
+			hCrs_EseedVSEtot[i] = 0;
+			hCrs_EseedVSMulti[i] = 0;
+			hCrs_EtotVSMulti[i] = 0;
+			hCrs_EtopEbotVsEtot[i] = 0;
+			hCrs_EtopEbotVsEseed[i] = 0;
+			hCrs_Eseed_CutEasym[i] = 0;
 
-		// HISTO CALORIMETER
-		hCrs_Etot[i] = 0;
-		hCrs_multiplicity[i] = 0;
-		hCrs_Eseed[i] = 0;
-		hCrs_Etop[i] = 0;
-		hCrs_Ebottom[i] = 0;
-		hCrs_R_EtopEtot[i] = 0;
-		hCrs_R_EbottomEtot[i] = 0;
-		hCrs_EtotVsEtop[i] = 0;
-	    hCrs_XYseed[i] = 0;
-	    hCrs_XY_XYseed[i] = 0;
-		hCrs_EseedVSEtot[i] = 0;
-		hCrs_EseedVSMulti[i] = 0;
-		hCrs_EtotVSMulti[i] = 0;
-		hCrs_EtopEbotVsEtot[i] = 0;
-		hCrs_EtopEbotVsEseed[i] = 0;
-		hCrs_Eseed_CutEasym[i] = 0;
+			// HISTO CALORIMETER NO VETO
 
+			for (int j = 0; j < 3; j++) {
+				hCrs_Etot_NoVETO[i][j] = 0;
+				hCrs_multiplicity_NoVETO[i][j] = 0;
+				hCrs_Eseed_NoVETO[i][j] = 0;
+				hCrs_Etop_NoVETO[i][j] = 0;
+				hCrs_Ebottom_NoVETO[i][j] = 0;
+				hCrs_R_EtopEtot_NoVETO[i][j] = 0;
+				hCrs_R_EbottomEtot_NoVETO[i][j] = 0;
+				hCrs_EtotVsEtop_NoVETO[i][j] = 0;
+				hCrs_XYseed_NoVETO[i][j] = 0;
+				hCrs_XY_XYseed_NoVETO[i][j] = 0;
+				hCrs_EseedVSEtot_NoVETO[i][j] = 0;
+				hCrs_EseedVSMulti_NoVETO[i][j] = 0;
+				hCrs_EtotVSMulti_NoVETO[i][j] = 0;
+				hCrs_EtopEbotVsEtot_NoVETO[i][j] = 0;
+				hCrs_EtopEbotVsEseed_NoVETO[i][j] = 0;
+				hCrs_Eseed_CutEasym_NoVETO[i][j] = 0;
+			}
 
-		  // HISTO CALORIMETER NO VETO
+			//HISTO rejection study
 
-		for(int j=0; j<3; j++){
-		hCrs_Etot_NoVETO[i][j] = 0;
-		hCrs_multiplicity_NoVETO[i][j] = 0;
-		hCrs_Eseed_NoVETO[i][j] = 0;
-		hCrs_Etop_NoVETO[i][j] = 0;
-		hCrs_Ebottom_NoVETO[i][j] = 0;
-		hCrs_R_EtopEtot_NoVETO[i][j] = 0;
-		hCrs_R_EbottomEtot_NoVETO[i][j] = 0;
-		hCrs_EtotVsEtop_NoVETO[i][j] = 0;
-	    hCrs_XYseed_NoVETO[i][j] = 0;
-	    hCrs_XY_XYseed_NoVETO[i][j] = 0;
-		hCrs_EseedVSEtot_NoVETO[i][j]= 0;
-		hCrs_EseedVSMulti_NoVETO[i][j] = 0;
-		hCrs_EtotVSMulti_NoVETO[i][j] = 0;
-		hCrs_EtopEbotVsEtot_NoVETO[i][j] = 0;
-		hCrs_EtopEbotVsEseed_NoVETO[i][j] = 0;
-		hCrs_Eseed_CutEasym_NoVETO[i][j] = 0;
-		}
+			Eseed = 0;
+			multip = 0;
 
+			/*Variables Veto */
 
-		//HISTO rejection study
+			OV_A_max = 0;
+			OV_T_max = 0;
+			OV_max = 0;
 
-		 Eseed=0;
-		 multip=0;
-
-		/*Variables Veto */
-
-		OV_A_max=0;
-		OV_T_max=0;
-	    OV_max=0;
-
-	 	IV_A_max=0;
-	 	IV_T_max=0;
-	 	IV_max=0;
+			IV_A_max = 0;
+			IV_T_max = 0;
+			IV_max = 0;
 
 		}
 
-
-
-		hTlive=0;
-
+		hTlive = 0;
 
 	}
 
@@ -211,56 +197,50 @@ public:
 	virtual void SlaveTerminate();
 	virtual void Terminate();
 
-
 	int eventNumber, runNumber;
 	double weight;
-	
 
 	/*Pointers. Note that EACH histogram pointer MUST be initialized to 0 in the TSelector constructor*/
 	TEventHeader *m_EventHeader;
 	TEvent *m_Event;
 
-
 	/*Counter histogram for normalization*/
 	//	TH1D *hCounter;
-
 	/*trigger histograms*/
 	//TH1D *hTrigBits, *hTrigBitsPulser;
-
 	/*Rate-Stability histograms*/
 	//TH1D *hTrigAllEvents;
 	//TH1D *hTrig1, *hTrig2, *hTrig3, *hTrig4, *hTrigP, *hTrig0;
 
-
 	TH1D *hTrigAllEvents_rate_garbage;
-	TH2D *hHALLA_cur_garbage, *hHALLA_cur_cosmic, *hHALLA_cur_beam, *hTlive;
-	vector<double> BDX_time_garbage;
-	vector<double> BDX_time_beam;
-	vector<double> BDX_time_cosmic;
-    bool isGarbage;
-    bool isCosmic;
-    bool isBeam;
-    int INDEX;
-
-    //variables VETO
-    double QOV[11], QIV[11], TOV[11], TIV[11];
-
-    //variables CRS
-
-    double Ecrs[45], Tcrs[45], Acrs[45];
-
-       // HISTO VETO
+	TH2D *hTlive;
+	TH1D *hStatus_selector;
 
 
-    TH1D *hOV_Atot[3], *hOV_multiplicity[3] ;
-	TH1D *hIV_Atot[3], *hIV_multiplicity[3] ;
+
+	bool isGarbage;
+	bool isCosmic;
+	bool isBeam;
+	int INDEX;
+
+	//variables VETO
+	double QOV[11], QIV[11], TOV[11], TIV[11];
+
+	//variables CRS
+
+	double Ecrs[45], Tcrs[45], Acrs[45];
+
+	//Normalization histo - just for checks
+	TH1D *hNormalization;
+
+	// HISTO VETO
+	TH1D *hOV_Atot[3], *hOV_multiplicity[3];
+	TH1D *hIV_Atot[3], *hIV_multiplicity[3];
 	TH2D *hOV_Atot_vs_multiplicity[3];
 	TH2D *hIV_Atot_vs_multiplicity[3];
 
-
-
-	  // HISTO CALORIMETER
-	 // 0=cosmic, 1=beam, 2=MC
+	// HISTO CALORIMETER
+	// 0=cosmic, 1=beam, 2=MC
 	TH1D *hCrs_Etot[3];
 	TH1D *hCrs_multiplicity[3];
 	TH1D *hCrs_Eseed[3];
@@ -278,13 +258,9 @@ public:
 	TH2D *hCrs_EtopEbotVsEseed[3];
 	TH1D *hCrs_Eseed_CutEasym[3];
 
-
-
-
-
 	// HISTO CALORIMETER No VETO
 	//[i][j] :
-   // i = 0=cosmic, 1=beam, 2=MC
+	// i = 0=cosmic, 1=beam, 2=MC
 	//j = 0= no OV, 1 = no IV, 2 = No IV && NO OV
 	TH1D *hCrs_Etot_NoVETO[3][3];
 	TH1D *hCrs_multiplicity_NoVETO[3][3];
@@ -303,7 +279,6 @@ public:
 	TH2D *hCrs_EtopEbotVsEseed_NoVETO[3][3];
 	TH1D *hCrs_Eseed_CutEasym_NoVETO[3][3];
 
-
 	/*Variables Cal*/
 	double Eseed;
 	int multip;
@@ -316,14 +291,9 @@ public:
 	double IV_A_max, IV_T_max;
 	int IV_max;
 
-	vector<TTree*> tQmatrix;
-
-	
 	TProofOutputFile *outProofFile;
 	TFile *outFile;
 
-
-	
 	/*Variables*/
 	double EOT, mean_tlive;
 	double Ttot, T0;
@@ -334,12 +304,8 @@ public:
 	int NProof;
 	double time, current;
 
-
-
-		int N_event;
-		int t_start, t_stop, dt, DT_noBEAM, ii_time, DT_true;
-
-	
+	int N_event;
+	int t_start, t_stop, dt, DT_noBEAM, ii_time, DT_true;
 
 	uint64_t thisEventFineTime, prevEventFineTime; //works only if proof = 0
 
@@ -361,7 +327,6 @@ public:
 		Info("setT0", Form("time0 set to %f", T0));
 	}
 
-
 	double getN0() {
 		return N0;
 	}
@@ -370,49 +335,46 @@ public:
 		Info("setN0", Form("events set to %f", N0));
 	}
 
-
-
 	void setNProof(int N) {
 		NProof = N;
 	}
 
 	int getCaloIDXFromXY(const int &x, const int &y) {
 
-		if(x==-2 && y==-2) return 1;
-		if(x==-1 && y==-2) return 2;
-		if(x==0 && y==-2) return 3;
-		if(x==1 && y==-2) return 4;
-		if(x==2 && y==-2) return 5;
+		if (x == -2 && y == -2) return 1;
+		if (x == -1 && y == -2) return 2;
+		if (x == 0 && y == -2) return 3;
+		if (x == 1 && y == -2) return 4;
+		if (x == 2 && y == -2) return 5;
 
-		if(x==0 && y==-1) return 6;
+		if (x == 0 && y == -1) return 6;
 
-		if(x==-2 && y==0) return 7;
-		if(x==-1 && y==0) return 8;
-		if(x==0 && y==0) return 9;
-		if(x==1 && y==0) return 10;
-		if(x==2 && y==0) return 11;
+		if (x == -2 && y == 0) return 7;
+		if (x == -1 && y == 0) return 8;
+		if (x == 0 && y == 0) return 9;
+		if (x == 1 && y == 0) return 10;
+		if (x == 2 && y == 0) return 11;
 
-		if(x==-2 && y==1) return 12;
-		if(x==-1 && y==1) return 13;
-		if(x==0 && y==1) return 14;
-		if(x==1 && y==1) return 15;
-		if(x==2 && y==1) return 16;
+		if (x == -2 && y == 1) return 12;
+		if (x == -1 && y == 1) return 13;
+		if (x == 0 && y == 1) return 14;
+		if (x == 1 && y == 1) return 15;
+		if (x == 2 && y == 1) return 16;
 
-		if(x==-2 && y==2) return 17;
-		if(x==-1 && y==2) return 18;
-		if(x==1 && y==2) return 19;
-		if(x==2 && y==2) return 20;
+		if (x == -2 && y == 2) return 17;
+		if (x == -1 && y == 2) return 18;
+		if (x == 1 && y == 2) return 19;
+		if (x == 2 && y == 2) return 20;
 
 		//if(x==1 && y==3) return 21;
 		//if(x==2 && y==3) return 22;
 
-		if(x==-1 && y==3) return 21;
-		if(x==1 && y==3) return 22;
+		if (x == -1 && y == 3) return 21;
+		if (x == 1 && y == 3) return 22;
 	}
 
-	
-
-ClassDef(BDXDSTSelector1,1);
+ClassDef(BDXDSTSelector1,1)
+	;
 
 };
 
