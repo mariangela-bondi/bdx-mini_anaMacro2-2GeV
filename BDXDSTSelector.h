@@ -69,8 +69,8 @@ public:
 		thisEventT = 0;
 
 		/*OutputTree and related stuff*/
-		outProofFile = 0;
-		outFile = 0;
+	//	outProofFile = 0;
+	//	outFile = 0;
 
 
 		hHALLA_cur = 0;
