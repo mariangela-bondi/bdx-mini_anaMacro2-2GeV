@@ -17,20 +17,20 @@
 #include "TF1.h"
 #include <TGraphErrors.h>
 /*
-#include "RooRealVar.h"
-#include "RooPlot.h"
-#include "RooArgSet.h"
-#include "RooDataSet.h"
-#include "RooGaussian.h"
-#include "RooLandau.h"
-#include "RooNumConvPdf.h"
-#include "RooAddPdf.h"
-#include "RooAbsPdf.h"
-#include "RooFFTConvPdf.h"
-#include "RooPolynomial.h"
-#include "RooExponential.h"
-#include "RooArgusBG.h"
-#include "RooGenericPdf.h"
+ #include "RooRealVar.h"
+ #include "RooPlot.h"
+ #include "RooArgSet.h"
+ #include "RooDataSet.h"
+ #include "RooGaussian.h"
+ #include "RooLandau.h"
+ #include "RooNumConvPdf.h"
+ #include "RooAddPdf.h"
+ #include "RooAbsPdf.h"
+ #include "RooFFTConvPdf.h"
+ #include "RooPolynomial.h"
+ #include "RooExponential.h"
+ #include "RooArgusBG.h"
+ #include "RooGenericPdf.h"
  */
 using namespace std;
 //using namespace RooFit;
@@ -40,63 +40,62 @@ int nproof;
 int Ntot;
 int N0;
 
-bool showGUI, doTree;
+bool showGUI;
 
 string ofname, fname;
 vector<string> fnames;
 
-
 double langau(double *x, double *par) {
 
 	//Fit parameters:
-	   //par[0]=Width (scale) parameter of Landau density
-	   //par[1]=Most Probable (MP, location) parameter of Landau density
-	   //par[2]=Total area (integral -inf to inf, normalization constant)
-	   //par[3]=Width (sigma) of convoluted Gaussian function
-	   //
-	   //In the Landau distribution (represented by the CERNLIB approximation),
-	   //the maximum is located at x=-0.22278298 with the location parameter=0.
-	   //This shift is corrected within this function, so that the actual
-	   //maximum is identical to the MP parameter.
+	//par[0]=Width (scale) parameter of Landau density
+	//par[1]=Most Probable (MP, location) parameter of Landau density
+	//par[2]=Total area (integral -inf to inf, normalization constant)
+	//par[3]=Width (sigma) of convoluted Gaussian function
+	//
+	//In the Landau distribution (represented by the CERNLIB approximation),
+	//the maximum is located at x=-0.22278298 with the location parameter=0.
+	//This shift is corrected within this function, so that the actual
+	//maximum is identical to the MP parameter.
 
-	      // Numeric constants
-	      Double_t invsq2pi = 0.3989422804014;   // (2 pi)^(-1/2)
-	      Double_t mpshift  = -0.22278298;       // Landau maximum location
+	// Numeric constants
+	Double_t invsq2pi = 0.3989422804014;   // (2 pi)^(-1/2)
+	Double_t mpshift = -0.22278298;       // Landau maximum location
 
-	      // Control constants
-	      Double_t np = 1000.0;      // number of convolution steps
-	      Double_t sc =   5.0;      // convolution extends to +-sc Gaussian sigmas
+	// Control constants
+	Double_t np = 1000.0;      // number of convolution steps
+	Double_t sc = 5.0;      // convolution extends to +-sc Gaussian sigmas
 
-	      // Variables
-	      Double_t xx;
-	      Double_t mpc;
-	      Double_t fland;
-	      Double_t sum = 0.0;
-	      Double_t xlow,xupp;
-	      Double_t step;
-	      Double_t i;
+	// Variables
+	Double_t xx;
+	Double_t mpc;
+	Double_t fland;
+	Double_t sum = 0.0;
+	Double_t xlow, xupp;
+	Double_t step;
+	Double_t i;
 
-	      // MP shift correction
-	      mpc = par[1] - mpshift * par[0];
+	// MP shift correction
+	mpc = par[1] - mpshift * par[0];
 
-	      // Range of convolution integral
-	      xlow = x[0] - sc * par[3];
-	      xupp = x[0] + sc * par[3];
+	// Range of convolution integral
+	xlow = x[0] - sc * par[3];
+	xupp = x[0] + sc * par[3];
 
-	      step = (xupp-xlow) / np;
+	step = (xupp - xlow) / np;
 
-	      // Convolution integral of Landau and Gaussian by sum
-	      for(i=1.0; i<=np/2; i++) {
-	         xx = xlow + (i-.5) * step;
-	         fland = TMath::Landau(xx,mpc,par[0]) / par[0];
-	         sum += fland * TMath::Gaus(x[0],xx,par[3]);
+	// Convolution integral of Landau and Gaussian by sum
+	for (i = 1.0; i <= np / 2; i++) {
+		xx = xlow + (i - .5) * step;
+		fland = TMath::Landau(xx, mpc, par[0]) / par[0];
+		sum += fland * TMath::Gaus(x[0], xx, par[3]);
 
-	         xx = xupp - (i-.5) * step;
-	         fland = TMath::Landau(xx,mpc,par[0]) / par[0];
-	         sum += fland * TMath::Gaus(x[0],xx,par[3]);
-	      }
+		xx = xupp - (i - .5) * step;
+		fland = TMath::Landau(xx, mpc, par[0]) / par[0];
+		sum += fland * TMath::Gaus(x[0], xx, par[3]);
+	}
 
-	      return (par[2]*step*sum*invsq2pi / par[3]);
+	return (par[2] * step * sum * invsq2pi / par[3]);
 }
 
 void parseCommandLine(int argc, char **argv) {
@@ -129,7 +128,7 @@ void parseCommandLine(int argc, char **argv) {
 		} else if (command == "-Ntot") {
 			Ntot = atoi(argv[ii + 1]);
 		} else if (command == "-GUI") showGUI = true;
-		else if (command == "-tree") doTree = true;
+
 	}
 }
 
@@ -145,22 +144,21 @@ int main(int argc, char **argv) {
 	int doFit = 0;
 
 	string opt = "";
-	string opt2 ="";
+	string opt2 = "";
 
-	if (isMC){
+	if (isMC) {
 		opt = "MC";
-	    opt2 = fname;
+		opt2 = fname;
 	}
 
-	cout << "******"<<endl;
-	cout << "******"<<endl;
-	cout << "******"<<endl;
-	cout << "******"<<endl;
-	cout << "******"<<endl;
-	cout << "******"<<endl;
+	cout << "******" << endl;
+	cout << "******" << endl;
+	cout << "******" << endl;
+	cout << "******" << endl;
+	cout << "******" << endl;
+	cout << "******" << endl;
 
-	cout<< opt<<endl;
-	if (doTree) opt = "Tree:" + opt;
+	cout << opt << endl;
 
 	BDXDSTSelector *myBDXDSTSelector = new BDXDSTSelector();
 	BDXDSTSelector1 *myBDXDSTSelector1 = new BDXDSTSelector1();
@@ -219,217 +217,202 @@ int main(int argc, char **argv) {
 		cout << "USING PROOF WITH " << nproof << " WORKERS! " << endl;
 		TProof *proof = TProof::Open(Form("workers=%i", nproof));
 		//proof->Exec("gSystem->Load(\"libRooFit.so\")");
+#if __APPLE__
 		proof->Exec("gSystem->Load(\"${BDXRECO_ROOT}/lib/libJANA.dylib\")");
 		proof->Exec("gSystem->Load(\"${BDXRECO_ROOT}/lib/libbdxRecoExt.dylib\")");
 		proof->Exec("gSystem->Load(\"${BDXRECO_ROOT}/lib/libbdxReco.dylib\")");
-		proof->Exec("gSystem->Load(\"/Users/Mariangela/work/BDX-MINI/bdx-mini_anaMacro2-2GeV/libBDXDSTSelector.so\")");
-		//proof->Exec("gSystem->Load(\"/auto_data/fiber7/bondi/bdx-mini_anaMacro2-2GeV/libBDXDSTSelector.so\")");
+#else
+		proof->Exec("gSystem->Load(\"${BDXRECO_ROOT}/lib/libJANA.so\")");
+		proof->Exec("gSystem->Load(\"${BDXRECO_ROOT}/lib/libbdxRecoExt.so\")");
+		proof->Exec("gSystem->Load(\"${BDXRECO_ROOT}/lib/libbdxReco.so\")");
+#endif
+		proof->Exec("gSystem->Load(\"${BDXMINISELECTOR_ROOT}/libBDXDSTSelector.so\")");
+
 		proof->SetParameter("PROOF_Packetizer", "TPacketizer");
 		DSTChain->SetProof(1);
 	}
-  cout << "Before process"<<endl;
+	cout << "Before process" << endl;
 
 	myBDXDSTSelector->nEventsTotal = Ntot;
 	myBDXDSTSelector1->nEventsTotal = Ntot;
+
+	//A.C. So that we have consistent dT/dT1
+	myBDXDSTSelector->dT = 1;
+	myBDXDSTSelector->dT1 = 60;
 
 	vector<double> time_garbage;
 	vector<double> time_beamON;
 	vector<double> time_cosmic;
 	vector<double> current_beamON;
-	double meanTLive =1.;
+	double meanTLive = 1.;
+	TH1D* hStatus_selector = 0;
 
+	if (isMC == 0) {
+		DSTChain->Process(myBDXDSTSelector, opt.c_str(), Ntot, N0);
 
+		cout << "After process myBDXDSTSelector  " << endl;
 
-	if(isMC==0){
-	DSTChain->Process(myBDXDSTSelector, opt.c_str(), Ntot, N0);
+		// define array rate in order to estimate the rate mean value and rate STDev:
+		// these information are used to exclude the time with a wrong rate
+		int Nrate_bin = myBDXDSTSelector->hTrigAllEvents_rate->GetNbinsX();
+		float rate[Nrate_bin + 1];
+		double sum = 0;
+		double var = 0;
+		double rate_mainValue = 0;
+		double rate_StDev = 0;
 
-	cout << "After process myBDXDSTSelector  " << endl;
-
-	// define array rate in order to estimate the rate mean value and rate STDev:
-	// these information are used to exclude the time with a wrong rate
-	int Nrate_bin = myBDXDSTSelector->hTrigAllEvents_rate->GetNbinsX();
-    float rate[Nrate_bin+1];
-    double sum = 0;
-    double var =0;
-    double rate_mainValue=0;
-    double rate_StDev=0;
-
-    for(int i=0; i<=Nrate_bin; i++){
-    	if(i==0){
-    		rate[i] = 0;
-    	}else{
-    	  rate[i] = myBDXDSTSelector->hTrigAllEvents_rate->GetBinContent(i);
-    	  sum +=rate[i];
-    	}
-    }
-
-    rate_mainValue = sum/Nrate_bin;
-
-    for(int i=1; i<=myBDXDSTSelector->hTrigAllEvents_rate->GetNbinsX(); i++){
-    	var += (rate[i] - rate_mainValue)*(rate[i] - rate_mainValue) / Nrate_bin;
-    }
-
-    rate_StDev = sqrt(var);
-
-    cout << rate_mainValue<< " "<<rate_StDev<<endl;
-
-	double dT_bin = 1;
-	int Nbin = (Ttot / dT_bin);
-	float ratio;
-	TH1D* hTrigAllEvents_current = new TH1D("hTrigAllEvents_current", "hTrigAllEvents_current;T(s), current",Nbin,0,Nbin * dT_bin);
-
-	for(int i=1; i<=Nbin; i++){
-		ratio = myBDXDSTSelector->hTrigAllEvents_current_temp->GetBinContent(i)/myBDXDSTSelector->hTrigAllEvents->GetBinContent(i);
-		hTrigAllEvents_current->SetBinContent(i,ratio);
+		for (int i = 0; i <= Nrate_bin; i++) {
+			if (i == 0) {
+				rate[i] = 0;
+			} else {
+				rate[i] = myBDXDSTSelector->hTrigAllEvents_rate->GetBinContent(i);
+				sum += rate[i];
+			}
 		}
 
-    double halla_current=0;
-    double halla_current_temp=0;
-    double halla_current_time_temp=0;
-    int i=0;
-    bool isGarbage= false;
-    double rate_temp=0;
+		rate_mainValue = sum / Nrate_bin;
 
+		for (int i = 1; i <= myBDXDSTSelector->hTrigAllEvents_rate->GetNbinsX(); i++) {
+			var += (rate[i] - rate_mainValue) * (rate[i] - rate_mainValue) / Nrate_bin;
+		}
 
-     //first of all check rate : if the abs(rate - mean_value) <= 5*sigma is ok else time is time garbage
-    // skim data in beam on event, cosmic event, garbage event:
-    // an event is garbage if in the 5 sec after or before it there is a change of current :
-    //i.e in the i-simo bin the current is >0 and in the following i+5 (or i-5) current=0 or viceversa
+		rate_StDev = sqrt(var);
 
-    for (int iX = 1; iX<=Nbin; iX++){
-        isGarbage = false;
-        if(abs(myBDXDSTSelector->hTrigAllEvents_rate->GetBinContent(iX)-rate_mainValue)>3*rate_StDev){
+		cout << rate_mainValue << " " << rate_StDev << endl;
 
-        	isGarbage=true;
-        }
-        halla_current = hTrigAllEvents_current->GetBinContent(iX);
-        if(isGarbage==false && iX<=hTrigAllEvents_current->GetNbinsX()-6 ){
-        for(int j=iX+1; j<=iX+5; j++){
-        	halla_current_temp = hTrigAllEvents_current->GetBinContent(j);
-            if((halla_current>0.030 && halla_current_temp<=0.030)||(halla_current<=0.030 && halla_current_temp>0.030)){
-           //  cout <<"sono after " <<iX << " " << halla_current << " "<< j << " "<< halla_current_temp<<endl;
-            	isGarbage = true;
-               break;
-            }
-        }
-        }
-        if(isGarbage==false && iX>=6){
-        for(int j=iX-5; j<=iX-1; j++){
-        	halla_current_temp = hTrigAllEvents_current->GetBinContent(j);
-        	if((halla_current>0.030 && halla_current_temp<=0.030)||(halla_current<=0.030 && halla_current_temp>0.030)){
-       	//	 cout <<"sono before " <<iX << " " << halla_current << " "<< j << " "<< halla_current_temp<<endl;
-               isGarbage = true;
-               break;
-            }
-        }
-        }
+		//Create an histogram with the current vs time, extracted from myBDXDSTSelector
+		double dT_bin = myBDXDSTSelector->dT;
+		int Nbin = (Ttot / dT_bin);
+		float ratio;
+		TH1D* hTrigAllEvents_current = new TH1D("hTrigAllEvents_current", "hTrigAllEvents_current;T(s), current", Nbin, 0, Nbin * dT_bin);
+		for (int i = 1; i <= Nbin; i++) {
+			ratio = myBDXDSTSelector->hTrigAllEvents_current_temp->GetBinContent(i) / myBDXDSTSelector->hTrigAllEvents->GetBinContent(i);
+			hTrigAllEvents_current->SetBinContent(i, ratio);
+		}
 
-     if(isGarbage ==true) {
-    	// cout <<hTrigAllEvents_current->GetBinCenter(iX)-0.5<<endl;
-    	 time_garbage.push_back(hTrigAllEvents_current->GetBinCenter(iX)-0.5);
+		//Create the histogram for the status
+		hStatus_selector = new TH1D("hStatus_selector", "hStatus_selector: -1 garbage, 0 beam-off, 1 beam-on", Nbin, 0, Nbin * dT_bin);
 
-     }else{
-    	 if(halla_current>0.03) {
-    		 time_beamON.push_back(hTrigAllEvents_current->GetBinCenter(iX)-0.5);
-    	     current_beamON.push_back(halla_current);
-    	 }
-    	 if(halla_current<=0.03) {
-    	//	 cout << halla_current<<endl;
-    		 time_cosmic.push_back(hTrigAllEvents_current->GetBinCenter(iX)-0.5);
-    	 }
+		double halla_current = 0;
+		double halla_current_temp = 0;
+		double halla_current_time_temp = 0;
+		int i = 0;
+		bool isGarbage = false;
+		double rate_temp = 0;
 
-     }
+		//first of all check rate : if the abs(rate - mean_value) <= 5*sigma is ok else time is time garbage
+		// skim data in beam on event, cosmic event, garbage event:
+		// an event is garbage if in the 5 sec after or before it there is a change of current :
+		//i.e in the i-simo bin the current is >0 and in the following i+5 (or i-5) current=0 or viceversa
 
-    }   //end skim of data
+		for (int iX = 1; iX <= Nbin; iX++) {
+			isGarbage = false;
+			if (fabs(myBDXDSTSelector->hTrigAllEvents_rate->GetBinContent(iX) - rate_mainValue) > 3 * rate_StDev) {
+				isGarbage = true;
+			}
+			halla_current = hTrigAllEvents_current->GetBinContent(iX);
+			if (isGarbage == false && iX <= hTrigAllEvents_current->GetNbinsX() - 6) {
+				for (int j = iX + 1; j <= iX + 5; j++) {
+					halla_current_temp = hTrigAllEvents_current->GetBinContent(j);
+					if ((halla_current > 0.030 && halla_current_temp <= 0.030) || (halla_current <= 0.030 && halla_current_temp > 0.030)) {
+						//  cout <<"sono after " <<iX << " " << halla_current << " "<< j << " "<< halla_current_temp<<endl;
+						isGarbage = true;
+						break;
+					}
+				}
+			}
+			if (isGarbage == false && iX >= 6) {
+				for (int j = iX - 5; j <= iX - 1; j++) {
+					halla_current_temp = hTrigAllEvents_current->GetBinContent(j);
+					if ((halla_current > 0.030 && halla_current_temp <= 0.030) || (halla_current <= 0.030 && halla_current_temp > 0.030)) {
+						//	 cout <<"sono before " <<iX << " " << halla_current << " "<< j << " "<< halla_current_temp<<endl;
+						isGarbage = true;
+						break;
+					}
+				}
+			}
 
+			if (isGarbage == true) {
+				hStatus_selector->SetBinContent(iX, -1);
+				time_garbage.push_back(hTrigAllEvents_current->GetBinCenter(iX) - 0.5);
+			} else {
+				if (halla_current > 0.03) {
+					hStatus_selector->SetBinContent(iX, 1);
+					time_beamON.push_back(hTrigAllEvents_current->GetBinCenter(iX) - 0.5);
+					current_beamON.push_back(halla_current);
+				}
+				if (halla_current <= 0.03) {
+					hStatus_selector->SetBinContent(iX, 0);
+					time_cosmic.push_back(hTrigAllEvents_current->GetBinCenter(iX) - 0.5);
+				}
+			}
+		}   //end skim of data
 
-    // evaluation of mean Tlive
-
-   TH1D *hTLive = (TH1D*) myBDXDSTSelector->hTlive_temp->Clone("hTLive");
-    hTLive->Divide(myBDXDSTSelector->hTrigAllEvents) ;
-    for(int i=1; i<=hTLive->GetNbinsX(); i++){
-    	meanTLive += hTLive->GetBinContent(i);
-    }
-
-    meanTLive = (meanTLive/myBDXDSTSelector->hTlive->GetNbinsX())/100;
-
-    TCanvas *S00_c1 = new TCanvas("S00_c1", "current vs time");
-    S00_c1->Divide(1,3);
-    S00_c1->cd(1);
-	myBDXDSTSelector->hTrigAllEvents->SetLineColor(1);
-	myBDXDSTSelector->hTrigAllEvents->SetMarkerStyle(20);
-	myBDXDSTSelector->hTrigAllEvents->Draw();
-	S00_c1->cd(2);
-	myBDXDSTSelector->hTrigAllEvents_current_temp->SetLineColor(1);
-	myBDXDSTSelector->hTrigAllEvents_current_temp->SetMarkerStyle(20);
-	myBDXDSTSelector->hTrigAllEvents_current_temp->Draw();
-	S00_c1->cd(3);
-	hTrigAllEvents_current->SetLineColor(1);
-	hTrigAllEvents_current->SetMarkerStyle(20);
-	hTrigAllEvents_current->Draw();
-
+		// evaluation of mean Tlive
+		TH1D *hTLive = (TH1D*) myBDXDSTSelector->hTlive_temp->Clone("hTLive");
+		hTLive->Divide(myBDXDSTSelector->hTrigAllEvents);
+		for (int i = 1; i <= hTLive->GetNbinsX(); i++) {
+			meanTLive += hTLive->GetBinContent(i);
+		}
+		meanTLive = (meanTLive / myBDXDSTSelector->hTlive->GetNbinsX()) / 100;
+		if (showGUI) {
+			TCanvas *S00_c1 = new TCanvas("S00_c1", "current vs time");
+			S00_c1->Divide(1, 3);
+			S00_c1->cd(1);
+			myBDXDSTSelector->hTrigAllEvents->SetLineColor(1);
+			myBDXDSTSelector->hTrigAllEvents->SetMarkerStyle(20);
+			myBDXDSTSelector->hTrigAllEvents->Draw();
+			S00_c1->cd(2);
+			myBDXDSTSelector->hTrigAllEvents_current_temp->SetLineColor(1);
+			myBDXDSTSelector->hTrigAllEvents_current_temp->SetMarkerStyle(20);
+			myBDXDSTSelector->hTrigAllEvents_current_temp->Draw();
+			S00_c1->cd(3);
+			hTrigAllEvents_current->SetLineColor(1);
+			hTrigAllEvents_current->SetMarkerStyle(20);
+			hTrigAllEvents_current->Draw();
+		}
 	} //end if isMC==0
 
-	cout << time_garbage.size()<<" "<<time_beamON.size()<< " "<<time_cosmic.size()<<endl;
+	cout << time_garbage.size() << " " << time_beamON.size() << " " << time_cosmic.size() << endl;
 
-
-	myBDXDSTSelector1->BDX_time_garbage = time_garbage;
-//	myBDXDSTSelector1->BDX_time_beam = time_beamON;
-//	myBDXDSTSelector1->BDX_time_cosmic = time_cosmic;
-
-
+	myBDXDSTSelector1->hStatus_selector = hStatus_selector;
 
 	//evaluation of EOT
-
-	double EOT =0;
-	double charge_e= 1.6E-19;
-	for(int i=0; i<current_beamON.size(); i++){
-
-		EOT += current_beamON.at(i)*1;      // this corresponds to charge : current*dt where dt is 1 sec
-
+	double EOT = 0;
+	double charge_e = 1.6E-19;
+	for (int i = 0; i < current_beamON.size(); i++) {
+		EOT += current_beamON[i] * myBDXDSTSelector->dT;      // this corresponds to charge : current*dt where dt is myBDXDSTSelector->dT (1 s)
 	}
+	EOT = (EOT * (1E-6)) / charge_e;
 
-	EOT = (EOT*(1E-6))/charge_e;
+	/* in hControl you can find the following info;
+	 bin 1 : number of EOT
+	 bin 3 : beam DT
+	 bin 5 : cosmic DT
+	 bin 7 : garbage DT
+	 */
+	TH1D* hControl = new TH1D("hControl", "hControl", 100, 0.5, 100.5);
+	hControl->SetBinContent(1, EOT);
+	hControl->SetBinContent(3, time_beamON.size());
+	hControl->SetBinContent(5, time_cosmic.size());
+	hControl->SetBinContent(7, time_garbage.size());
 
-	//cout<<halla_current.size()<<endl;
+	cout << "before BDXDSTSelector1" << endl;
+	myBDXDSTSelector1->mean_tlive = meanTLive;
 
+	DSTChain->Process(myBDXDSTSelector1, opt.c_str(), Ntot, N0);
 
+	cout << "after BDXDSTSelector1" << endl;
 
-/* in hControl you can find the following info;
-   bin 1 : number of EOT
-   bin 3 : beam DT
-   bin 5 : cosmic DT
-   bin 7 : garbage DT
+	if (isMC == 0 && showGUI) {
 
-*/
-TH1D* hControl = new TH1D("hControl", "hControl",100,0.5,100.5);
-
-    for (int i=1; i<=100; i++){
-
-    	if(i==1) hControl->SetBinContent(i, EOT);
-    	if(i==3) hControl->SetBinContent(i, time_beamON.size());
-    	if(i==5) hControl->SetBinContent(i, time_cosmic.size());
-    	if(i==7) hControl->SetBinContent(i, time_garbage.size());
-    }
-    cout << "before BDXDSTSelector1"<<endl;
-    myBDXDSTSelector1->mean_tlive = meanTLive;
-
- DSTChain->Process(myBDXDSTSelector1, opt.c_str(), Ntot, N0);
-
-cout <<"after BDXDSTSelector1"<<endl;
-
-
-        if(isMC==0){
-
-
-
-        TCanvas *S0_c1 = new TCanvas("S0_c1", "TLive");
-        S0_c1->Divide(1,2);
-        S0_c1->cd(1);
+		TCanvas *S0_c1 = new TCanvas("S0_c1", "TLive");
+		S0_c1->Divide(1, 2);
+		S0_c1->cd(1);
 		myBDXDSTSelector->hTlive->SetLineColor(1);
 		myBDXDSTSelector->hTlive->SetMarkerStyle(20);
 		myBDXDSTSelector->hTlive->Draw();
-		TLine *Line1 = new TLine(0, meanTLive*100, Ttot, meanTLive*100 );
+		TLine *Line1 = new TLine(0, meanTLive * 100, Ttot, meanTLive * 100);
 		Line1->SetLineColor(2);
 		Line1->Draw("same");
 		S0_c1->cd(2);
@@ -440,7 +423,7 @@ cout <<"after BDXDSTSelector1"<<endl;
 
 		TCanvas *S0_c2 = new TCanvas("S0_c2", "trigger_stability");
 
-		S0_c2->Divide(3,3);
+		S0_c2->Divide(3, 3);
 		S0_c2->cd(1);
 		myBDXDSTSelector->hBDXMiniStability_trg[0]->SetLineColor(7);
 		myBDXDSTSelector->hBDXMiniStability_trg[0]->SetMarkerColor(7);
@@ -487,9 +470,8 @@ cout <<"after BDXDSTSelector1"<<endl;
 		myBDXDSTSelector->hBDXMiniStability_trg[4]->Draw("same");
 		myBDXDSTSelector->hBDXMiniStability_trg[31]->Draw("same");
 
-
 		TCanvas *S0_c3 = new TCanvas("S0_c3", "trigger_stability_hasChannel");
-		S0_c3->Divide(1,3);
+		S0_c3->Divide(1, 3);
 
 		S0_c3->cd(1);
 		myBDXDSTSelector->hBDXMiniStability_hasChannel_Alltrg->SetLineColor(1);
@@ -509,65 +491,30 @@ cout <<"after BDXDSTSelector1"<<endl;
 		myBDXDSTSelector->hBDXMiniStability_hasChannel_trg1->SetMarkerStyle(20);
 		myBDXDSTSelector->hBDXMiniStability_hasChannel_trg1->Draw();
 
-
-
 		TCanvas *c2 = new TCanvas("c2", "Current Hall A");
 
 		myBDXDSTSelector->hHALLA_cur->SetLineColor(1);
 		myBDXDSTSelector->hHALLA_cur->Draw();
 
-		myBDXDSTSelector1->hHALLA_cur_beam->SetMarkerStyle(20);
-		myBDXDSTSelector1->hHALLA_cur_beam->SetMarkerColor(2);
-		myBDXDSTSelector1->hHALLA_cur_beam->Draw("same");
+	}
 
-		myBDXDSTSelector1->hHALLA_cur_garbage->SetMarkerStyle(20);
-		myBDXDSTSelector1->hHALLA_cur_garbage->SetMarkerColor(4);
-		myBDXDSTSelector1->hHALLA_cur_garbage->Draw("same");
-
-		myBDXDSTSelector1->hHALLA_cur_cosmic->SetMarkerStyle(20);
-		myBDXDSTSelector1->hHALLA_cur_cosmic->SetMarkerColor(5);
-		myBDXDSTSelector1->hHALLA_cur_cosmic->Draw("same");
-
-        }
-
-
-        cout << "garbage DT: "<< time_garbage.size()<<" beam DT: "<< time_beamON.size()<<" cosmic DT "<<time_cosmic.size()<<endl;
-        cout << "EOT "<< EOT<<endl;
-        cout << "Tlive "<< meanTLive*100<<endl;
-
-
-
-
+	cout << "garbage DT: " << time_garbage.size() << " beam DT: " << time_beamON.size() << " cosmic DT " << time_cosmic.size() << endl;
+	cout << "EOT " << EOT << endl;
+	cout << "Tlive " << meanTLive * 100 << endl;
 
 	/*Write histograms on the output file*/
 
 	if (ofname != "") {
 		TFile *ofile = new TFile(ofname.c_str(), "recreate");
 
-		if(isMC==0){
-		hControl->Write();
-		//hRate->Write();
-/*
-		TListIter iter(myBDXDSTSelector->GetOutputList());
-		TObject *obj;
-
-		while (obj = iter.Next()) {
-			if (obj->InheritsFrom(TH1::Class())) obj->Write();
-		}
-*/
-
+		if (isMC == 0) {
+			hControl->Write();
 		}
 		TListIter iter1(myBDXDSTSelector1->GetOutputList());
 		TObject *obj1;
 
 		while (obj1 = iter1.Next()) {
 			if (obj1->InheritsFrom(TH1::Class())) obj1->Write();
-		}
-
-
-		if (doTree) {
-		if(isMC==0)	myBDXDSTSelector->GetOutTree()->CloneTree()->Write();
-			myBDXDSTSelector1->GetOutTree()->CloneTree()->Write();
 		}
 
 		ofile->Close();
