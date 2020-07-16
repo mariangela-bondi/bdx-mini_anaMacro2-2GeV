@@ -41,6 +41,7 @@ int Ntot;
 int N0;
 
 bool showGUI;
+bool doPROD=false;
 
 string ofname, fname;
 vector<string> fnames;
@@ -106,6 +107,7 @@ void parseCommandLine(int argc, char **argv) {
 	ofname = "";
 
 	showGUI = false;
+	doPROD = false;
 
 	for (int ii = 0; ii < argc; ii++) {
 		string command = string(argv[ii]);
@@ -128,7 +130,7 @@ void parseCommandLine(int argc, char **argv) {
 		} else if (command == "-Ntot") {
 			Ntot = atoi(argv[ii + 1]);
 		} else if (command == "-GUI") showGUI = true;
-
+		else if (command == "-PROD") doPROD = true;
 	}
 }
 
@@ -143,13 +145,17 @@ int main(int argc, char **argv) {
 
 	int doFit = 0;
 
-	string opt = "";
+	string opt1 = "";
 	string opt2 = "";
-
+	string opt="";
 	if (isMC) {
-		opt = "MC";
-		opt2 = fname;
+		opt1 = "MC";
 	}
+	if (doPROD){
+		opt2 = "PROD";
+	}
+
+	opt=opt1+" "+opt2;
 
 	cout << "******" << endl;
 	cout << "******" << endl;
@@ -404,7 +410,7 @@ int main(int argc, char **argv) {
 
 	cout << "after BDXDSTSelector1" << endl;
 
-	if (isMC == 0 && showGUI) {
+	if (isMC == 0 && showGUI && !doPROD) {
 
 		TCanvas *S0_c1 = new TCanvas("S0_c1", "TLive");
 		S0_c1->Divide(1, 2);
@@ -515,6 +521,7 @@ int main(int argc, char **argv) {
 
 		while (obj1 = iter1.Next()) {
 			if (obj1->InheritsFrom(TH1::Class())) obj1->Write();
+			if (obj1->InheritsFrom(TTree::Class())) obj1->Write();
 		}
 
 		ofile->Close();
