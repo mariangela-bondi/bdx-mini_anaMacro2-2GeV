@@ -76,9 +76,7 @@ public:
 		EOT = 0;
 		mean_tlive = 0;
 
-		/*OutputTree and related stuff*/
-		outProofFile = 0;
-		outFile = 0;
+
 
 		hTrigAllEvents_rate_garbage = 0;
 		hStatus_selector = 0;
@@ -166,6 +164,8 @@ public:
 		}
 
 		hTlive = 0;
+
+		tOut = 0;
 
 	}
 
@@ -291,8 +291,10 @@ public:
 	double IV_A_max, IV_T_max;
 	int IV_max;
 
-	TProofOutputFile *outProofFile;
-	TFile *outFile;
+
+
+
+
 
 	/*Variables*/
 	double EOT, mean_tlive;
@@ -310,6 +312,16 @@ public:
 	uint64_t thisEventFineTime, prevEventFineTime; //works only if proof = 0
 
 	int isMC;
+	int isPROD;
+
+	/*A.C. The output tree - ONLY FLAT VARIABLES*/
+	TTree *tOut;
+	double Weight_tout;
+	int EventType_tout; //0: COSMIC, 1: DATA, 2: MC
+	double Etot_tout,Eseed_tout;
+	int Multiplicity_tout;
+
+
 
 	/*Methods*/
 	double getTimeInterval() {

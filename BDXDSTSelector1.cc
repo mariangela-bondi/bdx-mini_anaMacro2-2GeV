@@ -36,9 +36,12 @@ void BDXDSTSelector1::Begin(TTree * /*tree*/) {
 
 	TString option = GetOption();
 	isMC = 0;
-
+	isPROD = 0;
 	if (option.Contains("MC") == true) {
 		isMC = 1;
+	}
+	if (option.Contains("PROD") == true) {
+		isPROD = 1;
 	}
 
 	thisEventFineTime = 0;
@@ -55,25 +58,22 @@ void BDXDSTSelector1::SlaveBegin(TTree * /*tree*/) {
 	double dT = 1;
 	int N = (int) (this->Ttot / dT);
 	isMC = 0;
-
+	isPROD = 0;
 	if (option.Contains("MC") == true) {
 		isMC = 1;
 	}
-
+	if (option.Contains("PROD") == true) {
+		isPROD = 1;
+	}
 	/*Create here the histograms.*/
-	hNormalization=new TH1D("hNormalization","hNormalization",100,-0.5,99.5);
-
-
+	hNormalization = new TH1D("hNormalization", "hNormalization", 100, -0.5, 99.5);
 
 	if (isMC == 0) {
 		hTrigAllEvents_rate_garbage = new TH1D("hTrigAllEvents_rate_garbage", "hTrigAllEvents_rate_garbage;T(s);Rate(Hz)", N, 0, N * dT);
-
-	//	hHALLA_cur_beam = new TH2D("hHALLA_cur_beam", "hHALLA_cur_beam;T(s);Current(uA)", N, 0, N * dT, 100, -0.05, 200.05);
-	//	hHALLA_cur_cosmic = new TH2D("hHALLA_cur_cosmic", "hHALLA_cur_cosmic;T(s);Current(uA)", N, 0, N * dT, 100, -0.05, 200.05);
-	//	hHALLA_cur_garbage = new TH2D("hHALLA_cur_garbage", "hHALLA_cur_garbage;T(s);Current(uA)", N, 0, N * dT, 100, -0.05, 200.05);
+		//	hHALLA_cur_beam = new TH2D("hHALLA_cur_beam", "hHALLA_cur_beam;T(s);Current(uA)", N, 0, N * dT, 100, -0.05, 200.05);
+		//	hHALLA_cur_cosmic = new TH2D("hHALLA_cur_cosmic", "hHALLA_cur_cosmic;T(s);Current(uA)", N, 0, N * dT, 100, -0.05, 200.05);
+		//	hHALLA_cur_garbage = new TH2D("hHALLA_cur_garbage", "hHALLA_cur_garbage;T(s);Current(uA)", N, 0, N * dT, 100, -0.05, 200.05);
 	}
-//	hTlive = new TH2D("hTlive", "hTlive;T(s);Live Time(%)", N, 0, N * dT, 100, 0, 100.);
-
 	// HISTO VETO
 	int Nbin_Atot = 201;
 	int min_Atot = -0.5;
@@ -130,19 +130,30 @@ void BDXDSTSelector1::SlaveBegin(TTree * /*tree*/) {
 			hCrs_EtopEbotVsEseed_NoVETO[i][j] = new TH2D(Form("hCrs_EtopEbotVsEseed_NoVETO_%i_%i", i, j), Form("hCrs_EtopEbotVsEseed_NoVETO_%i_%i; Etop-Ebot/Etot; Eseed [MeV]", i, j), 300, -1.5, 1.5, Nbin_Etot, min_Etot, max_Etot);
 			hCrs_Eseed_CutEasym_NoVETO[i][j] = new TH1D(Form("hCrs_Eseed_CutEasym_NoVETO_%i_%i", i, j), Form("hCrs_Eseed_CutEasym_NoVETO_%i_%i; Eseed [MeV]; Hz/MeV", i, j), Nbin_Etot, min_Etot, max_Etot);
 		}
-
 	}
 
-	Info("SlaveBegin", "AllHistos to fOutput");
-	TIter next(gDirectory->GetList());
-	TObject *obj;
+	/*A.C. this is the "flat" ttree that we are using for output*/
+	tOut = new TTree("tOut", "tOut");
+	tOut->Branch("EventType", &EventType_tout);
+	tOut->Branch("Multiplicity", &Multiplicity_tout);
+	tOut->Branch("Weight", &Weight_tout);
+	tOut->Branch("Etot", &Etot_tout);
+	tOut->Branch("Eseed", &Eseed_tout);
 
-	while (obj = (TObject*) next()) {
-		if (obj->InheritsFrom(TH1::Class())) {
-			fOutput->Add(obj);
-		}
-		if (obj->InheritsFrom(TTree::Class())) {
-			fOutput->Add(obj);
+	fOutput->Add(tOut);
+
+	if (!isPROD) {
+		Info("SlaveBegin", "AllHistos to fOutput");
+		TIter next(gDirectory->GetList());
+		TObject *obj;
+
+		while (obj = (TObject*) next()) {
+			if (obj->InheritsFrom(TH1::Class())) {
+				fOutput->Add(obj);
+			}
+			if (obj->InheritsFrom(TTree::Class())) {
+				fOutput->Add(obj);
+			}
 		}
 	}
 
@@ -167,7 +178,7 @@ Bool_t BDXDSTSelector1::Process(Long64_t entry) {
 	// The return value is currently not used.
 
 	//Andrea: entry==0 is probably wrong. Skip it.
-	if (entry==0) return kFALSE;
+	if (entry == 0) return kFALSE;
 
 	this->GetEntry(entry);
 	isGarbage = false;
@@ -238,13 +249,10 @@ Bool_t BDXDSTSelector1::Process(Long64_t entry) {
 	weight = m_EventHeader->getWeight();
 	//	if(weight>0.01)	cout << "ERR WEIGHT!!: "<< weight << endl;
 
-
-
 	N_event++;
 
 	hNormalization->Fill(1.); //1->Total number of events
-	hNormalization->Fill(2.,weight); //2->Sum of weights
-
+	hNormalization->Fill(2., weight); //2->Sum of weights
 
 	thisEventT = m_Event->getEventHeader()->getEventTime() - T0;
 
@@ -257,7 +265,7 @@ Bool_t BDXDSTSelector1::Process(Long64_t entry) {
 
 		if (isGarbage == true) {
 			hTrigAllEvents_rate_garbage->Fill(thisEventT);
-		//	hHALLA_cur_garbage->Fill(thisEventT, current);
+			//	hHALLA_cur_garbage->Fill(thisEventT, current);
 			m_Event->Clear("C");
 			return kTRUE;
 		}
@@ -267,13 +275,13 @@ Bool_t BDXDSTSelector1::Process(Long64_t entry) {
 
 		if (isMC == 0 && current <= 0.03) {
 			isCosmic = true;
-		//	hHALLA_cur_cosmic->Fill(thisEventT, current);
+			//	hHALLA_cur_cosmic->Fill(thisEventT, current);
 			INDEX = 0;
 		}
 
 		if (isMC == 0 && current > 0.03) {
 			isBeam = true;
-		//	hHALLA_cur_beam->Fill(thisEventT, current);
+			//	hHALLA_cur_beam->Fill(thisEventT, current);
 			INDEX = 1;
 		}
 
@@ -378,7 +386,7 @@ Bool_t BDXDSTSelector1::Process(Long64_t entry) {
 
 			}
 		}
-		int idx_crs =0;
+		int idx_crs = 0;
 
 		/*Check if the event has a collection named CalorimeterHits, and the corresponding objects are CalorimeterHit objects*/
 		if (m_Event->hasCollection(CalorimeterHit::Class(), "CalorimeterHits")) {
@@ -472,7 +480,15 @@ Bool_t BDXDSTSelector1::Process(Long64_t entry) {
 				}
 			}
 		}
-
+		/*A.C. This is where we fill the FLAT ttree for output in anticoincidence*/
+		if (OV == false && IV == false && Etot > 10.) {
+			EventType_tout = INDEX;
+			Weight_tout = weight;
+			Etot_tout = Etot;
+			Eseed_tout = Eseed;
+			Multiplicity_tout = multip;
+			tOut->Fill();
+		}
 
 		if (Eseed > 0) {
 			hCrs_Etot[INDEX]->Fill(Etot, weight);
@@ -554,62 +570,63 @@ void BDXDSTSelector1::Terminate() {
 	Info("Terminate", "Terminate starts");
 	Info("Terminate", "Total events are: %i", nEventsTotal);
 
-	TListIter iter(fOutput);
-	TObject *obj;
+	if (!isPROD) {
+		TListIter iter(fOutput);
+		TObject *obj;
 
-	hTrigAllEvents_rate_garbage = (TH1D*) fOutput->FindObject("hTrigAllEvents_rate_garbage");
+		hTrigAllEvents_rate_garbage = (TH1D*) fOutput->FindObject("hTrigAllEvents_rate_garbage");
 
+		//HISTO VETO
+		for (int i = 0; i < 3; i++) {
+			// if(i!=1){
+			hOV_Atot[i] = (TH1D*) fOutput->FindObject(Form("hOV_Atot_%i", i));
+			hOV_multiplicity[i] = (TH1D*) fOutput->FindObject(Form("hOV_multiplicity_%i", i));
+			hIV_Atot[i] = (TH1D*) fOutput->FindObject(Form("hIV_Atot_%i", i));
+			hIV_multiplicity[i] = (TH1D*) fOutput->FindObject(Form("hIV_multiplicity_%i", i));
+			hOV_Atot_vs_multiplicity[i] = (TH2D*) fOutput->FindObject(Form("hOV_Atot_vs_multiplicity_%i", i));
+			hIV_Atot_vs_multiplicity[i] = (TH2D*) fOutput->FindObject(Form("hIV_Atot_vs_multiplicity_%i", i));
 
-	//HISTO VETO
-	for (int i = 0; i < 3; i++) {
-		// if(i!=1){
-		hOV_Atot[i] = (TH1D*) fOutput->FindObject(Form("hOV_Atot_%i", i));
-		hOV_multiplicity[i] = (TH1D*) fOutput->FindObject(Form("hOV_multiplicity_%i", i));
-		hIV_Atot[i] = (TH1D*) fOutput->FindObject(Form("hIV_Atot_%i", i));
-		hIV_multiplicity[i] = (TH1D*) fOutput->FindObject(Form("hIV_multiplicity_%i", i));
-		hOV_Atot_vs_multiplicity[i] = (TH2D*) fOutput->FindObject(Form("hOV_Atot_vs_multiplicity_%i", i));
-		hIV_Atot_vs_multiplicity[i] = (TH2D*) fOutput->FindObject(Form("hIV_Atot_vs_multiplicity_%i", i));
+			// HISTO CALORIMETER
+			hCrs_Etot[i] = (TH1D*) fOutput->FindObject(Form("hCrs_Etot_%i", i));
+			hCrs_multiplicity[i] = (TH1D*) fOutput->FindObject(Form("hCrs_multiplicity_%i", i));
+			hCrs_Eseed[i] = (TH1D*) fOutput->FindObject(Form("hCrs_Eseed_%i", i));
+			hCrs_Etop[i] = (TH1D*) fOutput->FindObject(Form("hCrs_Etop_%i", i));
+			hCrs_Ebottom[i] = (TH1D*) fOutput->FindObject(Form("hCrs_Ebottom_%i", i));
+			hCrs_R_EtopEtot[i] = (TH1D*) fOutput->FindObject(Form("hCrs_R_EtopEtot_%i", i));
+			hCrs_R_EbottomEtot[i] = (TH1D*) fOutput->FindObject(Form("hCrs_R_EbottomEtot_%i", i));
+			hCrs_EtotVsEtop[i] = (TH2D*) fOutput->FindObject(Form("hCrs_EtotVsEtop_%i", i));
+			hCrs_XYseed[i] = (TH2D*) fOutput->FindObject(Form("hCrs_XYseed_%i", i));
+			hCrs_XY_XYseed[i] = (TH2D*) fOutput->FindObject(Form("hCrs_XY_XYseed_%i", i));
+			hCrs_EseedVSEtot[i] = (TH2D*) fOutput->FindObject(Form("hCrs_EseedVSEtot_%i", i));
+			hCrs_EseedVSMulti[i] = (TH2D*) fOutput->FindObject(Form("hCrs_EseedVSMulti_%i", i));
+			hCrs_EtotVSMulti[i] = (TH2D*) fOutput->FindObject(Form("hCrs_EtotVSMulti_%i", i));
+			hCrs_EtopEbotVsEtot[i] = (TH2D*) fOutput->FindObject(Form("hCrs_EtopEbotVsEtot_%i", i));
+			hCrs_EtopEbotVsEseed[i] = (TH2D*) fOutput->FindObject(Form("hCrs_EtopEbotVsEseed_%i", i));
+			hCrs_Eseed_CutEasym[i] = (TH1D*) fOutput->FindObject(Form("hCrs_Eseed_CutEasym_%i", i));
 
-		// HISTO CALORIMETER
-		hCrs_Etot[i] = (TH1D*) fOutput->FindObject(Form("hCrs_Etot_%i", i));
-		hCrs_multiplicity[i] = (TH1D*) fOutput->FindObject(Form("hCrs_multiplicity_%i", i));
-		hCrs_Eseed[i] = (TH1D*) fOutput->FindObject(Form("hCrs_Eseed_%i", i));
-		hCrs_Etop[i] = (TH1D*) fOutput->FindObject(Form("hCrs_Etop_%i", i));
-		hCrs_Ebottom[i] = (TH1D*) fOutput->FindObject(Form("hCrs_Ebottom_%i", i));
-		hCrs_R_EtopEtot[i] = (TH1D*) fOutput->FindObject(Form("hCrs_R_EtopEtot_%i", i));
-		hCrs_R_EbottomEtot[i] = (TH1D*) fOutput->FindObject(Form("hCrs_R_EbottomEtot_%i", i));
-		hCrs_EtotVsEtop[i] = (TH2D*) fOutput->FindObject(Form("hCrs_EtotVsEtop_%i", i));
-		hCrs_XYseed[i] = (TH2D*) fOutput->FindObject(Form("hCrs_XYseed_%i", i));
-		hCrs_XY_XYseed[i] = (TH2D*) fOutput->FindObject(Form("hCrs_XY_XYseed_%i", i));
-		hCrs_EseedVSEtot[i] = (TH2D*) fOutput->FindObject(Form("hCrs_EseedVSEtot_%i", i));
-		hCrs_EseedVSMulti[i] = (TH2D*) fOutput->FindObject(Form("hCrs_EseedVSMulti_%i", i));
-		hCrs_EtotVSMulti[i] = (TH2D*) fOutput->FindObject(Form("hCrs_EtotVSMulti_%i", i));
-		hCrs_EtopEbotVsEtot[i] = (TH2D*) fOutput->FindObject(Form("hCrs_EtopEbotVsEtot_%i", i));
-		hCrs_EtopEbotVsEseed[i] = (TH2D*) fOutput->FindObject(Form("hCrs_EtopEbotVsEseed_%i", i));
-		hCrs_Eseed_CutEasym[i] = (TH1D*) fOutput->FindObject(Form("hCrs_Eseed_CutEasym_%i", i));
-
-		for (int j = 0; j < 3; j++) {
-			hCrs_Etot_NoVETO[i][j] = (TH1D*) fOutput->FindObject(Form("hCrs_Etot_NoVETO_%i_%i", i, j));
-			hCrs_multiplicity_NoVETO[i][j] = (TH1D*) fOutput->FindObject(Form("hCrs_multiplicity_NoVETO_%i_%i", i, j));
-			hCrs_Eseed_NoVETO[i][j] = (TH1D*) fOutput->FindObject(Form("hCrs_Eseed_NoVETO_%i_%i", i, j));
-			hCrs_Etop_NoVETO[i][j] = (TH1D*) fOutput->FindObject(Form("hCrs_Etop_NoVETO_%i_%i", i, j));
-			hCrs_Ebottom_NoVETO[i][j] = (TH1D*) fOutput->FindObject(Form("hCrs_Ebottom_NoVETO_%i_%i", i, j));
-			hCrs_R_EtopEtot_NoVETO[i][j] = (TH1D*) fOutput->FindObject(Form("hCrs_R_EtopEtot_NoVETO_%i_%i", i, j));
-			hCrs_R_EbottomEtot_NoVETO[i][j] = (TH1D*) fOutput->FindObject(Form("hCrs_R_EbottomEtot_NoVETO_%i_%i", i, j));
-			hCrs_EtotVsEtop_NoVETO[i][j] = (TH2D*) fOutput->FindObject(Form("hCrs_EtotVsEtop_NoVETO_%i_%i", i, j));
-			hCrs_XYseed_NoVETO[i][j] = (TH2D*) fOutput->FindObject(Form("hCrs_XYseed_NoVETO_%i_%i", i, j));
-			hCrs_XY_XYseed_NoVETO[i][j] = (TH2D*) fOutput->FindObject(Form("hCrs_XY_XYseed_NoVETO_%i_%i", i, j));
-			hCrs_EseedVSEtot_NoVETO[i][j] = (TH2D*) fOutput->FindObject(Form("hCrs_EseedVSEtot_NoVETO_%i_%i", i, j));
-			hCrs_EseedVSMulti_NoVETO[i][j] = (TH2D*) fOutput->FindObject(Form("hCrs_EseedVSMulti_NoVETO_%i_%i", i, j));
-			hCrs_EtotVSMulti_NoVETO[i][j] = (TH2D*) fOutput->FindObject(Form("hCrs_EtotVSMulti_NoVETO_%i_%i", i, j));
-			hCrs_EtopEbotVsEtot_NoVETO[i][j] = (TH2D*) fOutput->FindObject(Form("hCrs_EtopEbotVsEtot_NoVETO_%i_%i", i, j));
-			hCrs_EtopEbotVsEseed_NoVETO[i][j] = (TH2D*) fOutput->FindObject(Form("hCrs_EtopEbotVsEseed_NoVETO_%i_%i", i, j));
-			hCrs_Eseed_CutEasym_NoVETO[i][j] = (TH1D*) fOutput->FindObject(Form("hCrs_Eseed_CutEasym_NoVETO_%i_%i", i, j));
+			for (int j = 0; j < 3; j++) {
+				hCrs_Etot_NoVETO[i][j] = (TH1D*) fOutput->FindObject(Form("hCrs_Etot_NoVETO_%i_%i", i, j));
+				hCrs_multiplicity_NoVETO[i][j] = (TH1D*) fOutput->FindObject(Form("hCrs_multiplicity_NoVETO_%i_%i", i, j));
+				hCrs_Eseed_NoVETO[i][j] = (TH1D*) fOutput->FindObject(Form("hCrs_Eseed_NoVETO_%i_%i", i, j));
+				hCrs_Etop_NoVETO[i][j] = (TH1D*) fOutput->FindObject(Form("hCrs_Etop_NoVETO_%i_%i", i, j));
+				hCrs_Ebottom_NoVETO[i][j] = (TH1D*) fOutput->FindObject(Form("hCrs_Ebottom_NoVETO_%i_%i", i, j));
+				hCrs_R_EtopEtot_NoVETO[i][j] = (TH1D*) fOutput->FindObject(Form("hCrs_R_EtopEtot_NoVETO_%i_%i", i, j));
+				hCrs_R_EbottomEtot_NoVETO[i][j] = (TH1D*) fOutput->FindObject(Form("hCrs_R_EbottomEtot_NoVETO_%i_%i", i, j));
+				hCrs_EtotVsEtop_NoVETO[i][j] = (TH2D*) fOutput->FindObject(Form("hCrs_EtotVsEtop_NoVETO_%i_%i", i, j));
+				hCrs_XYseed_NoVETO[i][j] = (TH2D*) fOutput->FindObject(Form("hCrs_XYseed_NoVETO_%i_%i", i, j));
+				hCrs_XY_XYseed_NoVETO[i][j] = (TH2D*) fOutput->FindObject(Form("hCrs_XY_XYseed_NoVETO_%i_%i", i, j));
+				hCrs_EseedVSEtot_NoVETO[i][j] = (TH2D*) fOutput->FindObject(Form("hCrs_EseedVSEtot_NoVETO_%i_%i", i, j));
+				hCrs_EseedVSMulti_NoVETO[i][j] = (TH2D*) fOutput->FindObject(Form("hCrs_EseedVSMulti_NoVETO_%i_%i", i, j));
+				hCrs_EtotVSMulti_NoVETO[i][j] = (TH2D*) fOutput->FindObject(Form("hCrs_EtotVSMulti_NoVETO_%i_%i", i, j));
+				hCrs_EtopEbotVsEtot_NoVETO[i][j] = (TH2D*) fOutput->FindObject(Form("hCrs_EtopEbotVsEtot_NoVETO_%i_%i", i, j));
+				hCrs_EtopEbotVsEseed_NoVETO[i][j] = (TH2D*) fOutput->FindObject(Form("hCrs_EtopEbotVsEseed_NoVETO_%i_%i", i, j));
+				hCrs_Eseed_CutEasym_NoVETO[i][j] = (TH1D*) fOutput->FindObject(Form("hCrs_Eseed_CutEasym_NoVETO_%i_%i", i, j));
+			}
 		}
-	}
 
-	while (obj = iter.Next()) {
-		Info("Terminate", "obj: %s", obj->GetName());
+		while (obj = iter.Next()) {
+			Info("Terminate", "obj: %s", obj->GetName());
+		}
 	}
 	Info("Terminate", "No more objs");
 
