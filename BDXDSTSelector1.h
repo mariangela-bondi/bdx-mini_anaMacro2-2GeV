@@ -373,6 +373,19 @@ public:
 		if (x == 1 && y == 3) return 22;
 	}
 
+	int getCrystalThreshold(const int &Crs_ID) {
+
+		double E_thr =0;
+
+		if(Crs_ID==16 || Crs_ID==19 || Crs_ID==32 || Crs_ID==33 || Crs_ID==37 || Crs_ID==38 || Crs_ID==39 || Crs_ID==41 || Crs_ID==42 || Crs_ID==44){
+			E_thr = 5;
+		}else{
+			E_thr = 4;
+		}
+
+		return E_thr;
+	}
+
 ClassDef(BDXDSTSelector1,1)
 	;
 

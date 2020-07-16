@@ -213,7 +213,7 @@ Bool_t BDXDSTSelector1::Process(Long64_t entry) {
 	}
 
 	///CRS  Variables ///
-	double E_singleCrs_thr = 10; //minima energia misurabile
+//	double E_singleCrs_thr = 4; //minima energia misurabile
 	double Etot = 0;
 	double Etop = 0;
 	double Ebottom = 0;
@@ -378,6 +378,7 @@ Bool_t BDXDSTSelector1::Process(Long64_t entry) {
 
 			}
 		}
+		int idx_crs =0;
 
 		/*Check if the event has a collection named CalorimeterHits, and the corresponding objects are CalorimeterHit objects*/
 		if (m_Event->hasCollection(CalorimeterHit::Class(), "CalorimeterHits")) {
@@ -387,8 +388,11 @@ Bool_t BDXDSTSelector1::Process(Long64_t entry) {
 			while (fCaloHit = (CalorimeterHit*) CaloHitsIter.Next()) { //Need to cast to the proper object
 
 				Ehit = 0;
+
+				if (fCaloHit->m_channel.sector == 0) idx_crs = this->getCaloIDXFromXY(fCaloHit->m_channel.x, fCaloHit->m_channel.y);
+				if (fCaloHit->m_channel.sector == 1) idx_crs = (this->getCaloIDXFromXY(fCaloHit->m_channel.x, fCaloHit->m_channel.y)) + 22;
 				//MINIMUM ENERGY PER CRS //
-				if (fCaloHit->E > E_singleCrs_thr) {
+				if (fCaloHit->E > this->getCrystalThreshold(idx_crs)) {
 
 					//Multiplicity//
 					multip++;
@@ -426,8 +430,11 @@ Bool_t BDXDSTSelector1::Process(Long64_t entry) {
 		if (m_Event->hasCollection(CalorimeterHit::Class(), "CalorimeterHits")) {
 			TIter CaloHitsIter2(m_Event->getCollection(CalorimeterHit::Class(), "CalorimeterHits"));
 			while (fCaloHit = (CalorimeterHit*) CaloHitsIter2.Next()) {
-				if (fCaloHit->E > E_singleCrs_thr) {
 
+				if (fCaloHit->m_channel.sector == 0) idx_crs = this->getCaloIDXFromXY(fCaloHit->m_channel.x, fCaloHit->m_channel.y);
+				if (fCaloHit->m_channel.sector == 1) idx_crs = (this->getCaloIDXFromXY(fCaloHit->m_channel.x, fCaloHit->m_channel.y)) + 22;
+				//MINIMUM ENERGY PER CRS //
+				if (fCaloHit->E > this->getCrystalThreshold(idx_crs)) {
 					Xs = fCaloHit->m_channel.x - Xseed;
 					Ys = fCaloHit->m_channel.y - Yseed;
 					Zs = fCaloHit->m_channel.sector;
@@ -466,7 +473,8 @@ Bool_t BDXDSTSelector1::Process(Long64_t entry) {
 			}
 		}
 
-		if (Eseed > E_singleCrs_thr) {
+
+		if (Eseed > 0) {
 			hCrs_Etot[INDEX]->Fill(Etot, weight);
 			hCrs_multiplicity[INDEX]->Fill(multip, weight);
 			//   hCrs_Eseed[INDEX]->Fill(Eseed, weight);
@@ -486,7 +494,7 @@ Bool_t BDXDSTSelector1::Process(Long64_t entry) {
 
 		}
 
-		if (Eseed > E_singleCrs_thr) {
+		if (Eseed > 0) {
 
 			for (int j = 0; j < 3; j++) {
 
