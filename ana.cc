@@ -396,13 +396,15 @@ int main(int argc, char **argv) {
 	 bin 3 : beam DT
 	 bin 5 : cosmic DT
 	 bin 7 : garbage DT
+	 bin 9 : meanTlive
 	 */
+
 	TH1D* hControl = new TH1D("hControl", "hControl", 100, 0.5, 100.5);
 	hControl->SetBinContent(1, EOT);
-	hControl->SetBinContent(3, time_beamON.size());
-	hControl->SetBinContent(5, time_cosmic.size());
-	hControl->SetBinContent(7, time_garbage.size());
-
+	hControl->SetBinContent(3, time_beamON.size()*myBDXDSTSelector->dT); //A.C. adding dT inn case it is != 1 s
+	hControl->SetBinContent(5, time_cosmic.size()*myBDXDSTSelector->dT);
+	hControl->SetBinContent(7, time_garbage.size()*myBDXDSTSelector->dT);
+	hControl->SetBinContent(9,meanTLive);
 	cout << "before BDXDSTSelector1" << endl;
 	myBDXDSTSelector1->mean_tlive = meanTLive;
 
