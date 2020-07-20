@@ -480,15 +480,6 @@ Bool_t BDXDSTSelector1::Process(Long64_t entry) {
 				}
 			}
 		}
-		/*A.C. This is where we fill the FLAT ttree for output in anticoincidence*/
-		if (OV == false && IV == false && Etot > 10.) {
-			EventType_tout = INDEX;
-			Weight_tout = weight;
-			Etot_tout = Etot;
-			Eseed_tout = Eseed;
-			Multiplicity_tout = multip;
-			tOut->Fill();
-		}
 
 		if (Eseed > 0) {
 			hCrs_Etot[INDEX]->Fill(Etot, weight);
@@ -507,11 +498,10 @@ Bool_t BDXDSTSelector1::Process(Long64_t entry) {
 			hCrs_EtopEbotVsEtot[INDEX]->Fill((Etop - Ebottom) / Etot, Etot, weight);
 			hCrs_EtopEbotVsEseed[INDEX]->Fill((Etop - Ebottom) / Etot, Eseed, weight);
 			if (fabs((Etop - Ebottom) / Etot) < 0.8) hCrs_Eseed_CutEasym[INDEX]->Fill(Eseed, weight);
-
 		}
 
 		if (Eseed > 0) {
-
+			INDEX_VETO=-1;
 			for (int j = 0; j < 3; j++) {
 
 				if (j == 0) {
@@ -548,7 +538,18 @@ Bool_t BDXDSTSelector1::Process(Long64_t entry) {
 				if (fabs((Etop - Ebottom) / Etot) < 0.8) hCrs_Eseed_CutEasym_NoVETO[INDEX][INDEX_VETO]->Fill(Eseed, weight);
 			}
 		}
-	}
+
+		/*A.C. This is where we fill the FLAT ttree for output in anticoincidence*/
+		if (OV == false && IV == false && Etot > 10.) {
+			EventType_tout = INDEX;
+			Weight_tout = weight;
+			Etot_tout = Etot;
+			Eseed_tout = Eseed;
+			Multiplicity_tout = multip;
+			tOut->Fill();
+		}
+
+	} //end isGarbage==false || isMC==1
 
 	//cout <<"end event"<<endl;
 	m_Event->Clear("C");
