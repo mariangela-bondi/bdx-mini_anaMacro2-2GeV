@@ -134,6 +134,8 @@ void BDXDSTSelector1::SlaveBegin(TTree * /*tree*/) {
 
 	/*A.C. this is the "flat" ttree that we are using for output*/
 	tOut = new TTree("tOut", "tOut");
+	tOut->Branch("RunN",&RunN_tout);
+	tOut->Branch("EventN",&EventN_tout);
 	tOut->Branch("EventType", &EventType_tout);
 	tOut->Branch("Multiplicity", &Multiplicity_tout);
 	tOut->Branch("Weight", &Weight_tout);
@@ -546,10 +548,13 @@ Bool_t BDXDSTSelector1::Process(Long64_t entry) {
 			Etot_tout = Etot;
 			Eseed_tout = Eseed;
 			Multiplicity_tout = multip;
+			RunN_tout = runNumber;
+			EventN_tout = eventNumber;
+
 			tOut->Fill();
 		}
 
-	} //end isGarbage==false || isMC==1
+	}//end isGarbage==false || isMC==1
 
 	//cout <<"end event"<<endl;
 	m_Event->Clear("C");

@@ -320,7 +320,8 @@ public:
 	int EventType_tout; //0: COSMIC, 1: DATA, 2: MC
 	double Etot_tout,Eseed_tout;
 	int Multiplicity_tout;
-
+	int RunN_tout;
+	int EventN_tout;
 
 
 	/*Methods*/
