@@ -182,15 +182,15 @@ public:
 	bool isGarbage;
 	bool isCosmic;
 	bool isBeam;
-	double T0, Ttot;
+	long int T0, Ttot;
 	int N0, N_event;
-	int thisEventN;
-	double thisEventT;
+	long int thisEventN;
+	long int thisEventT;
 	int nEventsTotal;
 	int NProof;
 	double current, Tlive, time_Tlive, time_current, time_current_temp;
 
-	double dT, dT1;
+	long int dT, dT1;
 
 	vector<double> Vect_current;
 	vector<double> Vect_time_current;
@@ -201,32 +201,32 @@ public:
 	int isProd; //this variable is used to reduce the amount of histograms in the output when doing the production runs, otherwise proof and hadd is very slow.
 
 	/*Methods*/
-	double getTimeInterval() {
+	long int getTimeInterval() {
 		return Ttot;
 	}
-	void setTimeInterval(double T) {
+	void setTimeInterval(long int T) {
 		Ttot = T;
-		Info("setTimeInterval", Form("Ttot set to %f", Ttot));
+		Info("setTimeInterval", Form("Ttot set to %li", Ttot));
 	}
-	double getT0() {
+	long int getT0() {
 		return T0;
 	}
-	void setT0(double T) {
+	void setT0(long int T) {
 		T0 = T;
-		Info("setT0", Form("time0 set to %f", T0));
+		Info("setT0", Form("time0 set to %li", T0));
 	}
 
-	void setdT(double dT) {
+	void setdT(long int dT) {
 		this->dT = dT;
 	}
-	double getdT() {
+	long int getdT() {
 		return dT;
 	}
 
-	void setdT1(double dT1) {
+	void setdT1(long int dT1) {
 		this->dT1 = dT1;
 	}
-	double getdT1() {
+	long int getdT1() {
 		return dT1;
 	}
 

@@ -213,8 +213,8 @@ int main(int argc, char **argv) {
 	myBDXDSTSelector->setTimeInterval(Ttot);
 	myBDXDSTSelector1->setTimeInterval(Ttot);
 	cout << "setting first event time: " << Tfirst << endl;
-	myBDXDSTSelector->setT0(1. * Tfirst);
-	myBDXDSTSelector1->setT0(1. * Tfirst);
+	myBDXDSTSelector->setT0(1 * Tfirst);
+	myBDXDSTSelector1->setT0(1 * Tfirst);
 
 	myBDXDSTSelector->setNProof(nproof);
 	myBDXDSTSelector1->setNProof(nproof);
