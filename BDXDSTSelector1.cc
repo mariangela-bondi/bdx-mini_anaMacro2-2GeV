@@ -302,9 +302,7 @@ Bool_t BDXDSTSelector1::Process(Long64_t entry) {
 			TIter IntVetoHitsIter(m_Event->getCollection(IntVetoHit::Class(), "IntVetoHits"));
 			while (fIntVetoHit = (IntVetoHit*) IntVetoHitsIter.Next()) { //Need to cast to the proper object
 
-				if (eventNumber==44552){
-					 cout<<fIntVetoHit->m_channel.layer*1.<<" "<<fIntVetoHit->m_channel.component*1.<<" "<<fIntVetoHit->A<<" "<<fIntVetoHit->T<<endl;
-				}
+
 
 				if (fIntVetoHit->m_channel.layer == 0 && fIntVetoHit->m_channel.component != 3) {
 					QOV[fIntVetoHit->m_channel.component] = fIntVetoHit->A;
@@ -353,7 +351,7 @@ Bool_t BDXDSTSelector1::Process(Long64_t entry) {
 
 				if (i != IV_max && QIV[i] > IV_th && abs(TIV[i] - IV_T_max) < 100) multiplicity_IV = multiplicity_IV + 1;
 
-				if (eventNumber==44552)  cout<<i<<" "<<IV_max<<" "<<QIV[i]<<" "<<multiplicity_IV<<endl;
+
 			}
 		}
 
@@ -362,9 +360,6 @@ Bool_t BDXDSTSelector1::Process(Long64_t entry) {
 		/* Outer Veto event */
 		if ((multiplicity_OV == 1 && OV_A_max > 6.5) || multiplicity_OV > 1) OV = true;
 
-		if (eventNumber==44552){
-			cout<<"CAZZO: ->"<< multiplicity_IV <<" "<<multiplicity_OV<<" "<<IV_A_max<<" "<<OV_A_max <<" "<<IV<<" "<<OV<<endl;
-		}
 
 		//cout << weight<<endl;
 		//HISTO VETO
