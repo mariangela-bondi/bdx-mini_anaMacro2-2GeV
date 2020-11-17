@@ -298,10 +298,10 @@ public:
 
 	/*Variables*/
 	double EOT, mean_tlive;
-	double Ttot, T0;
+	long int Ttot, T0;
 	int N0;
 	int thisEventN;
-	double thisEventT;
+	long int thisEventT;
 	int nEventsTotal;
 	int NProof;
 	double time, current;
@@ -322,22 +322,23 @@ public:
 	int Multiplicity_tout;
 	int RunN_tout;
 	int EventN_tout;
+	long int EventTime_tout;
 
 
 	/*Methods*/
-	double getTimeInterval() {
+	long int getTimeInterval() {
 		return Ttot;
 	}
-	void setTimeInterval(double T) {
+	void setTimeInterval(long int T) {
 		Ttot = T;
-		Info("setTimeInterval", Form("Ttot set to %f", Ttot));
+		Info("setTimeInterval", Form("Ttot set to %li", Ttot));
 	}
-	double getT0() {
+	long int getT0() {
 		return T0;
 	}
-	void setT0(double T) {
+	void setT0(long int T) {
 		T0 = T;
-		Info("setT0", Form("time0 set to %f", T0));
+		Info("setT0", Form("time0 set to %li", T0));
 	}
 
 	double getN0() {
