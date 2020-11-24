@@ -322,7 +322,7 @@ public:
 	int Multiplicity_tout;
 	int RunN_tout;
 	int EventN_tout;
-	long int EventTime_tout;
+	ULong64_t EventTime_tout;
 
 
 	/*Methods*/
