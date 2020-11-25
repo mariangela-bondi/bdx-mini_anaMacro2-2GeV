@@ -134,15 +134,14 @@ void BDXDSTSelector1::SlaveBegin(TTree * /*tree*/) {
 
 	/*A.C. this is the "flat" ttree that we are using for output*/
 	tOut = new TTree("tOut", "tOut");
-	tOut->Branch("RunN",&RunN_tout);
-	tOut->Branch("EventN",&EventN_tout);
-	tOut->Branch("EventTime",&EventTime_tout);
+	tOut->Branch("RunN", &RunN_tout);
+	tOut->Branch("EventN", &EventN_tout);
+	tOut->Branch("EventTime", &EventTime_tout);
 	tOut->Branch("EventType", &EventType_tout);
 	tOut->Branch("Multiplicity", &Multiplicity_tout);
 	tOut->Branch("Weight", &Weight_tout);
 	tOut->Branch("Etot", &Etot_tout);
 	tOut->Branch("Eseed", &Eseed_tout);
-
 
 	fOutput->Add(tOut);
 
@@ -258,8 +257,11 @@ Bool_t BDXDSTSelector1::Process(Long64_t entry) {
 	hNormalization->Fill(1.); //1->Total number of events
 	hNormalization->Fill(2., weight); //2->Sum of weights
 
-	thisEventT = m_Event->getEventHeader()->getEventTime() - T0;
-
+	if (isMC == 0) {
+		thisEventT = m_Event->getEventHeader()->getEventTime() - T0;
+	} else {
+		thisEventT = 0;
+	}
 	if (isMC == 0) {
 		current = m_EventHeader->getEpicsData()->getDataValue("pcrexHallA_beam_current");
 
@@ -301,8 +303,6 @@ Bool_t BDXDSTSelector1::Process(Long64_t entry) {
 		if (m_Event->hasCollection(IntVetoHit::Class(), "IntVetoHits")) {
 			TIter IntVetoHitsIter(m_Event->getCollection(IntVetoHit::Class(), "IntVetoHits"));
 			while (fIntVetoHit = (IntVetoHit*) IntVetoHitsIter.Next()) { //Need to cast to the proper object
-
-
 
 				if (fIntVetoHit->m_channel.layer == 0 && fIntVetoHit->m_channel.component != 3) {
 					QOV[fIntVetoHit->m_channel.component] = fIntVetoHit->A;
@@ -351,7 +351,6 @@ Bool_t BDXDSTSelector1::Process(Long64_t entry) {
 
 				if (i != IV_max && QIV[i] > IV_th && abs(TIV[i] - IV_T_max) < 100) multiplicity_IV = multiplicity_IV + 1;
 
-
 			}
 		}
 
@@ -359,7 +358,6 @@ Bool_t BDXDSTSelector1::Process(Long64_t entry) {
 		if ((multiplicity_IV == 1 && IV_A_max > 5.5) || multiplicity_IV > 1) IV = true;
 		/* Outer Veto event */
 		if ((multiplicity_OV == 1 && OV_A_max > 6.5) || multiplicity_OV > 1) OV = true;
-
 
 		//cout << weight<<endl;
 		//HISTO VETO
@@ -510,7 +508,7 @@ Bool_t BDXDSTSelector1::Process(Long64_t entry) {
 		}
 
 		if (Eseed > 0) {
-			INDEX_VETO=-1;
+			INDEX_VETO = -1;
 			for (int j = 0; j < 3; j++) {
 
 				if (j == 0) {
@@ -560,7 +558,7 @@ Bool_t BDXDSTSelector1::Process(Long64_t entry) {
 			EventTime_tout = thisEventT;
 			tOut->Fill();
 		}
-	}//end isGarbage==false || isMC==1
+	} //end isGarbage==false || isMC==1
 
 	//cout <<"end event"<<endl;
 	m_Event->Clear("C");
